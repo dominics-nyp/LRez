@@ -1,0 +1,5 @@
+C:\Workspace\LRezLib\LRezLib\bin\Debug\LRezLib.dll
+C:\Workspace\LRezLib\LRezLib\bin\Debug\LRezLib.pdb
+C:\Workspace\LRezLib\LRezLib\obj\Debug\LRezLib.csprojResolveAssemblyReference.cache
+C:\Workspace\LRezLib\LRezLib\obj\Debug\LRezLib.dll
+C:\Workspace\LRezLib\LRezLib\obj\Debug\LRezLib.pdb

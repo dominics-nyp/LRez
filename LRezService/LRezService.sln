@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRezService", "LRezService\LRezService.csproj", "{DD701B6C-E768-4E4B-9160-4267DE4735B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRezService.Tests", "LRezService.Tests\LRezService.Tests.csproj", "{7D529D8A-DBC7-45AA-B159-1528BF0DC902}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRezLib", "..\LRezLib\LRezLib\LRezLib.csproj", "{585B52C4-C0D1-48C8-AEA3-C6D520EEA54D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD701B6C-E768-4E4B-9160-4267DE4735B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD701B6C-E768-4E4B-9160-4267DE4735B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD701B6C-E768-4E4B-9160-4267DE4735B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD701B6C-E768-4E4B-9160-4267DE4735B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D529D8A-DBC7-45AA-B159-1528BF0DC902}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D529D8A-DBC7-45AA-B159-1528BF0DC902}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D529D8A-DBC7-45AA-B159-1528BF0DC902}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D529D8A-DBC7-45AA-B159-1528BF0DC902}.Release|Any CPU.Build.0 = Release|Any CPU
+		{585B52C4-C0D1-48C8-AEA3-C6D520EEA54D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{585B52C4-C0D1-48C8-AEA3-C6D520EEA54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{585B52C4-C0D1-48C8-AEA3-C6D520EEA54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{585B52C4-C0D1-48C8-AEA3-C6D520EEA54D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
