@@ -27,7 +27,7 @@ namespace LRezLib.Managers
 
         public static bool addReservation(Reservation r)
         {
-            string sql = "";
+            string sql = "insert into";
 
 
 
