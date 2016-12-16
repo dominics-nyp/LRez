@@ -1,0 +1,58 @@
+<ion-view view-title="Reservation">
+  <ion-content>
+    <div class="text-center">
+      <a ui-sref="account">
+        <img menu-close="" src="img/lrez.jpg">
+        <h4 >Make a Reservation</h4>
+      </a>
+      <h5>Please complete the form to submit your reservation request</h5>
+      <div class="list">
+
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Name</span>
+          <input type="text" required placeholder="Ms/Mdm/Mr">
+        </label>
+
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Number</span>
+          <input type="text" required placeholder="Number" pattern="[0-9]{8}" maxlength="8">
+        </label>
+
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Date</span>
+          <input type="date" required>
+        </label>
+        
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Number of Adults</span>
+          <input type="number" required placeholder="Number of Adult" pattern="[0-9]{8}" maxlength='2'>
+        </label>
+
+           <label class="item item-input item-stacked-label">
+          <span class="input-label">Number of Kids</span>
+          <input type="number" required placeholder="Number of Kids (Aged 12 years and below)" pattern="[0-9]{8}" maxlength='2'>
+        </label>
+
+         <div class="list">
+          <label class="item item-input item-select">
+            <div class="input-label">Reservation Timing</div>
+            <select>
+              <option value="11:30">11:30 a.m.</option>
+              <option value="12:00">12:00 p.m.</option>
+              <option value="12:30">12:30 p.m.</option>
+              <option value="1:00">1:00 p.m.</option>
+              <option value="1:30">1:30 p.m.</option>
+              <option value="2:00">2:00 p.m.</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="padding">
+          <button class="button button-block button-balanced" 
+          onclick="alert('Submitted Sucessfully')" ui-sref="tab.home">
+          Submit
+        </button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
