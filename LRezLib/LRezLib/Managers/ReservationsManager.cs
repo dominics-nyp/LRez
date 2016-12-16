@@ -16,7 +16,7 @@ namespace LRezLib.Managers
             List<Reservation> reservations = new List<Reservation>();
 
             string sql = "select * from Reservations";
-            DataTable dt = DB.query(sql);
+            DataTable dt = DB.query(sql);//
 
             foreach (DataRow dr in dt.Rows)
                 reservations.Add(new Reservation(dr));
