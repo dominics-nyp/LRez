@@ -27,7 +27,7 @@ namespace LRezLib.Managers
 
         public static bool addReservation(Reservation r)
         {
-            string sql = "insert into Reservations 00000";
+            string sql = "insert into Reservations 00idjfi000";
 
 
 
