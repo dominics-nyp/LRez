@@ -6,23 +6,28 @@
   .controller('AppCtrl', function($cordovaOauth) {
     var appCtrl = this;
 
-    appCtrl.fbLogin = function () {
-      $cordovaOauth.facebook("640446396160697", ["email", "read_stream", "user_website", "user_location", "user_relationships"])
-      .then(function(response) {
-        alert('hello');
-        if (response.status === 'connected') {
-            console.log('Facebook login succeeded');
-            $scope.closeLogin();
-        } else {
-            alert('Facebook login failed');
-        }
-      })
-      .catch(function(error) {
-        alert('eror here');
-        console.log("Error -> " + error);
-      });
+    appCtrl.fbLogin = function () { 
+      
+      try {
+    
+        $cordovaOauth.facebook("640446396160697", ["public_profile", "email"])
+        .then(function(response) {
+          if (response.status === 'connected') {
+              console.log('Facebook login succeeded');
+              $scope.closeLogin();
+          } else {
+              alert('Facebook login failed');
+          }
+        })
+        .catch(function(error) {
+          alert('Exception: ' + error);
+          console.log("Error -> " + error);
+        });
+      }
+      catch (error) {
+        alert("Exception: " + error);
+      }
     };
-
   })
 
   .controller('InfoCtrl', function() {
