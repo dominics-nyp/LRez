@@ -22,7 +22,7 @@
             alert('Facebook login success');
             appCtrl.user = {
               id: response.data.id,
-              display: 'http://graph.facebook.com/'+ response.data.id + '/picture?',
+              display: 'http://graph.facebook.com/'+ response.data.id + '/picture?type=large',
               name: response.data.name
             };
           })
