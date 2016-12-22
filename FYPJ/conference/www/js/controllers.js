@@ -10,8 +10,9 @@
       
       try {
     
-        $cordovaOauth.facebook("640446396160697", ["public_profile", "email"])
+        $cordovaOauth.facebook("1799825963610262", ["public_profile", "email"])
         .then(function(response) {
+          alert('response: ' + JSON.stringify(response));
           if (response.status === 'connected') {
               console.log('Facebook login succeeded');
               $scope.closeLogin();
@@ -32,7 +33,7 @@
 
   .controller('InfoCtrl', function() {
     var infoCtrl = this;
-    
+
     var myLatlng = new google.maps.LatLng(1.382711,103.849527);
 
     // set option for map
@@ -41,6 +42,10 @@
       zoom: 16,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
+    
+    if (document.getElementById("map") == null)
+      alert('oh no');
+    
     // init map
     var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
@@ -52,6 +57,7 @@
       map: map
     });
 
+    
   });
 
 })();

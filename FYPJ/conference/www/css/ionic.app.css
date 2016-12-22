@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*
 To customize the look and feel of Ionic, you can override the variables
 in ionic's _variables.scss file.
@@ -9126,41 +9126,54 @@ a {
 #map {
   width: 100%;
   height: 40%;
-  background: url("../img/map.png") 100% 100%; }
+}
 
 .scroll {
-  height: 100%; }
+  height: 100%; 
+}
 
 .search-result .left-block {
-  display: inline-block; }
+  display: inline-block; 
+}
 
 .search-result .right-block {
-  text-decoration: none; }
+  text-decoration: none; 
+}
 
 .profile-picture {
   border-radius: 50%;
   width: 100px;
-  margin: 30px auto 0; }
+  margin: 30px auto 0; 
+}
 
 .dark-list .item {
   background: #444;
-  color: #F7F7F7; }
+  color: #F7F7F7; 
+}
 
 .account-bg {
   background: url("../img/user-cover.jpg") 100% 100%;
-  padding-bottom: 10px; }
+  padding-bottom: 10px; 
+}
 
 .social-button {
-  color: #FFF; }
-  .social-button i {
-    font-size: 1.8em;
-    vertical-align: middle;
-    margin-left: 0.5em; }
-  .social-button span {
-    vertical-align: middle; }
+  color: #FFF; 
+}
+
+.social-button i {
+  font-size: 1.8em;
+  vertical-align: middle;
+  margin-left: 0.5em; 
+}
+
+.social-button span {
+  vertical-align: middle; 
+}
 
 .facebook-login {
-  background: #3B5999; }
+  background: #3B5999; 
+}
 
 .twitter-login {
-  background: #00ACEE; }
+  background: #00ACEE; 
+}
