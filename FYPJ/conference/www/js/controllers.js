@@ -3,30 +3,42 @@
 
   angular.module('app.controllers', [])
 
-  .controller('AppCtrl', function($cordovaOauth) {
+  .controller('AppCtrl', function($cordovaOauth, $http) {
     var appCtrl = this;
 
+    appCtrl.user = '';
+    
     appCtrl.fbLogin = function () { 
       
       try {
     
         $cordovaOauth.facebook("1799825963610262", ["public_profile", "email"])
         .then(function(response) {
-          alert('response: ' + JSON.stringify(response));
-          if (response.status === 'connected') {
-              console.log('Facebook login succeeded');
-              $scope.closeLogin();
-          } else {
-              alert('Facebook login failed');
-          }
+
+          $http({
+            url: 'https://graph.facebook.com/v2.1/me?access_token=' + response.access_token
+          })
+          .then(function(response) {
+            alert('Facebook login success');
+            appCtrl.user = {
+              id: response.data.id,
+              display: 'http://graph.facebook.com/'+ response.data.id + '/picture?',
+              name: response.data.name
+            };
+          })
+          .catch(function(error) {
+            alert('error: ' + JSON.stringify(error));
+          });
+          
         })
         .catch(function(error) {
-          alert('Exception: ' + error);
-          console.log("Error -> " + error);
+          alert('Facebook login failed');
+          console.log("Error -> " + JSON.stringify(error));
         });
       }
       catch (error) {
-        alert("Exception: " + error);
+        alert('Facebook login failed');
+        console.log("Error -> " + JSON.stringify(error));
       }
     };
   })
