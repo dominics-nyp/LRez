@@ -43,6 +43,11 @@
   <ItemGroup>
     <Compile Include="Connections\DB.cs" />
     <Compile Include="Connections\Parameter.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="DAO\ReservationsDAO.cs" />
+    <Compile Include="Exceptions\Exception_Database.cs" />
+    <Compile Include="Exceptions\Exception_InvalidParameters.cs" />
+    <Compile Include="Exceptions\Exception_ReservationNotFound.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Managers\ReservationsManager.cs" />
     <Compile Include="Models\Reservation.cs" />
