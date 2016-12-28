@@ -8,6 +8,18 @@ namespace LRezLib
 {
     public class Constants
     {
-        public static readonly int ReservationStatus_NEW = 0;
+        public static readonly int ReservationStatus_PENDING = 0;
+        public static readonly int ReservationStatus_APPROVED = 1;
+        public static readonly int ReservationStatus_REJECTED = 2;
+
+        public static readonly int MenuStatus_ACTIVE = 0;
+        public static readonly int MenuStatus_HIDDEN = 1;
+        public static readonly int MenuStatus_ARCHIVED = 2;
+
+        public static readonly string NEW = "NEW";
+
+
+
+
     }
 }

@@ -78,7 +78,7 @@ namespace LRezLib.DAO
                 return r;
             }
             else
-                throw new Exception_ReservationNotFound("Tracking ID: [ " + tracking + " ] not found");
+                throw new Exception_NotFound("Reservation Tracking ID: [ " + tracking + " ] not found");
         }
 
         public static Reservation getReservation(int id)
@@ -93,7 +93,7 @@ namespace LRezLib.DAO
                 return r;
             }
             else
-                throw new Exception_ReservationNotFound("ID: [ " + id + " ] not found");
+                throw new Exception_NotFound("Reservation ID: [ " + id + " ] not found");
         }
 
         public static bool addReservation(Reservation r)

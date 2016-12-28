@@ -47,8 +47,8 @@ namespace LRezLib.Managers
             r.Tracking = generateTracking(reservation.Name);
             r.SocialAccount = reservation.SocialAccount;
             r.SocialProvider = reservation.SocialProvider;
-            r.Status = Constants.ReservationStatus_NEW;
-            r.LastModifiedBy = "NEW";
+            r.Status = Constants.ReservationStatus_PENDING;
+            r.LastModifiedBy = Constants.NEW;
             r.LastModifiedDate = DateTime.Now;
             r.Remarks = reservation.Remarks;
 

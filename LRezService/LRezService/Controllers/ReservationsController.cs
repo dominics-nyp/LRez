@@ -50,7 +50,7 @@ namespace LRezService.Controllers
                 Reservation reservation = ReservationsManager.getReservation(tracking);
                 return Ok(reservation);
             }
-            catch (Exception_ReservationNotFound e)
+            catch (Exception_NotFound e)
             {
                 Log.Message(e.Message);
                 return BadRequest("Tracking: " + tracking + " not found");
@@ -70,7 +70,7 @@ namespace LRezService.Controllers
                 Reservation reservation = ReservationsManager.getReservation(id);
                 return Ok(reservation);
             }
-            catch (Exception_ReservationNotFound e)
+            catch (Exception_NotFound e)
             {
                 Log.Message(e.Message);
                 return BadRequest("ID: " + id + " not found");

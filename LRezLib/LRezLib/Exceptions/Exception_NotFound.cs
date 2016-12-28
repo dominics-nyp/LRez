@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace LRezLib.Exceptions
 {
-    public class Exception_ReservationNotFound : Exception
+    public class Exception_NotFound : Exception
     {
-        public Exception_ReservationNotFound()
+        public Exception_NotFound()
         {
         }
 
-        public Exception_ReservationNotFound(string message)
+        public Exception_NotFound(string message)
         : base(message)
         {
         }
 
-        public Exception_ReservationNotFound(string message, Exception inner)
+        public Exception_NotFound(string message, Exception inner)
         : base(message, inner)
         {
         }
