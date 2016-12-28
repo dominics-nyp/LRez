@@ -52,12 +52,12 @@ namespace LRezService.Controllers
             }
             catch (Exception_NotFound e)
             {
-                Log.Message(e.Message);
+                Log.Error(e.Message);
                 return BadRequest("Tracking: " + tracking + " not found");
             }
             catch (Exception e)
             {
-                Log.Message(e.Message);
+                Log.Error(e.Message);
                 return InternalServerError();
             }
         }
@@ -72,12 +72,12 @@ namespace LRezService.Controllers
             }
             catch (Exception_NotFound e)
             {
-                Log.Message(e.Message);
+                Log.Error(e.Message);
                 return BadRequest("ID: " + id + " not found");
             }
             catch (Exception e)
             {
-                Log.Message(e.Message);
+                Log.Error(e.Message);
                 return InternalServerError();
             }
         }
@@ -85,7 +85,16 @@ namespace LRezService.Controllers
         [HttpPost]
         public IHttpActionResult Post([FromBody]Reservation reservation)
         {
-            return Ok(reservation);
+            try
+            {
+                Reservation r = ReservationsManager.createReservation(reservation);
+                return Ok(r);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                return InternalServerError();
+            }
         }
 
     }
