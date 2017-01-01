@@ -1,5 +1,6 @@
 ﻿using LRezLib.Connections;
 using LRezLib.DAO;
+using LRezLib.Exceptions;
 using LRezLib.Models;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,22 @@ namespace LRezLib.Managers
             return MenuDAO.getMenu(id);
         }
 
+        public static Menu createMenu(Menu menu)
+        {
+            Menu m = new Menu();
+            m.Name = menu.Name;
+            m.Description = menu.Description;
+            m.URL = menu.URL;
+            m.Status = menu.Status;
+            m.LastModifiedBy = menu.LastModifiedBy;
+            m.LastModifiedDate = DateTime.Now;
+            m.Remarks = menu.Remarks;
+
+            if (MenuDAO.addMenu(m))
+                return m;
+            else
+                throw new Exception_Database("Unable to create new Menu");
+
+        }
     }
 }

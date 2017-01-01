@@ -11,6 +11,10 @@ namespace LRezLib.Models
     {
         public int ID { get; set; }
 
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
         public string URL { get; set; }
 
         public int Status { get; set; }
@@ -24,6 +28,8 @@ namespace LRezLib.Models
         public Menu()
         {
             this.ID = -1;
+            this.Name = "";
+            this.Description = "";
             this.URL = "";
             this.Status = -1;
             this.LastModifiedBy = "";
@@ -34,6 +40,10 @@ namespace LRezLib.Models
         public Menu(DataRow dr)
         {
             this.ID = (int)dr["ID"];
+            if (dr["name"] != DBNull.Value)
+                this.Name = (string)dr["name"];
+            if (dr["description"] != DBNull.Value)
+                this.Description = (string)dr["description"];
             if (dr["url"] != DBNull.Value)
                 this.URL = (string)dr["url"];
             if (dr["status"] != DBNull.Value)
