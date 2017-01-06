@@ -4,7 +4,14 @@
     ViewBag.Title = "Menu";
 }
 
-<h2>Menu</h2>
+<style>
+.carousel-inner > .item > img {
+    /*height: 85vh;*/
+    margin: 0 auto;
+}
+</style>
+
+<h2>Whats Cooking?</h2>
 
 
 <div class="container">
@@ -12,60 +19,51 @@
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-            <li data-target="#myCarousel" data-slide-to="3"></li>
+        @for (int i=0; i<Model.Count(); i++)
+        {
+            if (i == 0)
+            {
+                <li data-target="#myCarousel" data-slide-to="@(i + 1)" class="active"></li>
+            }
+            else {
+                <li data-target="#myCarousel" data-slide-to="@(i + 1)"></li>
+            }
+        }
         </ol>
 
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
-            <div class="item active">
-                <img src="img_chania.jpg" alt="Chania" width="460" height="345">
-            </div>
+        @{int j = 0;}
+        @foreach (var menu in Model)
+        {
+            if (j == 0)
+            {
+                <div class="item active">
+                    <img src="@menu.URL" alt="@menu.Name">
+                </div>
+            }
+            else
+            {
+                <div class="item">
+                    <img src="@menu.URL" alt="@menu.Name">
+                </div>
+            }
+            j += 1;
+        }
 
-            <div class="item">
-                <img src="img_chania2.jpg" alt="Chania" width="460" height="345">
-            </div>
-
-            <div class="item">
-                <img src="img_flower.jpg" alt="Flower" width="460" height="345">
-            </div>
-
-            <div class="item">
-                <img src="img_flower2.jpg" alt="Flower" width="460" height="345">
-            </div>
         </div>
 
+        @if (Model.Count() > 1)
+        {
         <!-- Left and right controls -->
-        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev" style="background-image: none">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true" style="color: black"></span>
             <span class="sr-only">Previous</span>
         </a>
-        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next" style="background-image: none">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="color: black"></span>
             <span class="sr-only">Next</span>
         </a>
+        }
     </div>
 </div>
-
-
-
-
-<table>
-    @foreach (var menu in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => menu.URL)
-            </td>
-            @*<td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ID })  |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-                </td>*@
-        </tr>
-    }
-</table>
-
-
