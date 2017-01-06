@@ -12,25 +12,27 @@ namespace LRezLib.DAO
 {
     class MenuDAO
     {
-        public static List<Menu> getMenus(List<int> menuStatus = null)
+        public static List<Menu> getMenus()
         {
             List<Menu> menus = new List<Menu>();
             string sql = "select * from Menu";
 
-            if (menuStatus == null || menuStatus.Count == 0)
-            {
-                DataTable dt = DB.query(sql);
-                foreach (DataRow dr in dt.Rows)
-                    menus.Add(new Menu(dr));
-            }
-            else
-            {
-                sql += " where status in @status";
-                Parameter p = new Parameter("@status", menuStatus);
-                DataTable dt = DB.query(sql, p);
-                foreach (DataRow dr in dt.Rows)
-                    menus.Add(new Menu(dr));
-            }
+            DataTable dt = DB.query(sql);
+            foreach (DataRow dr in dt.Rows)
+                menus.Add(new Menu(dr));
+
+            return menus;
+        }
+
+        public static List<Menu> getMenus(int menuStatus)
+        {
+            List<Menu> menus = new List<Menu>();
+            string sql = "select * from Menu where status=@status";
+
+            Parameter p = new Parameter("@status", menuStatus);
+            DataTable dt = DB.query(sql, p);
+            foreach (DataRow dr in dt.Rows)
+                menus.Add(new Menu(dr));
 
             return menus;
         }

@@ -13,11 +13,21 @@ namespace LRezLib.Managers
 {
     public class MenuManager
     {
-        public static List<Menu> getMenus(List<int> menuStatus = null)
+        public static List<Menu> getMenus()
+        {
+            return MenuDAO.getMenus();
+        }
+
+        public static List<Menu> getMenus(int menuStatus)
         {
             return MenuDAO.getMenus(menuStatus);
         }
-        
+
+        public static List<Menu> getActiveMenus()
+        {
+            return MenuDAO.getMenus(Constants.MenuStatus_ACTIVE);
+        }
+
         public static Menu getMenu(int id)
         {
             return MenuDAO.getMenu(id);
