@@ -24,7 +24,7 @@ namespace LRezService.Controllers
             catch (Exception e)
             {
                 Log.Error(e.Message);
-                return InternalServerError();
+                return InternalServerError(e);
             }
         }
 
@@ -35,7 +35,7 @@ namespace LRezService.Controllers
             {
                 List<Menu> menus;
                 if (active)
-                    menus = MenuManager.getMenus(new List<int>() { Constants.MenuStatus_ACTIVE });
+                    menus = MenuManager.getMenus();
                 else
                     menus = MenuManager.getMenus();
                 return Ok(menus);
@@ -43,7 +43,7 @@ namespace LRezService.Controllers
             catch (Exception e)
             {
                 Log.Error(e.Message);
-                return InternalServerError();
+                return InternalServerError(e);
             }
         }
 
@@ -63,7 +63,7 @@ namespace LRezService.Controllers
             catch (Exception e)
             {
                 Log.Error(e.Message);
-                return InternalServerError();
+                return InternalServerError(e);
             }
         }
 

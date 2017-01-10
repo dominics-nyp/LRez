@@ -175,6 +175,15 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\menu3.jpg" />
+    <Content Include="Images\menuone.jpg" />
+    <Content Include="Images\menutwo.jpg" />
+    <Content Include="Images\potato1.jpg" />
+    <Content Include="Images\sausageroll.jpg" />
+    <Content Include="Images\shroomish.jpg" />
+    <Content Include="Images\soupOX.jpg" />
+    <Content Include="Images\soupretz.jpg" />
+    <Content Include="Images\sushione.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -203,7 +212,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
