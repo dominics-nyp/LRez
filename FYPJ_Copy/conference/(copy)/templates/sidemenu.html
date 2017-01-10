@@ -1,0 +1,54 @@
+
+<ion-side-menus enable-menu-with-back-views="false">
+
+  <ion-side-menu-content>
+  
+    <ion-nav-bar class="bar-assertive">
+    
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+      </ion-nav-buttons>
+      
+    </ion-nav-bar>
+
+    <ion-tabs class="tabs-background-dark tabs-color-light"  ng-class="{ 'tabs-item-hide': hideTabs }">
+    
+      <ion-tab title="Home" href="#/app/home">
+        <ion-nav-view name="homeContent"></ion-nav-view>
+      </ion-tab>
+      
+      <ion-tab title="Menu" href="#/app/menu">
+        <ion-nav-view name="menuContent"></ion-nav-view>
+      </ion-tab>
+
+      <ion-tab title="Reservation" href="#/app/reservation">
+        <ion-nav-view name="reservationContent"></ion-nav-view>
+      </ion-tab>
+
+      <ion-tab title="Information" href="#/app/information">
+        <ion-nav-view name="informationContent"></ion-nav-view>
+      </ion-tab>
+      
+    </ion-tabs>
+    
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left" class="dark-bg">
+
+    <ion-content>
+
+      <div class="item item-avatar">
+        <img src="{{appCtrl.user.display}}"/>
+        <h2>{{appCtrl.user.name}}</h2>
+      </div>
+      <div>
+        <button class="button button-block button-positive" ng-click="appCtrl.fbLogin()">
+          Login with Facebook
+        </button>
+      </div>
+    
+    </ion-content>
+    
+  </ion-side-menu>
+
+</ion-side-menus>
