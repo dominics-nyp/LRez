@@ -1,0 +1,25 @@
+﻿@model IEnumerable<LRezLib.Models.Menu> 
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Menu</h2>
+
+<table>
+    @foreach (var menu in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => menu.URL)
+            </td>
+            @*<td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID })  |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>*@
+        </tr>
+    }
+</table>
+
+

@@ -50,6 +50,7 @@ namespace LRezLib.Connections
         {
             SqlConnection conn = new SqlConnection(ConnectionString);
             SqlCommand cmd = new SqlCommand(sql, conn);
+            SqlParameter p = new SqlParameter(parameter.ParameterName, parameter.Value);
             cmd.Parameters.AddWithValue(parameter.ParameterName, parameter.Value);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
 
