@@ -1,4 +1,7 @@
-﻿using System;
+﻿using LRezLib.Managers;
+using LRezLib.Models;
+using Microsoft.Security.Application;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,14 +18,18 @@ namespace LRezWebApp.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            Information information = InformationManager.getInformation();
+            ViewBag.Text = Sanitizer.GetSafeHtmlFragment(information.AboutUsText);
+            ViewBag.Image = information.AboutUsImage;
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            Information information = InformationManager.getInformation();
+            ViewBag.Text = Sanitizer.GetSafeHtmlFragment(information.ContactUsText);
+            ViewBag.Map = information.ContactUsMap;
 
             return View();
         }

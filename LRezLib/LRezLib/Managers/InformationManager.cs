@@ -15,8 +15,8 @@ namespace LRezLib.Managers
         {
             Information i = InformationDAO.getInformation();
 
-            i.AboutUsText = Sanitizer.GetSafeHtmlFragment(i.AboutUsText);
-            i.ContactUsText = Sanitizer.GetSafeHtmlFragment(i.ContactUsText);
+            i.AboutUsText = Sanitizer.GetSafeHtmlFragment(i.AboutUsText.Replace("\\n", "<br/>"));
+            i.ContactUsText = Sanitizer.GetSafeHtmlFragment(i.ContactUsText.Replace("\\n", "<br/>"));
             i.ContactUsMap = Sanitizer.GetSafeHtmlFragment(i.ContactUsMap);
 
             return i;
