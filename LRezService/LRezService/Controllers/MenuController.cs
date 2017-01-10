@@ -24,7 +24,7 @@ namespace LRezService.Controllers
             catch (Exception e)
             {
                 Log.Error(e.Message);
-                return InternalServerError();
+                return InternalServerError(e);
             }
         }
 
@@ -43,7 +43,7 @@ namespace LRezService.Controllers
             catch (Exception e)
             {
                 Log.Error(e.Message);
-                return InternalServerError();
+                return InternalServerError(e);
             }
         }
 
@@ -63,7 +63,7 @@ namespace LRezService.Controllers
             catch (Exception e)
             {
                 Log.Error(e.Message);
-                return InternalServerError();
+                return InternalServerError(e);
             }
         }
 
