@@ -35,7 +35,7 @@ namespace LRezService.Controllers
             {
                 List<Menu> menus;
                 if (active)
-                    menus = MenuManager.getMenus(new List<int>() { Constants.MenuStatus_ACTIVE });
+                    menus = MenuManager.getMenus();
                 else
                     menus = MenuManager.getMenus();
                 return Ok(menus);
