@@ -1,29 +1,6 @@
 
 (function() {
 
-  
-// var app=  angular.module( 'myMenu', ['ionic']);
-
-//  app.controller('MenuCtrl', function($scope, $http) {
-
-//     $scope.menus = [];
-    
-//     $http.get('http://localhost:53501/api/Menu')
-//     .success(function(response){
-//       for( i = 0 ; i<response.length ; i++){
-//         console.log(response[i].URL);
-//         alert(response[i].URL);
-//       $scope.menus.push(response[i].URL);
-//       }
-       
-      
-//        });
-//   });
-
-
-
-
-
 angular.module('app.controllers', [])
 
   .controller('AppCtrl', function($cordovaOauth, $http) {
@@ -177,50 +154,7 @@ angular.module('app.controllers', [])
       }
     };
 
-
-
-    //   appCtrl.twitterLogin = function () { 
-      
-    //   try {
-    
-    //     $cordovaOauth.linkedin("81w533odcvwnow", "43HhB8QPIYLaQ4uL", ["r_basicprofile", "r_emailaddress"])
-    //     .then(function(response) {
-    //       alert(error)
-    //       $http({
-    //         url: 'https://graph.facebook.com/v2.1/me?access_token=' + response.access_token
-    //       })
-    //       .then(function(response) {
-    //         alert('Facebook login success');
-    //         appCtrl.user = {
-    //           id: response.data.id,
-    //           display: 'http://graph.facebook.com/'+ response.data.id + '/picture?type=large',
-    //           name: response.data.name
-    //         };
-    //       })
-    //       .catch(function(error) {
-    //         alert('error: ' + JSON.stringify(error));
-    //       });
-          
-    //     })
-    //     .catch(function(error) {
-    //       alert('Facebook login faileda');
-    //       console.log("Error -> " + JSON.stringify(error));
-    //     });
-    //   }
-    //   catch (error) {
-    //     alert('Facebook login failedb');
-    //     console.log("Error -> " + JSON.stringify(error));
-    //   }
-    // };
-
-
-
-
-
   })
-
-
-
 
   .controller('InfoCtrl', function() {
     var infoCtrl = this;
@@ -251,6 +185,85 @@ angular.module('app.controllers', [])
     
   })
 
+    .controller('CalendarCtrl', function ($scope, $cordovaCalendar, $http) {
+
+    $scope.rf = {
+      name:'',
+      number:0,
+      email:'',
+      date:'',
+      adult:0,
+      kid:0,
+      time:''
+
+
+    }
+
+    $scope.display = function(){
+      console.log($scope.rf);
+    
+var data = {'Name': $scope.rf.name,
+            'Contact':$scope.rf.number,
+            'Email': $scope.rf.email,
+            'ReservationDateTime':new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60),
+            'NumAdults':$scope.rf.adult,
+            'NumChildren':$scope.rf.kid
+          };
+
+    $http({
+      method: 'POST',
+      url: 'http://localhost:53501/api/Reservations', 
+      data: data,
+      headers: {'Content-Type':'application/json'}
+    })
+   .then(
+       function(response){
+         // success callback
+         alert('success')
+       })
+  .catch(
+    function(error){
+   // failure callback
+   //alert(JSON.stringify(error));
+ }
+);
+
+      try {
+       $cordovaCalendar.createEvent({
+        title: 'LRez Reservation',
+        location: 'Nanyang Polytechnic Block F, Level 3',
+        notes: 'Wishing you a pleasant dining experience!',
+        startDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) ,
+        endDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) 
+      }).then(function (result) {
+      // success
+      alert("Event successfully added into calendar!");
+      }, function (err) {
+      // error
+      alert("Event is not into calendar");
+      });
+    }
+    catch (error) {
+        alert('Event Creation Failure');
+        console.log("Error -> " + JSON.stringify(error));
+      }
+    }
+
+})
+
+.controller('ResCtrl', function($scope, $ionicLoading, $state, $stateParams){
+    console.log('reservation');
+
+    $scope.formData = {};
+
+    //Go to the guessing page
+    $scope.onTouch = function(item,event){
+        console.log($scope.formData.email);
+    };
+
+})
+
+
   .controller('MenuCtrl', function($scope, $http) {
         $scope.menus = [];
     
@@ -259,15 +272,16 @@ angular.module('app.controllers', [])
       for( i = 0 ; i<response.data.length ; i++){
         console.log(response.data[i].URL);
         $scope.menus.push(response.data[i].URL);
-
-      }
-       
-      
+         }
        })
     .catch(function(error) {
         alert("error: " + JSON.stringify(error));
+
     });
   });
+
+
+
 
 })();
 

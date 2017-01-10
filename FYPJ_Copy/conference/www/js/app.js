@@ -1,7 +1,7 @@
 
 (function() {
   
-  angular.module('app', ['ionic', 'app.controllers', 'ngCordovaOauth'])
+  angular.module('app', ['ionic', 'app.controllers', 'ngCordovaOauth', 'ngCordova'])
   
   .run(function($ionicPlatform) {//, ngFB) {
     // ngFB.init({appId: '640446396160697'});
@@ -67,7 +67,8 @@
       url: '/reservation',
       views: {
         'reservationContent': {
-          templateUrl: 'templates/tab-reservation.html'
+          templateUrl: 'templates/tab-reservation.html',
+          controller: "CalendarCtrl"
         }
       }
     });
