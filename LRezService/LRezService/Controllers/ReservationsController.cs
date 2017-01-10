@@ -97,5 +97,10 @@ namespace LRezService.Controllers
             }
         }
 
+        [HttpOptions]
+        public HttpResponseMessage Options()
+        {
+            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        }
     }
 }
