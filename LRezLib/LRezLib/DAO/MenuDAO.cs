@@ -12,25 +12,27 @@ namespace LRezLib.DAO
 {
     class MenuDAO
     {
-        public static List<Menu> getMenus(List<int> menuStatus = null)
+        public static List<Menu> getMenus()
         {
             List<Menu> menus = new List<Menu>();
             string sql = "select * from Menu";
 
-            if (menuStatus == null || menuStatus.Count == 0)
-            {
-                DataTable dt = DB.query(sql);
-                foreach (DataRow dr in dt.Rows)
-                    menus.Add(new Menu(dr));
-            }
-            else
-            {
-                sql += " where status in @status";
-                Parameter p = new Parameter("@status", menuStatus);
-                DataTable dt = DB.query(sql, p);
-                foreach (DataRow dr in dt.Rows)
-                    menus.Add(new Menu(dr));
-            }
+            DataTable dt = DB.query(sql);
+            foreach (DataRow dr in dt.Rows)
+                menus.Add(new Menu(dr));
+
+            return menus;
+        }
+
+        public static List<Menu> getMenus(int menuStatus)
+        {
+            List<Menu> menus = new List<Menu>();
+            string sql = "select * from Menu where status=@status";
+
+            Parameter p = new Parameter("@status", menuStatus);
+            DataTable dt = DB.query(sql, p);
+            foreach (DataRow dr in dt.Rows)
+                menus.Add(new Menu(dr));
 
             return menus;
         }
@@ -50,7 +52,37 @@ namespace LRezLib.DAO
                 throw new Exception_NotFound("Menu ID: [ " + id + " ] not found");
         }
 
+        public static bool addMenu(Menu menu)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("insert into Menu (");
+            sb.Append("name, description, url, status, last_modified, last_modified_date, remarks) ");
+            sb.Append("values (");
+            sb.Append("@name, @description, @url, @status, @last_modified, @last_modified_date, @remarks)");
 
+            List<Parameter> parameters = new List<Parameter>();
+            parameters.Add(new Parameter("@name", menu.Name));
+
+            if (menu.Description == null || menu.Description.Length == 0)
+                parameters.Add(new Parameter("@description", DBNull.Value));
+            else
+                parameters.Add(new Parameter("@description", menu.Description));
+
+            parameters.Add(new Parameter("@url", menu.URL));
+            parameters.Add(new Parameter("@status", menu.Status));
+            parameters.Add(new Parameter("@last_modified", menu.LastModifiedBy));
+            parameters.Add(new Parameter("@last_modified_date", menu.LastModifiedDate));
+
+            if (menu.Remarks == null || menu.Remarks.Length==0)
+                parameters.Add(new Parameter("@remarks", DBNull.Value));
+            else
+                parameters.Add(new Parameter("@remarks", menu.Remarks));
+
+            if (DB.execute(sb.ToString(), parameters) < 0)
+                return false;
+            else
+                return true;
+        }
 
     }
 }

@@ -18,8 +18,5 @@ namespace LRezLib
 
         public static readonly string NEW = "NEW";
 
-
-
-
     }
 }

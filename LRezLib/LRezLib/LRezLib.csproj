@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AntiXssLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\..\LRezWebAppAdmin\packages\AntiXSS.4.3.0\lib\net40\AntiXssLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\..\LRezWebAppAdmin\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -44,17 +52,23 @@
     <Compile Include="Connections\DB.cs" />
     <Compile Include="Connections\Parameter.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DAO\InformationDAO.cs" />
     <Compile Include="DAO\MenuDAO.cs" />
     <Compile Include="DAO\ReservationsDAO.cs" />
     <Compile Include="Exceptions\Exception_Database.cs" />
     <Compile Include="Exceptions\Exception_InvalidParameters.cs" />
     <Compile Include="Exceptions\Exception_NotFound.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Managers\InformationManager.cs" />
     <Compile Include="Managers\MenuManager.cs" />
     <Compile Include="Managers\ReservationsManager.cs" />
+    <Compile Include="Models\Information.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\Reservation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
