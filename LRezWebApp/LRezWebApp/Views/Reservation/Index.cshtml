@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "Reservations";
+}
+
+<style>
+
+    .input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #CCC;
+        color: #555;
+        box-sizing: border-box;
+        top: 50%;
+        width: 250px;
+    }
+        .input:focus {
+            outline: none;
+        }
+
+</style>
+<link type="text/css" rel="stylesheet" href="~/Content/jquery.datetimepicker.css" />
+
+<script>
+
+    function formatDate(dateString) {
+        var dateTimeSplit = dateString.split(" ");
+        var dateSplit = dateTimeSplit[0].split("/");
+        //var timeSplit = dateTimeSplit[1].split(":");
+        //return dateSplit[1]-1 + "/" + dateSplit[0] + "/" + dateSplit[2] + " " + timeSplit[0] + ":" + timeSplit[1];
+
+        return dateSplit[1] + "/" + dateSplit[0] + "/" + dateSplit[2] + " " + dateTimeSplit[1];
+    }
+
+    function confirmModal() {
+        $('#lblName').text($('#inName').val());
+        $('#lblContact').text($('#inContact').val());
+        $('#lblEmail').text($('#inEmail').val());
+        $('#lblDateTime').text($('#datetimepicker').val());
+        $('#lblPAX').text($('#inPAX').val());
+        $('#lblRequests').text($('#inRequests').val().replace('\r\n', '<br />'));
+    }
+
+    function createReservation() {
+        var reservation = {
+            Name: $('#inName').val(),
+            Contact: $('#inContact').val(),
+            Email: $('#inEmail').val(),
+            ReservationDateTime: formatDate($('#datetimepicker').val()),
+            NumVisitors: $('#inPAX').val(),
+            Requests: $('#inRequests').val()
+        };
+
+        alert(JSON.stringify(reservation));
+
+        $.ajax({
+            url: location.protocol + "//" + location.host + '/Reservation/CreateReservation',
+            method: 'post',
+            data: reservation,
+            success: function (response) {
+                alert('success: ' + JSON.stringify(response));
+            },
+            fail: function (error) {
+                alert('error: ' + error);
+            }
+        });
+        
+    }
+
+</script>
+
+@section scripts {
+<script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+<script>
+        $('#datetimepicker').datetimepicker({
+            dayOfWeekStart: 0,
+            lang: 'en',
+            onGenerate: function (ct) {
+                $(this).find('.xdsoft_date.xdsoft_weekend')
+                    .addClass('xdsoft_disabled');
+            },
+            allowTimes: ['11:30', '12:00', '12:30', '13:00', '13:30', '14:00'],
+            minDate: '+1970/01/02',
+            format: 'd/m/Y H:i'
+        });
+</script>
+}
+
+
+<br />
+<h2>Make a Reservation with us today!</h2>
+<br />
+<div>
+    <div class="col-lg-2">Name</div><input id="inName" class="input" type="text" />*<br /><br />
+    <div class="col-lg-2">Contact No.</div><input id="inContact" class="input" type="text" />*<br /><br />
+    <div class="col-lg-2">Email</div><input  id="inEmail" class="input" type="text" /><br /><br />
+    <div class="col-lg-2">Reservation Date</div><input id="datetimepicker" class="input" type="text" style="width: 150px" />*<br /><br />
+    <div class="col-lg-2">Number of Visitors</div><input id="inPAX" class="input" type="number" min="0" step="1" style="width: 50px" />*<br /><br />
+    <div class="col-lg-2">Special Requests</div><textarea id="inRequests" type="text" style="width: 255px" rows="6"></textarea><br /><br />
+    <div class="col-lg-2"></div><div style="width: 250px; text-align: right; float: left">
+        <button class="btn btn-default" data-toggle="modal" data-target="#confirmModal" onclick="confirmModal()">go</button>
+    </div>
+    <div style="font-size: xx-small; clear: both">* denotes compulsary field</div>
+</div>
+
+<div id="confirmModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirm Reservation?</h4>
+            </div>
+            <div class="modal-body">
+                <p><u>Please review your details</u></p><br />
+                Name : <label id="lblName"></label><br /><br />
+                Contact No. :<label id="lblContact"></label><br /><br />
+                Email : <label id="lblEmail"></label><br /><br />
+                Reservation Time : <label id="lblDateTime"></label><br /><br />
+                Number of Guests : <label id="lblPAX"></label><br /><br />
+                Special Requests : <label id="lblRequests"></label><br /><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="createReservation()">OK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

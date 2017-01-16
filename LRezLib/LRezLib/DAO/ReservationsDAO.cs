@@ -111,8 +111,7 @@ namespace LRezLib.DAO
             parameters.Add(new Parameter("@contact", r.Contact));
             parameters.Add(new Parameter("@email", r.Email));
             parameters.Add(new Parameter("@reservation_datetime", r.ReservationDateTime));
-            parameters.Add(new Parameter("@num_adults", r.NumAdults));
-            parameters.Add(new Parameter("@num_children", r.NumChildren));
+            parameters.Add(new Parameter("@num_visitors", r.NumVisitors));
 
             if (r.Requests == null || r.Requests.Length == 0)
                 parameters.Add(new Parameter("@requests", DBNull.Value));

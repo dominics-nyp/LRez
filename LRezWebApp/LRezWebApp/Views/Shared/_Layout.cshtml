@@ -11,16 +11,26 @@
         .navbar-fixed-top {
             height:75px;
         }
+        .navbar-default .navbar-nav {
+            background-color: #f8f8f8;
+        }
         .navbar-nav li a {
-            line-height: 75px;
+            padding-top: 35px;
+        }
+        .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+            background-color: #ff5733;
+            color: #ffffff;
         }
         body {
             padding-top: 75px;
+            padding-bottom: 80px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -34,6 +44,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Menu", "Index", "Menu")</li>
+                    <li>@Html.ActionLink("Reservations", "Index", "Reservation")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
@@ -42,7 +53,7 @@
     </div>
     <div class="container body-content" style="padding: 0">
         @RenderBody()
-        <footer class="bottom text-center" style="padding: 10px">
+        <footer class="navbar-fixed-bottom text-center" style="height: 80px; background-color: white">
             <hr />
             <p>&copy; 2017 - L'Rez Training Restaurant @@ NYP</p>
         </footer>

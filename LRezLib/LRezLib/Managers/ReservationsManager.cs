@@ -41,8 +41,7 @@ namespace LRezLib.Managers
             r.Contact = reservation.Contact;
             r.Email = reservation.Email;
             r.ReservationDateTime = reservation.ReservationDateTime;
-            r.NumAdults = reservation.NumAdults;
-            r.NumChildren = reservation.NumChildren;
+            r.NumVisitors = reservation.NumVisitors;
             r.Requests = reservation.Requests;
             r.Tracking = generateTracking(reservation.Name);
             r.SocialAccount = reservation.SocialAccount;

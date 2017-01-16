@@ -267,7 +267,7 @@ var data = {'Name': $scope.rf.name,
   .controller('MenuCtrl', function($scope, $http) {
         $scope.menus = [];
     
-    $http.get('http://172.20.130.159:8080/api/Menu')
+    $http.get('http://localhost:53501/api/Menu')
     .then(function(response){
       for( i = 0 ; i<response.data.length ; i++){
         console.log(response.data[i].URL);

@@ -14,8 +14,7 @@ namespace LRezLib.Models
         public string Contact { get; set; }
         public string Email { get; set; }
         public DateTime ReservationDateTime { get; set; }
-        public int NumAdults { get; set; }
-        public int NumChildren { get; set; }
+        public int NumVisitors { get; set; }
         public string Requests { get; set; }
         public string Tracking { get; set; }
         public string SocialAccount { get; set; }
@@ -32,8 +31,7 @@ namespace LRezLib.Models
             this.Contact = "";
             this.Email = "";
             this.ReservationDateTime = DateTime.Now;
-            this.NumAdults = -1;
-            this.NumChildren = -1;
+            this.NumVisitors = -1;
             this.Requests = "";
             this.Tracking = "";
             this.SocialAccount = "";
@@ -55,10 +53,8 @@ namespace LRezLib.Models
                 this.Email = (string)dr["email"];
             if (dr["reservation_datetime"] != DBNull.Value)
                 this.ReservationDateTime = (DateTime)dr["reservation_datetime"];
-            if (dr["num_adults"] != DBNull.Value)
-                this.NumAdults = (int)dr["num_adults"];
-            if (dr["num_children"] != DBNull.Value)
-                this.NumChildren = (int)dr["num_children"];
+            if (dr["num_visitors"] != DBNull.Value)
+                this.NumVisitors = (int)dr["num_adults"];
             if (dr["requests"] != DBNull.Value)
                 this.Requests = (string)dr["requests"];
             if (dr["tracking"] != DBNull.Value)
