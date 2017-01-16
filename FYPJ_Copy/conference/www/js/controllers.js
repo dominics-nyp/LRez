@@ -224,7 +224,7 @@ var data = {'Name': $scope.rf.name,
   .catch(
     function(error){
    // failure callback
-   //alert(JSON.stringify(error));
+   alert(JSON.stringify(error));
  }
 );
 
