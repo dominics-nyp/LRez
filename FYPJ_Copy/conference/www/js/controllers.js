@@ -240,7 +240,7 @@ var data = {'Name': $scope.rf.name,
       alert("Event successfully added into calendar!");
       }, function (err) {
       // error
-      alert("Event is not into calendar");
+      alert("Event is not added into calendar");
       });
     }
     catch (error) {
