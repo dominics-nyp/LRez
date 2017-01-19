@@ -37,6 +37,22 @@ namespace LRezLib.DAO
             return menus;
         }
 
+        public static List<Menu> getMenus(int menuStatus, int menuType)
+        {
+            List<Menu> menus = new List<Menu>();
+            string sql = "select * from Menu where status=@status and type=@type";
+
+            List<Parameter> parameters = new List<Parameter>();
+            parameters.Add(new Parameter("@status", menuStatus));
+            parameters.Add(new Parameter("@type", menuType));
+
+            DataTable dt = DB.query(sql, parameters);
+            foreach (DataRow dr in dt.Rows)
+                menus.Add(new Menu(dr));
+
+            return menus;
+        }
+
         public static Menu getMenu(int id)
         {
             string sql = "select * from Menu where ID=@id";
@@ -56,9 +72,9 @@ namespace LRezLib.DAO
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into Menu (");
-            sb.Append("name, description, url, status, last_modified, last_modified_date, remarks) ");
+            sb.Append("name, description, url, status, type, last_modified, last_modified_date, remarks) ");
             sb.Append("values (");
-            sb.Append("@name, @description, @url, @status, @last_modified, @last_modified_date, @remarks)");
+            sb.Append("@name, @description, @url, @status, @type, @last_modified, @last_modified_date, @remarks)");
 
             List<Parameter> parameters = new List<Parameter>();
             parameters.Add(new Parameter("@name", menu.Name));
@@ -70,6 +86,7 @@ namespace LRezLib.DAO
 
             parameters.Add(new Parameter("@url", menu.URL));
             parameters.Add(new Parameter("@status", menu.Status));
+            parameters.Add(new Parameter("@type", menu.Type));
             parameters.Add(new Parameter("@last_modified", menu.LastModifiedBy));
             parameters.Add(new Parameter("@last_modified_date", menu.LastModifiedDate));
 

@@ -100,16 +100,21 @@ namespace LRezLib.DAO
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into Reservations (");
-            sb.Append("name, contact, email, reservation_datetime, num_adults, num_children, ");
+            sb.Append("name, contact, email, reservation_datetime, num_visitors, ");
             sb.Append("requests, tracking, social_account, social_provider, status, last_modified, last_modified_date, remarks) ");
             sb.Append("values (");
-            sb.Append("@name, @contact, @email, @reservation_datetime, @num_adults, @num_children, ");
+            sb.Append("@name, @contact, @email, @reservation_datetime, @num_visitors, ");
             sb.Append("@requests, @tracking, @social_account, @social_provider, @status, @last_modified, @last_modified_date, @remarks)");
 
             List<Parameter> parameters = new List<Parameter>();
             parameters.Add(new Parameter("@name", r.Name));
             parameters.Add(new Parameter("@contact", r.Contact));
-            parameters.Add(new Parameter("@email", r.Email));
+
+            if (r.Email == null || r.Email.Length == 0)
+                parameters.Add(new Parameter("@email", DBNull.Value));
+            else
+                parameters.Add(new Parameter("@email", r.Email));
+
             parameters.Add(new Parameter("@reservation_datetime", r.ReservationDateTime));
             parameters.Add(new Parameter("@num_visitors", r.NumVisitors));
 

@@ -19,6 +19,8 @@ namespace LRezLib.Models
 
         public int Status { get; set; }
 
+        public int Type { get; set; }
+
         public string LastModifiedBy { get; set; }
 
         public DateTime LastModifiedDate { get; set; }
@@ -32,6 +34,7 @@ namespace LRezLib.Models
             this.Description = "";
             this.URL = "";
             this.Status = -1;
+            this.Type = -1;
             this.LastModifiedBy = "";
             this.LastModifiedDate = DateTime.Now;
             this.Remarks = "";
@@ -48,6 +51,8 @@ namespace LRezLib.Models
                 this.URL = (string)dr["url"];
             if (dr["status"] != DBNull.Value)
                 this.Status = (int)dr["status"];
+            if (dr["type"] != DBNull.Value)
+                this.Type = (int)dr["type"];
             if (dr["last_modified"] != DBNull.Value)
                 this.LastModifiedBy = (string)dr["last_modified"];
             if (dr["last_modified_date"] != DBNull.Value)
