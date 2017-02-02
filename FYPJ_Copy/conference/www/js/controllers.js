@@ -3,10 +3,28 @@
 
 angular.module('app.controllers', [])
 
-  .controller('AppCtrl', function($cordovaOauth, $http) {
+.controller('MenuCtrl', function($scope, $http) {
+        $scope.menus = [];
+    
+    $http.get('http://172.20.130.159:8080/api/Menu')
+    .then(function(response){
+      for( i = 0 ; i<response.data.length ; i++){
+        console.log(response.data[i].URL);
+        $scope.menus.push(response.data[i].URL);
+         }
+       })
+    .catch(function(error) {
+        alert("error: " + JSON.stringify(error));
+
+    });
+  })
+
+  .controller('AppCtrl', function($cordovaOauth, $http, $scope) {
     var appCtrl = this;
 
     appCtrl.user = '';
+     $scope.showsecondCard = true;
+      $scope.isDisabled = false;
     
     appCtrl.fbLogin = function () { 
       
@@ -25,6 +43,10 @@ angular.module('app.controllers', [])
               display: 'http://graph.facebook.com/'+ response.data.id + '/picture?type=large',
               name: response.data.name
             };
+              $scope.hidedefaultimg = true;
+             $scope.showsecondCard = false;
+                $scope.isDisabled = true;
+                return false;
           })
           .catch(function(error) {
             alert('error: ' + JSON.stringify(error));
@@ -101,6 +123,10 @@ angular.module('app.controllers', [])
               display: "http://graph.facebook.com/"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     + response.data.id + '/picture?type=large',
               name: response.data.name
             };
+            $scope.hidedefaultimg = true;
+             $scope.showsecondCard = false;
+             $scope.isDisabled = true;
+                return false;
           })
           .catch(function(error) {
             alert('error: ' + JSON.stringify(error));
@@ -153,6 +179,20 @@ angular.module('app.controllers', [])
         console.log("Error -> " + JSON.stringify(error));
       }
     };
+
+
+      $scope.logout = function() {
+       $scope.hidedefaultimg = false;
+        $scope.isDisabled = false;
+      alert("Sign out successfully");
+      $scope.showsecondCard = true;
+    $cordovaFacebook.logout();
+
+    }, function(error) {
+        alert("There was a problem signing in!  See the console for logs");
+        console.log(error);
+      
+    }
 
   })
 
@@ -240,7 +280,7 @@ var data = {'Name': $scope.rf.name,
       alert("Event successfully added into calendar!");
       }, function (err) {
       // error
-      alert("Event is not into calendar");
+      alert("Event is not added into calendar");
       });
     }
     catch (error) {
@@ -264,22 +304,7 @@ var data = {'Name': $scope.rf.name,
 })
 
 
-  .controller('MenuCtrl', function($scope, $http) {
-        $scope.menus = [];
-    
-    $http.get('http://172.20.130.159:8080/api/Menu')
-    .then(function(response){
-      for( i = 0 ; i<response.data.length ; i++){
-        console.log(response.data[i].URL);
-        $scope.menus.push(response.data[i].URL);
-         }
-       })
-    .catch(function(error) {
-        alert("error: " + JSON.stringify(error));
-
-    });
-  });
-
+ 
 
 
 

@@ -23,9 +23,19 @@ namespace LRezLib.Managers
             return MenuDAO.getMenus(menuStatus);
         }
 
+        public static List<Menu> getMenus(int menuStatus, int menuType)
+        {
+            return MenuDAO.getMenus(menuStatus, menuType);
+        }
+
         public static List<Menu> getActiveMenus()
         {
             return MenuDAO.getMenus(Constants.MenuStatus_ACTIVE);
+        }
+
+        public static List<Menu> getActiveMenus(int menuType)
+        {
+            return MenuDAO.getMenus(Constants.MenuStatus_ACTIVE, menuType);
         }
 
         public static Menu getMenu(int id)
@@ -40,6 +50,7 @@ namespace LRezLib.Managers
             m.Description = menu.Description;
             m.URL = menu.URL;
             m.Status = menu.Status;
+            m.Type = menu.Type;
             m.LastModifiedBy = menu.LastModifiedBy;
             m.LastModifiedDate = DateTime.Now;
             m.Remarks = menu.Remarks;

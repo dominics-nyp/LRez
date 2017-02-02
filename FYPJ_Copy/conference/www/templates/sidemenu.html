@@ -38,9 +38,11 @@
     <ion-content>
 
  <div class="text-center">
-            <a ui-sref="account">
-              <img class="profile-picture" menu-close="" src="{{appCtrl.user.display}}">
-              <h4 class="stable">{{appCtrl.user.name}}</h4>
+              <a ui-sref="account">
+            <div><img ng-hide="hidedefaultimg" class="profile-picture" menu-close="" src="https://image.freepik.com/free-icon/question-mark_318-52837.jpg"></div>
+              
+              <img  ng-hide="showsecondCard" class="profile-picture" menu-close="" src="{{appCtrl.user.display}}">
+              <h4 ng-hide="showsecondCard" class="stable">{{appCtrl.user.name}}</h4>
             </a>
             <h5>Log in to access your account and
               <br>view your reservation history</h5>
@@ -55,7 +57,7 @@
 
 
       <!--   FB -->
-          <div class="padding row">
+            <div class="padding row" ng-hide="isDisabled" ng-model="isDisabled">
 
        <button class="col facebook-login icon-left social-button"     ng-click="appCtrl.fbLogin()">
               <i class="icon ion-social-facebook" ></i>
@@ -90,7 +92,10 @@
 
           </div>
 
-
+ <button class="col social-logout icon-left social-button"  ng-click="logout()" ng-show="isDisabled" ng-model="isDisabled">
+              <i class="icon ion-log-out" ></i>
+              <span> Sign-out</span>
+            </button>
 
 
     <!--   <div>

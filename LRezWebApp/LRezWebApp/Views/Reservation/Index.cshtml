@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "Reservations";
+}
+
+<style>
+
+    .input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #CCC;
+        color: #555;
+        box-sizing: border-box;
+        top: 50%;
+        width: 250px;
+    }
+        .input:focus {
+            outline: none;
+        }
+
+    li a {
+        color: grey;
+    }
+    li a:hover {
+        color: black;
+    }
+
+
+
+</style>
+<link type="text/css" rel="stylesheet" href="~/Content/jquery.datetimepicker.css" />
+
+<script>
+
+    function formatDate(dateString) {
+
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        var dateTimeSplit = dateString.split(" ");
+        var dateSplit = dateTimeSplit[0].split("/");
+        //var timeSplit = dateTimeSplit[1].split(":");
+        //var date = new Date(dateSplit[2], dateSplit[1]-1, dateSplit[0], timeSplit[0], timeSplit[1]);
+
+        //return date.toString();
+        //return dateSplit[1]-1 + "/" + dateSplit[0] + "/" + dateSplit[2] + " " + timeSplit[0] + ":" + timeSplit[1];
+        return dateSplit[0] + " " + months[dateSplit[1]-1] + " " + dateSplit[2] + " " + dateTimeSplit[1];
+    }
+
+    function confirmModal() {
+        $('#lblName').text($('#inName').val());
+        $('#lblContact').text($('#inContact').val());
+        $('#lblEmail').text($('#inEmail').val());
+        $('#lblDateTime').text($('#datetimepicker').val());
+        $('#lblPAX').text($('#inPAX').val());
+        $('#lblRequests').text($('#inRequests').val().replace('\r\n', '<br />'));
+    }
+
+    function createReservation() {
+        var reservation = {
+            Name: $('#inName').val(),
+            Contact: $('#inContact').val(),
+            Email: $('#inEmail').val(),
+            ReservationDateTime: formatDate($('#datetimepicker').val()),
+            NumVisitors: $('#inPAX').val(),
+            Requests: $('#inRequests').val()
+        };
+
+        $.ajax({
+            url: location.protocol + "//" + location.host + '/Reservation/CreateReservation',
+            method: 'post',
+            data: reservation,
+            success: function (response) {
+                resetForm();
+                $('#lblSuccess').text('Congratulations! Your reservation has been submitted for processing. We will get in touch with you shortly. To track your reservation, please use tracking ID: ' + response.Tracking);
+                $("#divSuccess").show();
+            },
+            fail: function (error) {
+                console.log('Error: ' + error);
+                $("#divFail").show();
+            }
+        });
+
+    }
+
+    function resetForm() {
+        $('#inName').val("");
+        $('#inContact').val("");
+        $('#inEmail').val("");
+        $('#datetimepicker').val("");
+        $('#inPAX').val(null);
+        $('#inRequests').val("");
+    }
+
+</script>
+
+@section scripts {
+<script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+<script>
+        $('#datetimepicker').datetimepicker({
+            dayOfWeekStart: 0,
+            lang: 'en',
+            onGenerate: function (ct) {
+                $(this).find('.xdsoft_date.xdsoft_weekend')
+                    .addClass('xdsoft_disabled');
+            },
+            allowTimes: ['11:30', '12:00', '12:30', '13:00', '13:30', '14:00'],
+            minDate: '+1970/01/02',
+            format: 'd/m/Y H:i'
+        });
+</script>
+}
+
+<br />
+
+<ul class="nav nav-tabs navbar-right" style="color: black">
+    <li class="active"><a data-toggle="tab" href="#create">Make a Reservation</a></li>
+    <li><a data-toggle="tab" href="#track">Track a Reservation</a></li>
+</ul>
+
+<div class="tab-content">
+    <div id="create" class="tab-pane fade in active" style="padding-top: 50px">
+        <div id="divSuccess" class="alert alert-success alert-dismissable fade in" style="display: none">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <label id="lblSuccess"></label>
+        </div>
+        <div id="divFail" class="alert alert-danger alert-dismissable fade in" style="display: none">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <label id="lblFail">Reservation submission failed. Please check your entry.</label>
+        </div>
+
+        <h2>Make a Reservation with us today!</h2>
+        <br />
+        <div>
+            <div class="col-lg-2">Name</div><input id="inName" class="input" type="text" />*<br /><br />
+            <div class="col-lg-2">Contact No.</div><input id="inContact" class="input" type="text" />*<br /><br />
+            <div class="col-lg-2">Email</div><input id="inEmail" class="input" type="text" /><br /><br />
+            <div class="col-lg-2">Reservation Date</div><input id="datetimepicker" class="input" type="text" style="width: 150px" />*<br /><br />
+            <div class="col-lg-2">Number of Visitors</div><input id="inPAX" class="input" type="number" min="0" step="1" style="width: 50px" />*<br /><br />
+            <div class="col-lg-2">Special Requests</div><textarea id="inRequests" type="text" style="width: 255px" rows="6"></textarea><br /><br />
+            <div class="col-lg-2"></div><div style="width: 250px; text-align: right; float: left">
+                <button class="btn btn-default" data-toggle="modal" data-target="#confirmModal" onclick="confirmModal()">go</button>
+            </div>
+            <div style="font-size: xx-small; clear: both">* denotes compulsary field</div>
+        </div>
+
+        <div id="confirmModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Confirm Reservation?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><u>Please review your details</u></p><br />
+                        Name : <label id="lblName"></label><br /><br />
+                        Contact No. :<label id="lblContact"></label><br /><br />
+                        Email : <label id="lblEmail"></label><br /><br />
+                        Reservation Time : <label id="lblDateTime"></label><br /><br />
+                        Number of Guests : <label id="lblPAX"></label><br /><br />
+                        Special Requests : <label id="lblRequests"></label><br /><br />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="createReservation()">OK</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div id="track" class="tab-pane fade">
+        <h3>Menu 1</h3>
+        <p>Some content in menu 1.</p>
+    </div>
+
+</div>
+
+
+
