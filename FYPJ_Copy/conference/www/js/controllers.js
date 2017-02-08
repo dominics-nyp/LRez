@@ -19,6 +19,27 @@ angular.module('app.controllers', [])
     });
   })
 
+
+.controller('InstaCtrl', function($scope, $http) {
+        $scope.instas = [];
+          $scope.captions = [];
+    
+    $http.get('https://www.instagram.com/lreztrainingrestaurant/media/?size=t')
+    .then(function(response){
+      for( i = 0 ; i<response.data.items.length ; i++){
+        console.log(response.data.items[i]);
+        $scope.instas.push(response.data.items[i]);
+          $scope.captions.push(response.data.items[i].caption.text);
+         }
+       })
+    .catch(function(error) {
+        alert("error: " + JSON.stringify(error));
+
+    });
+  })
+
+
+
   .controller('AppCtrl', function($cordovaOauth, $http, $scope) {
     var appCtrl = this;
 
