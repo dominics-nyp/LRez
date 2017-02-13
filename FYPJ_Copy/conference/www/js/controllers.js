@@ -45,7 +45,7 @@ angular.module('app.controllers', [])
          }
        })
     .catch(function(error) {
-        alert("error: " + JSON.stringify(error));
+        // alert("error: " + JSON.stringify(error));
 
     });
 
@@ -57,7 +57,7 @@ angular.module('app.controllers', [])
              //$http.post('https://api.instagram.com/v1/media/'  + $scope.instas[key].id +'/likes?access_token=4318921338.d8a48ba.ea5390d0a6ee41458ad1fe9caa946fa6')
 
              var button = event.target.id;
-             alert(val.id);
+             // alert(val.id);
 
              for (key in $scope.instas)
              {
@@ -169,7 +169,7 @@ angular.module('app.controllers', [])
     
         $cordovaOauth.instagram("d8a48ba89ff14edeb7b621c758de4637", ["basic+likes"])
         .then(function(response) {
-          alert(JSON.stringify(response));
+          // alert(JSON.stringify(response));
 
           $window.sessionStorage.setItem("access_token", response.access_token);
 
@@ -179,7 +179,7 @@ angular.module('app.controllers', [])
             url: 'https://api.instagram.com/v1/users/self/?access_token=' + $scope.access_token
           })
           .then(function(response) {
-            alert(response.access_token);
+            // alert(response.access_token);
             alert('instagram login success');
             appCtrl.user = {
               id: response.data.id,
