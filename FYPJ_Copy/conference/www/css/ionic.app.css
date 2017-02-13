@@ -9225,3 +9225,15 @@ tr:nth-child(even) {
   vertical-align: middle;
  
 }
+
+.like-button{
+
+    font-size:18px;
+  color : red;
+  margin-left: 10px;
+
+}
+ .like-button:active {
+
+    background-color: yellow;
+}

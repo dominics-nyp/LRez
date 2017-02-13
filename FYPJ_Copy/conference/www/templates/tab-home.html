@@ -19,14 +19,19 @@
   <div>
     
   </div>
-  <img class="col test3dp" src="{{insta.caption.from.profile_picture}}" align="left" style="margin-bottom: 10px; margin-left: 10px"/>
+  <img class="col test3dp" src="{{insta.caption.from.profile_picture}}" align="left" style="margin-bottom: 8px; margin-left: 10px"/>
    <!--<p> &nbsp</p> -->
 
-   <h5 style="margin-top: 5%; margin-left: 70px "> {{insta.caption.from.full_name}}</h5>
+   <h5 style="margin-top: 8%; margin-left: 70px "> {{insta.caption.from.full_name}}</h5>
+
 
    <img src= "{{insta.images.standard_resolution.url}}" style="width:100%;height:480px;" />
-   
+  <!--  <button>  <i class="icon ion-heart" ></i>Like</button>
+   <input type="button"  class="icon ion-heart" /> -->
+    <i id="button" type="button" class="icon ion-heart like-button" ng-click="igLike(insta)">{{insta.likes.count}}Like</i>
     <p class="col imgone">  Lreztrainingrestaurant:{{insta.caption.text}} </p>
+
+    <!-- <p>{{insta.id}}</p> -->
 
     <div></div>
 </tr>

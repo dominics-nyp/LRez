@@ -3,6 +3,7 @@
 
 angular.module('app.controllers', [])
 
+
 .controller('MenuCtrl', function($scope, $http) {
         $scope.menus = [];
     
@@ -20,27 +21,62 @@ angular.module('app.controllers', [])
   })
 
 
-.controller('InstaCtrl', function($scope, $http) {
+
+.controller('InstaCtrl', function($scope, $http, $window) {
         $scope.instas = [];
-          $scope.captions = [];
-    
-    $http.get('https://www.instagram.com/lreztrainingrestaurant/media/?size=t')
+        $scope.captions = [];
+
+        $scope.access_token = $window.sessionStorage.getItem("access_token");
+        console.log("access_token", $scope.access_token);
+    $http.get('https://www.instagram.com/lrezproject/media/?size=t')
     .then(function(response){
-      for( i = 0 ; i<response.data.items.length ; i++){
+      for( i = 0 ; i<response.data.items.length; i++){
         console.log(response.data.items[i]);
         $scope.instas.push(response.data.items[i]);
-          $scope.captions.push(response.data.items[i].caption.text);
+
+          if (response.data.items[i].caption == null)
+          {
+            $scope.captions.push(response.data.items[i]);
+          }
+          else{
+            $scope.captions.push(response.data.items[i].caption.text);
+          }
+
          }
        })
     .catch(function(error) {
         alert("error: " + JSON.stringify(error));
 
     });
+
+       $scope.igLike = function(val) {
+
+
+          $scope.access_token = $window.sessionStorage.getItem("access_token");
+        //console.log($scope.instas);
+             //$http.post('https://api.instagram.com/v1/media/'  + $scope.instas[key].id +'/likes?access_token=4318921338.d8a48ba.ea5390d0a6ee41458ad1fe9caa946fa6')
+
+             var button = event.target.id;
+             alert(val.id);
+
+             for (key in $scope.instas)
+             {
+
+                if (val.id == $scope.instas[key].id) {
+
+                  $http.post('https://api.instagram.com/v1/media/' + $scope.instas[key].id + '/likes?access_token=' + $scope.access_token)
+
+                  alert("Liked");
+                  break;
+                }
+             }
+
+        }
+    
+
   })
 
-
-
-  .controller('AppCtrl', function($cordovaOauth, $http, $scope) {
+  .controller('AppCtrl', function($cordovaOauth, $http, $scope, $window) {
     var appCtrl = this;
 
     appCtrl.user = '';
@@ -131,13 +167,19 @@ angular.module('app.controllers', [])
 
       try {
     
-        $cordovaOauth.instagram("dadd1fa8cccb4f388b078935844b032a", ["basic"])
+        $cordovaOauth.instagram("d8a48ba89ff14edeb7b621c758de4637", ["basic+likes"])
         .then(function(response) {
           alert(JSON.stringify(response));
+
+          $window.sessionStorage.setItem("access_token", response.access_token);
+
+          $scope.access_token = $window.sessionStorage.getItem("access_token");
+
           $http({
-            url: 'https://api.instagram.com/v1/users/self/?access_token=' + response.access_token
+            url: 'https://api.instagram.com/v1/users/self/?access_token=' + $scope.access_token
           })
           .then(function(response) {
+            alert(response.access_token);
             alert('instagram login success');
             appCtrl.user = {
               id: response.data.id,
