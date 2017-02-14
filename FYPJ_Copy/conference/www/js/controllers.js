@@ -288,87 +288,138 @@ angular.module('app.controllers', [])
     
   })
 
-    .controller('CalendarCtrl', function ($scope, $cordovaCalendar, $http) {
+    .controller('CalendarCtrl', function ($scope, $cordovaCalendar, $http, $ionicPopup, $cordovaClipboard) {
+
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementsByName("Date")[0].setAttribute('min', today);
 
     $scope.rf = {
       name:'',
-      number:0,
+      number:'',
       email:'',
       date:'',
-      adult:0,
-      kid:0,
+      vistors:'',
       time:''
 
 
     }
 
-    $scope.display = function(){
-      console.log($scope.rf);
-    
-var data = {'Name': $scope.rf.name,
-            'Contact':$scope.rf.number,
-            'Email': $scope.rf.email,
-            'ReservationDateTime':new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60),
-            'NumAdults':$scope.rf.adult,
-            'NumChildren':$scope.rf.kid
-          };
+    function popup() {
+     var confirmPopup = $ionicPopup.confirm({
+       title: 'Calendar',
+       template: 'Would you like to add your reservation into your calendar?'
+     });
 
-    $http({
-      method: 'POST',
-      url: 'http://localhost:53501/api/Reservations', 
-      data: data,
-      headers: {'Content-Type':'application/json'}
-    })
-   .then(
-       function(response){
-         // success callback
-         alert('success')
-       })
-  .catch(
-    function(error){
-   // failure callback
-   alert(JSON.stringify(error));
- }
-);
-
-      try {
-       $cordovaCalendar.createEvent({
-        title: 'LRez Reservation',
-        location: 'Nanyang Polytechnic Block F, Level 3',
-        notes: 'Wishing you a pleasant dining experience!',
-        startDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) ,
-        endDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) 
-      }).then(function (result) {
+     confirmPopup.then(function(res) {
+       if(res) {
+         try {
+           $cordovaCalendar.createEvent({
+            title: 'LRez Reservation',
+            location: 'Nanyang Polytechnic Block F, Level 3',
+            notes: 'Wishing you a pleasant dining experience!',
+            startDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) ,
+            endDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) 
+          }).then(function (result) {
       // success
       alert("Event successfully added into calendar!");
-      }, function (err) {
+      showAlert();
+    }, function (err) {
       // error
       alert("Event is not added into calendar");
-      });
-    }
-    catch (error) {
-        alert('Event Creation Failure');
-        console.log("Error -> " + JSON.stringify(error));
-      }
-    }
+    });
+        }
+        catch (error) {
+          alert('Event Creation Failure');
+          console.log("Error -> " + JSON.stringify(error));
+        }
+      } else {
+       alert("Event is not added into calendar");
+       showAlert();
+     }
+   });
+   };
+
+   $scope.display = function(){
+    console.log($scope.rf);
+    
+    var data = {'Name': $scope.rf.name,
+    'Contact':$scope.rf.number,
+    'Email': $scope.rf.email,
+    'ReservationDateTime':new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60),
+    'Numvisitors':$scope.rf.visitors,
+  };
+
+  /* $scope.copyText = function(value) {
+        $cordovaClipboard.copy(value).then(function() {
+            console.log("Copied text");
+        }, function() {
+            console.error("There was an error copying");
+        });
+    } */
+
+  $http({
+    method: 'POST',
+    url: 'http://172.20.129.97:8033/api/Reservations', 
+    data: data,
+    headers: {'Content-Type':'application/json'}
+  })
+  .then(
+   function(response){
+           // success callback
+           popup();
+           console.log(response.data.Tracking);
+           $scope.tracking = response.data.Tracking; 
+           alert("Your Tracking ID is "+ response.data.Tracking);
+
+         })
+  .catch(
+    function(error){
+     // failure callback
+     console.log(error);
+     alert(JSON.stringify(error));
+   }
+   );
+}
 
 })
 
-.controller('ResCtrl', function($scope, $ionicLoading, $state, $stateParams){
+  .controller('ResCtrl', function($scope, $ionicLoading, $state, $stateParams){
     console.log('reservation');
 
     $scope.formData = {};
 
     //Go to the guessing page
     $scope.onTouch = function(item,event){
-        console.log($scope.formData.email);
+      console.log($scope.formData.email);
     };
 
-})
+  })
 
+  .controller('TrackCtrl', function($scope, $http) {
+    //var LoginId = SocialLogin.get();
+    $scope.reservations = [];
+    $scope.statuscheck= function(id){
+      $http.get('http://172.20.129.97:8033/api/Reservations?tracking='+id)
+      .then(function(response){
+        var intStatus = response.data.Status;
+        if( intStatus == 0){
+          $scope.reservationStatus = 'Rejected';
+        }
+        else if(intStatus == 1){
+         $scope.reservationStatus = 'Approved';
+       }
+       else if(intStatus == 2){
+         $scope.reservationStatus = 'Pending';
+       }
+     })
+      .catch(function(error) {
+        alert("Your ID is invalid");
 
- 
+      });
+    };
+    
 
+  });
 
 
 })();

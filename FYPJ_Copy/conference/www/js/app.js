@@ -75,6 +75,16 @@
       }
     })
 
+    .state('app.tracking', {
+      url: '/tracking',
+      views:{
+        'trackingContent':{
+           templateUrl: 'templates/tab-tracking.html',
+            controller: "TrackCtrl as trackCtrl"
+        }
+      }
+    })
+
    .state('app.reservation', {
       url: '/reservation',
       views: {
