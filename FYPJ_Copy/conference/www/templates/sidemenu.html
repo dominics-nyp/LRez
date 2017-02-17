@@ -8,7 +8,7 @@
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
       </ion-nav-buttons>
-      
+
     </ion-nav-bar>
 
     <ion-tabs class="tabs-background-dark tabs-color-light"  ng-class="{ 'tabs-item-hide': hideTabs }">
@@ -16,7 +16,7 @@
       <ion-tab title="Home" href="#/app/home">
         <ion-nav-view name="homeContent"></ion-nav-view>
       </ion-tab>
-      
+
       <ion-tab title="Menu" href="#/app/menu">
         <ion-nav-view name="menuContent"></ion-nav-view>
       </ion-tab>
@@ -35,9 +35,9 @@
      <!--  <ion-tab title="" href="#/app/lrezfb">
         <ion-nav-view name="lrezfbContent"></ion-nav-view>
       </ion-tab> -->
-      
+
     </ion-tabs>
-    
+
   </ion-side-menu-content>
 
   <ion-side-menu side="left" class="dark-bg">
@@ -46,7 +46,7 @@
 
      <div class="text-center">
       <a ui-sref="account">
-        <div><img ng-hide="hidedefaultimg" class="profile-picture" menu-close="" src="https://image.freepik.com/free-icon/question-mark_318-52837.jpg"></div>
+        <div><img ng-hide="hidedefaultimg" class="profile-picture" menu-close="" src="https://www.cdx.pl/UserFiles/Images/contact-outline.png"></div>
 
         <img  ng-hide="showsecondCard" class="profile-picture" menu-close="" src="{{appCtrl.user.display}}">
         <h4 ng-hide="showsecondCard" class="stable">{{appCtrl.user.name}}</h4>
@@ -56,7 +56,7 @@
 
       </div>
 
-<!-- 
+<!--
       <div class="item item-avatar">
         <img src="{{appCtrl.user.display}}"/>
         <h2>{{appCtrl.user.name}}</h2>
@@ -70,7 +70,7 @@
         <i class="icon ion-social-facebook" ></i>
         <span>Facebook</span>
       </button>
-      
+
       <button class="col instagram-login icon-left social-button"     ng-click="appCtrl.instaLogin()">
         <i class="icon ion-social-instagram" ></i>
         <span>Instagram</span>
@@ -91,7 +91,7 @@
               <span>  Google Plus</span>
             </button>
           -->
-<!-- 
+<!--
             <div class="col googleplus-login icon-left social-button">
               <i class="icon ion-social-googleplus"></i>
               Google Plus
@@ -103,10 +103,10 @@
             <a class="button button-block button-positive" href="#/app/tracking">
               Reservation Tracking
             </a>
-          </div>    
+          </div>
 
 
-          <a class="col social-lrezFb social-button " href="#/app/lrezfb"> 
+          <a class="col social-lrezFb social-button " href="#/app/lrezfb">
            <i class="icon ion-social-facebook" ></i> <span>L'REZ FB</span></a>
 
            <p></p>
@@ -126,7 +126,7 @@
       </div> -->
 
     </ion-content>
-    
+
   </ion-side-menu>
 
 </ion-side-menus>
