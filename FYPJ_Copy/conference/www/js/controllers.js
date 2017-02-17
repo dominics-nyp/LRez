@@ -403,13 +403,16 @@ angular.module('app.controllers', [])
       .then(function(response){
         var intStatus = response.data.Status;
         if( intStatus == 0){
-          $scope.reservationStatus = 'Rejected';
+          alert("Rejected Reservation");
+          //$scope.reservationStatus = 'Rejected';
         }
         else if(intStatus == 1){
-         $scope.reservationStatus = 'Approved';
+          alert("Approved Reservation");
+        // $scope.reservationStatus = 'Approved';
        }
        else if(intStatus == 2){
-         $scope.reservationStatus = 'Pending';
+        alert("Pending Reservation");
+        // $scope.reservationStatus = 'Pending';
        }
      })
       .catch(function(error) {
