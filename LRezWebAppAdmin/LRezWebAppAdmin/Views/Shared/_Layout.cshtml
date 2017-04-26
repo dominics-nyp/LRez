@@ -3,13 +3,50 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - L'Rez</title>
+    <title>@ViewBag.Title - L'Rez Training Restaurant @@ NYP</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+    <style>
+        .navbar-fixed-top {
+            height: 75px;
+        }
+
+        .navbar-default .navbar-nav {
+            background-color: #f8f8f8;
+        }
+
+        .navbar-nav li a {
+            padding-top: 35px;
+        }
+
+        .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+            background-color: #ff5733;
+            color: #ffffff;
+        }
+
+        .dropdown-menu > li > a {
+            padding-top: 10px;
+        }
+
+        .dropdown-menu > li > a:hover {
+            background-color: #ff5733;
+            color: #ffffff;
+            padding-top: 10px;
+        }
+
+        body {
+            padding-top: 75px;
+            padding-bottom: 80px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    </style>
+
 </head>
+
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -17,24 +54,27 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("L'Rez", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <span class="navbar-brand"><img src="http://localhost:8080/Images/logo.png" alt="L'Rez" height="50" /></span>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                @*<ul class="nav navbar-nav navbar-right">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Menu", "Index", "Menu")</li>
+                    <li>@Html.ActionLink("Reservations", "Index", "Reservation")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+                @Html.Partial("_LoginPartial")*@
+                @*@Html.Partial("_MenuPartial")*@
+                @{ Html.RenderAction("MenuBar", "Menu"); }
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="padding: 0">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer class="navbar-fixed-bottom text-center" style="height: 80px; background-color: white">
+            <hr />
+            <p>&copy; 2017 - L'Rez Training Restaurant @@ NYP</p>
         </footer>
     </div>
 

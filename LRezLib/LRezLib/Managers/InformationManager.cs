@@ -25,7 +25,7 @@ namespace LRezLib.Managers
         public static bool updateAboutText(string text)
         {
             string safe = Sanitizer.GetSafeHtmlFragment(text);
-            return InformationDAO.updateInformation(InformationDAO.InformationKey.AboutUsImage, safe);
+            return InformationDAO.updateInformation(InformationDAO.InformationKey.AboutUsText, safe);
         }
 
         public static bool updateAboutImage(string url)
@@ -42,7 +42,7 @@ namespace LRezLib.Managers
         public static bool updateContactMap(string map)
         {
             string safe = Sanitizer.GetSafeHtmlFragment(map);
-            return InformationDAO.updateInformation(InformationDAO.InformationKey.AboutUsImage, safe);
+            return InformationDAO.updateInformation(InformationDAO.InformationKey.ContactUsMap, safe);
         }
     }
 }

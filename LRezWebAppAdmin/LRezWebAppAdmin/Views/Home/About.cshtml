@@ -1,9 +1,97 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "About Us";
 }
 
-<h2>@ViewBag.Title.</h2>
-<h3>@Html.Raw(@ViewBag.Text)</h3>
+<style>
+    .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+    }
 
-<p><img src="@ViewBag.Image" alt="" /></p>
+    /*#txtAbout p {
+        padding: 0;
+    }
+
+    #tbxEditAbout {
+        padding: 0;
+        color: green;
+    }*/
+
+</style>
+
+@section scripts {
+
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+    <script>
+
+        var showEdit = function () {
+            $('#txtAbout').hide();
+            $('#btnEdit').hide();
+            $('#btnSave').show();
+            $('#btnCancel').show();
+            $('#tbxAbout').show();
+        };
+
+        var hideEdit = function () {
+            $('#txtAbout').show();
+            $('#btnEdit').show();
+            $('#btnSave').hide();
+            $('#btnCancel').hide();
+            $('#tbxAbout').hide();
+        };
+
+        var save = function () {
+            var text = CKEDITOR.instances.tbxEditAbout.getData();
+            $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    text: text
+                }),
+                url: '@Url.Action("UpdateAboutText", "Home")',
+                success: function (result) {
+                    $('#txtAbout').html(result.text);
+                },
+                error: function (error) {
+                    alert("An unknown error has occurred. Please try again.")
+                }
+            });
+            hideEdit();
+        };
+
+        $(document).ready(function () {
+            $('#tbxEditAbout').text($('#txtAbout').html());
+
+            CKEDITOR.config.height = 320;
+            CKEDITOR.config.line_height = 0;
+            CKEDITOR.replace('tbxEditAbout');
+        });
+
+
+
+    </script>
+}
+
+<div style="height: 3em"></div>
+
+<div class="row">
+
+    <div class="col-sm-6 vcenter" style="padding-bottom: 2em"><img src="@ViewBag.Image" alt="" class="img-responsive" /></div><!--
+    --><div class="col-sm-6 vcenter" style="padding-bottom: 2em">
+        <span id="txtAbout">@Html.Raw(@ViewBag.Text)</span>
+        <span id="tbxAbout" style="display: none"><textarea id="tbxEditAbout"></textarea></span>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 vcenter" style="padding-bottom: 2em"></div><!--
+        --><div class="col-sm-6 vcenter" style="padding-bottom: 2em">
+            <button id="btnEdit" class="btn btn-danger" onclick="showEdit()">Edit Text</button>
+            <button id="btnSave" class="btn btn-danger" onclick="save()" style="display: none">Save</button>
+            <button id="btnCancel" class="btn btn-danger" onclick="hideEdit()" style="display: none">Cancel</button>
+        </div>
+    </div>
+
+</div>

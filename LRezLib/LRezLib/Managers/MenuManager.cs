@@ -61,5 +61,21 @@ namespace LRezLib.Managers
                 throw new Exception_Database("Unable to create new Menu");
 
         }
+
+        public static bool updateMenuName(int id, string name, string user)
+        {
+            return MenuDAO.updateMenuName(id, name, user);
+        }
+
+        public static bool updateMenuStatus(int id, int status, string user)
+        {
+            return MenuDAO.updateMenuStatus(id, status, user);
+        }
+
+        public static List<int> getActiveMenuTypes()
+        {
+            return MenuDAO.getMenuTypes(Constants.MenuStatus_ACTIVE);
+        }
+
     }
 }

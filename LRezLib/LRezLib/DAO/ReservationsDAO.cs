@@ -36,6 +36,19 @@ namespace LRezLib.DAO
             return reservations;
         }
 
+        public static List<Reservation> getReservations(int reservationStatus)
+        {
+            List<Reservation> reservations = new List<Reservation>();
+
+            string sql = "select * from Reservations where status=@status";
+            Parameter p = new Parameter("status", reservationStatus);
+            DataTable dt = DB.query(sql, p);
+            foreach (DataRow dr in dt.Rows)
+                reservations.Add(new Reservation(dr));
+
+            return reservations;
+        }
+
         public static List<Reservation> getReservations(string social_account, string social_provider, bool includeExpired = false)
         {
             List<Reservation> reservations = new List<Reservation>();
@@ -64,6 +77,42 @@ namespace LRezLib.DAO
 
                 return reservations;
             }
+        }
+
+        public static List<Reservation> getReservations(DateTime date)
+        {
+            DateTime nextDate = date.AddDays(1);
+
+            List<Reservation> reservations = new List<Reservation>();
+
+            string sql = "select * from Reservations where reservation_datetime>=@reservation_datetime_start and reservation_datetime<@reservation_datetime_end " +
+                "order by reservation_datetime";
+            List<Parameter> parameters = new List<Parameter>() {
+                new Parameter("reservation_datetime_start", new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, 0)),
+                new Parameter("reservation_datetime_end", new DateTime(nextDate.Year, nextDate.Month, nextDate.Day, 0, 0, 0, 0))
+            };
+            DataTable dt = DB.query(sql, parameters);
+            foreach (DataRow dr in dt.Rows)
+                reservations.Add(new Reservation(dr));
+
+            return reservations;
+        }
+
+        public static List<Reservation> getReservations(DateTime fromDate, DateTime toDate)
+        {
+            List<Reservation> reservations = new List<Reservation>();
+
+            string sql = "select * from Reservations where reservation_datetime>=@reservation_datetime_start and reservation_datetime<@reservation_datetime_end " +
+                "order by reservation_datetime";
+            List<Parameter> parameters = new List<Parameter>() {
+                new Parameter("reservation_datetime_start", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0, 0)),
+                new Parameter("reservation_datetime_end", new DateTime(toDate.Year, toDate.Month, toDate.Day, 0, 0, 0, 0))
+            };
+            DataTable dt = DB.query(sql, parameters);
+            foreach (DataRow dr in dt.Rows)
+                reservations.Add(new Reservation(dr));
+
+            return reservations;
         }
 
         public static Reservation getReservation(string tracking)

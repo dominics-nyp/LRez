@@ -1,9 +1,107 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Contact Us";
 }
 
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Text</h3>
-<p>@ViewBag.Map</p>
+<style>
+    .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+    }
 
+    .google-maps {
+        position: relative;
+        padding-bottom: 75%;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .google-maps iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+</style>
+
+@section scripts {
+
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+    <script>
+
+        var showEdit = function () {
+            $('#txtContact').hide();
+            $('#btnEdit').hide();
+            $('#btnSave').show();
+            $('#btnCancel').show();
+            $('#tbxContact').show();
+        };
+
+        var hideEdit = function () {
+            $('#txtContact').show();
+            $('#btnEdit').show();
+            $('#btnSave').hide();
+            $('#btnCancel').hide();
+            $('#tbxContact').hide();
+        };
+
+        var save = function () {
+            var text = CKEDITOR.instances.tbxEditContact.getData();
+            $.ajax({
+                method: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    text: text
+                }),
+                url: '@Url.Action("UpdateContactText", "Home")',
+                success: function (result) {
+                    $('#txtContact').html(result.text);
+                },
+                error: function (error) {
+                    alert("An unknown error has occurred. Please try again.")
+                }
+            });
+            hideEdit();
+        };
+
+        $(document).ready(function () {
+            $('#tbxEditContact').text($('#txtContact').html());
+
+            CKEDITOR.config.height = 320;
+            CKEDITOR.config.line_height = 0;
+            CKEDITOR.replace('tbxEditContact');
+        });
+
+
+
+    </script>
+}
+
+<div style="height: 3em"></div>
+
+<div class="row">
+
+    <div class="col-sm-6 vcenter" style="padding-bottom: 2em">
+        <div id="txtContact" style="text-align: center">@Html.Raw(@ViewBag.Text)</div>
+        <div id="tbxContact" style="display: none"><textarea id="tbxEditContact"></textarea></div>
+    </div><!--
+    --><div class="col-sm-6 vcenter" style="padding-bottom: 2em">
+        <div class="google-maps">
+            <iframe src="@ViewBag.Map" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="row" style="text-align: center">
+        <div class="col-sm-6 vcenter" style="padding-bottom: 2em">
+            <button id="btnEdit" class="btn btn-danger" onclick="showEdit()">Edit Text</button>
+            <button id="btnSave" class="btn btn-danger" onclick="save()" style="display: none">Save</button>
+            <button id="btnCancel" class="btn btn-danger" onclick="hideEdit()" style="display: none">Cancel</button>
+        </div><!--
+        --><div class="col-sm-6 vcenter" style="padding-bottom: 2em"></div>
+    </div>
+
+</div>

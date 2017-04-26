@@ -1,4 +1,5 @@
-﻿using LRezLib.Managers;
+﻿using LRezLib;
+using LRezLib.Managers;
 using LRezLib.Models;
 using System;
 using System.Collections.Generic;
@@ -46,9 +47,33 @@ namespace LRezWebApp.Controllers
                 return true;
         }
 
-        public ActionResult TrackReservation()
+        [HttpPost]
+        public ActionResult TrackReservation(string tracking)
         {
-            return View();
+            try 
+            {
+                Reservation r = ReservationsManager.getReservation(tracking);
+                TrackedReservation t = new TrackedReservation();
+                t.ReservationDateTime = r.ReservationDateTime.ToString("f");
+                if (Constants.HashReservationStatus.ContainsKey(r.Status))
+                {
+                    t.Status = Constants.HashReservationStatus[r.Status];
+                    return Json(t);
+                }
+                else
+                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Invalid");
+
+            }
+            catch (Exception)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Invalid");
+            }
+        }
+
+        struct TrackedReservation
+        {
+            public string ReservationDateTime;
+            public string Status;
         }
 
     }

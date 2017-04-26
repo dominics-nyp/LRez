@@ -54,7 +54,7 @@ namespace LRezLib.Models
             if (dr["reservation_datetime"] != DBNull.Value)
                 this.ReservationDateTime = (DateTime)dr["reservation_datetime"];
             if (dr["num_visitors"] != DBNull.Value)
-                this.NumVisitors = (int)dr["num_adults"];
+                this.NumVisitors = (int)dr["num_visitors"];
             if (dr["requests"] != DBNull.Value)
                 this.Requests = (string)dr["requests"];
             if (dr["tracking"] != DBNull.Value)

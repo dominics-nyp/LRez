@@ -74,12 +74,32 @@
                 $('#lblSuccess').text('Congratulations! Your reservation has been submitted for processing. We will get in touch with you shortly. To track your reservation, please use tracking ID: ' + response.Tracking);
                 $("#divSuccess").show();
             },
-            fail: function (error) {
+            error: function (error) {
                 console.log('Error: ' + error);
                 $("#divFail").show();
             }
         });
 
+    }
+
+    function trackReservation() {
+        $("#divNotFound").hide();
+        $('#divReservationDetails').hide();
+        $.ajax({
+            url: location.protocol + "//" + location.host + '/Reservation/TrackReservation',
+            method: 'post',
+            data: {
+                tracking: $('#inTracking').val()
+            },
+            success: function (response) {
+                $('#lblTrackDate').text(response.ReservationDateTime);
+                $('#lblTrackStatus').text(response.Status);
+                $('#divReservationDetails').show();
+            },
+            error: function (error) {
+                $("#divNotFound").show();
+            }
+        });
     }
 
     function resetForm() {
@@ -118,7 +138,7 @@
 </ul>
 
 <div class="tab-content">
-    <div id="create" class="tab-pane fade in active" style="padding-top: 50px">
+    <div id="create" class="tab-pane fade in active" style="padding-top: 35px">
         <div id="divSuccess" class="alert alert-success alert-dismissable fade in" style="display: none">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <label id="lblSuccess"></label>
@@ -171,9 +191,18 @@
 
 
     </div>
-    <div id="track" class="tab-pane fade">
-        <h3>Menu 1</h3>
-        <p>Some content in menu 1.</p>
+    <div id="track" class="tab-pane fade" style="padding-top: 35px">
+        <h2>Whats the status of my Reservation?</h2>
+        <br /><br />
+        <p>Tracking ID:&nbsp;&nbsp;<input type="text" id="inTracking" class="input" style="color: darkgoldenrod" />&nbsp;&nbsp;&nbsp;<button onclick="trackReservation()">go</button></p>
+        <br /><br />
+        <div id="divNotFound" class="alert alert-danger alert-dismissable fade in" style="display: none">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <label id="lblNotFound">Tracking ID can not be found.</label>
+        </div>
+        <div id="divReservationDetails" style="display: none">
+            Thank you for choosing to dine at L'Rez. <br /><br />Your reservation on <label id="lblTrackDate"></label> is <label id="lblTrackStatus"></label>
+        </div>
     </div>
 
 </div>

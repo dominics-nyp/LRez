@@ -1,0 +1,334 @@
+﻿@{
+    ViewBag.Title = "Manage Reservations";
+}
+
+<style>
+    li a {
+        color: grey;
+    }
+
+        li a:hover {
+            color: black;
+        }
+
+    .input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #CCC;
+        color: #555;
+        box-sizing: border-box;
+        top: 50%;
+        width: 200px;
+        text-align: center;
+    }
+
+        .input:focus {
+            outline: none;
+        }
+
+    .row_header {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        font-weight: bold;
+        background-color: #e0e0e0;
+        border-top-right-radius: 0.5em;
+        border-top-left-radius: 0.5em;
+        text-align: center;
+    }
+
+    .row_content {
+        border-bottom: solid 1px #e0e0e0;
+    }
+
+        .row_content:hover {
+            background-color: #e0e0e0;
+        }
+
+    .col_content {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        /*height: 42px;*/
+        /*border-right: solid 1px #e0e0e0;*/
+        border-left: solid 1px #e0e0e0;
+        /*border-bottom: solid 1px #e0e0e0;*/
+    }
+
+    .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+        color: black;
+        background-color: darkgray;
+        width: 80px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
+    .nav-pills > li > a, .nav-pills > li > a:hover, .nav-pills > li > a:focus {
+        /*color:black;
+        background-color:darkgray;*/
+        width: 80px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+</style>
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        //$(document).ready(function () {
+        //    var hash = window.location.hash;
+        //    if (hash == '#celebrity') {
+        //        $('#liCelebrity a').click();
+        //    }
+        //    else if (hash == '#themed') {
+        //        $('#liThemed a').click();
+        //    }
+        //    else if (hash == '#degustation') {
+        //        $('#liDegustation a').click();
+        //    }
+        //    else {
+        //        $('#liRegular a').click();
+        //    }
+        //});
+
+        //var setMenuType = function (menuType) {
+        //    var menuTitle = '';
+        //    switch (menuType) {
+        //        case 0: menuTitle = 'Seasonal Menu'; break;
+        //        case 1: menuTitle = 'Celebrity Chef Series'; break;
+        //        case 2: menuTitle = 'Themed Menu'; break;
+        //        case 3: menuTitle = 'Degustation Menu'; break;
+        //        default: menuTitle = 'Menu'; break;
+        //    }
+
+        //    $('#addMenuTitle').text('Upload ' + menuTitle);
+        //    $('#menuType').val(menuType);
+        //};
+
+        //var getStatus = function (status) {
+        //    switch (status) {
+        //        case 0: return 'Active';
+        //        case 1: return 'Hidden';
+        //        case 2: return 'Archived';
+        //        default: return 'Error';
+        //    }
+        //};
+
+        //var edit = function(id) {
+        //    $('#spanName'+id).hide();
+        //    $('#btnEdit'+id).hide();
+        //    $('#inName'+id).val($('#spanName'+id).text());
+        //    $('#inName'+id).show();
+        //    $('#btnEditOK'+id).show();
+        //    $('#btnEditCancel'+id).show();
+        //}
+
+        //var editOK = function(id) {
+        //    $.ajax({
+        //        url: 'UpdateMenuTitle',
+        //        method: 'post',
+        //        data: {
+        //            id: id,
+        //            title: $('#inName'+id).val()
+        //        },
+        //        success: function() {
+        //            $('#inName'+id).hide();
+        //            $('#btnEditOK'+id).hide();
+        //            $('#btnEditCancel'+id).hide();
+        //            $('#spanName'+id).text($('#inName'+id).val());
+        //            $('#spanName'+id).show();
+        //            $('#btnEdit'+id).show();
+        //        },
+        //        error: function(err) {
+        //            alert("Error updating menu")
+        //        }
+        //    });
+        //}
+
+        //var editCancel = function(id) {
+        //    $('#inName'+id).hide();
+        //    $('#btnEditOK'+id).hide();
+        //    $('#btnEditCancel'+id).hide();
+        //    $('#spanName'+id).show();
+        //    $('#btnEdit'+id).show();
+        //}
+
+        //var updateStatus = function (id, status) {
+        //    $.ajax({
+        //        url: 'UpdateMenuStatus',
+        //        method: 'post',
+        //        data: {
+        //            id: id,
+        //            status: status
+        //        },
+        //        success: function () {
+
+        //        },
+        //        error: function (err) {
+        //            alert("Error updating menu")
+        //        }
+        //    });
+        //}
+
+        //var removeMenu = function (id) {
+        //    if (confirm("Confirm delete?") == true) {
+        //        $.ajax({
+        //            url: 'UpdateMenuStatus',
+        //            method: 'post',
+        //            data: {
+        //                id: id,
+        //                status: 2
+        //            },
+        //            success: function () {
+        //                location.reload();
+        //            },
+        //            error: function (err) {
+        //                alert("Error updating menu")
+        //            }
+        //        });
+        //    }
+        //}
+
+    </script>
+}
+
+<script type="text/javascript">
+
+    var displayStatus = function (status) {
+        if (status == 0)
+            document.write("pending");
+        else if (status == 1)
+            document.write("confirmed");
+        else if (status == 1)
+            document.write("rejected");
+        else if (status == 1)
+            document.write("cancelled");
+        else if (status == 1)
+            document.write("expired");
+        else
+            document.write("error");
+    };
+
+</script>
+
+
+<div style="height: 3em"></div>
+
+<ul class="nav nav-tabs">
+    <li id="liDaily" class="active"><a data-toggle="tab" href="#daily">&nbsp;&nbsp;&nbsp;&nbsp;Daily&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+    <li id="liWeekly"><a data-toggle="tab" href="#weekly">&nbsp;&nbsp;&nbsp;&nbsp;Weekly&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+    <li id="liPending"><a data-toggle="tab" href="#pending">&nbsp;&nbsp;&nbsp;&nbsp;Pending&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+    <li id="liSearch"><a data-toggle="tab" href="#search">&nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+</ul>
+
+<div style="height: 3em"></div>
+<div class="tab-content" style="padding-left: 1em; padding-right: 1em" align="center">
+    <div id="daily" class="tab-pane fade in active">
+
+        <div class="row row_header">
+            <div class="col-sm-1">ID</div>
+            <div class="col-sm-3">Customer</div>
+            <div class="col-sm-1">Time</div>
+            <div class="col-sm-1">Pax</div>
+            <div class="col-sm-2">Contact</div>
+            <div class="col-sm-1">Status</div>
+            <div class="col-sm-2">Action</div>
+            <div class="col-sm-1">Comments</div>
+        </div>
+
+        @foreach (var reservation in ViewBag.Daily)
+        {
+            <div class="row row_content">
+                <div class="col-sm-1 col_content">@reservation.ID</div>
+                <div class="col-sm-3 col_content" style="text-align: left">@reservation.Name</div>
+                <div class="col-sm-1 col_content">@reservation.ReservationDateTime.ToString("hh:mm tt")</div>
+                <div class="col-sm-1 col_content">@reservation.NumVisitors</div>
+                <div class="col-sm-2 col_content" style="text-align: left">
+                    @reservation.Contact<br />
+                    @reservation.Email
+                </div>
+                <div class="col-sm-1 col_content">
+                    <script type="text/javascript">
+                        displayStatus(@reservation.Status);
+                    </script>
+                </div>
+                <div class="col-sm-2 col_content">
+                    @if (reservation.Status == 0) //pending
+                    {
+                        <button type="button" class="btn btn-success">Confirm</button>
+                        <button type="button" class="btn btn-danger">Reject</button>
+                    }
+                    else if (reservation.Status == 1) //confirmed
+                    {
+                        <button type="button" class="btn btn-danger">Cancel</button>
+                    }
+                </div>
+                <div class="col-sm-1 col_content">something</div>
+
+
+
+                @*<div class="col-sm-3 col_content">
+                    <ul class="nav nav-pills">
+                        @if (menu.Status == 0)
+                        {
+                            <li class="active"><a data-toggle="pill" href="#">Active</a></li>
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 1)")">Hidden</a></li>
+                        }
+                        else if (menu.Status == 1)
+                        {
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 0)")">Active</a></li>
+                            <li class="active"><a data-toggle="pill" href="#">Hidden</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-sm-2 col_content">
+                    <button type="button" class="btn btn-default btn-sm btn-danger" onclick="@("removeMenu(" + menu.ID + ")")">
+                        <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Remove
+                    </button>
+                </div>*@
+            </div>
+        }
+
+    </div>
+    <div id="weekly" class="tab-pane fade">
+        
+    </div>
+
+    <div id="pending" class="tab-pane fade">
+
+    </div>
+    
+    <div id="search" class="tab-pane fade">
+
+    </div>
+
+</div>
+
+<div id="addModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="addMenuTitle">Upload Menu</h4>
+            </div>
+            @using (Html.BeginForm("Manage", "Menu", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+                    <label for="file">Title:</label>
+                    <input type="text" name="title" id="title" class="input" /><br /><br />
+                    <label for="file">Upload Menu:</label>
+                    <input type="file" name="file" id="file" /><br />
+                    <input type="hidden" name="menuType" id="menuType" value="0" />
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Upload Menu" />
+                    @*<button type="button" class="btn btn-default" data-dismiss="modal" onclick="submitAddMenu()">OK</button>*@
+                </div>
+            }
+        </div>
+
+    </div>
+</div>

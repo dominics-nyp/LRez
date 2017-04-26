@@ -18,6 +18,11 @@ namespace LRezLib.Managers
             return ReservationsDAO.getReservations(includeExpired);
         }
 
+        public static List<Reservation> getReservations(int reservationStatus)
+        {
+            return ReservationsDAO.getReservations(reservationStatus);
+        }
+
         public static List<Reservation> getReservations(string social_account, string social_provider, bool includeExpired = false)
         {
             return ReservationsDAO.getReservations(social_account, social_provider, includeExpired);
@@ -59,8 +64,19 @@ namespace LRezLib.Managers
 
         private static string generateTracking(string name)
         {
-            return (name + DateTime.Now.ToString()).GetHashCode().ToString();
+            return Math.Abs((name + DateTime.Now.ToString()).GetHashCode()).ToString();
         }
+
+        public static List<Reservation> getReservations(DateTime date)
+        {
+            return ReservationsDAO.getReservations(date);
+        }
+
+        public static List<Reservation> getReservations(DateTime fromDate, DateTime toDate)
+        {
+            return ReservationsDAO.getReservations(fromDate, toDate);
+        }
+
 
     }
 }

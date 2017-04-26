@@ -1,0 +1,462 @@
+﻿@{
+    ViewBag.Title = "Manage Menus";
+}
+
+<style>
+    li a {
+        color: grey;
+    }
+    li a:hover {
+        color: black;
+    }
+
+    .input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #CCC;
+        color: #555;
+        box-sizing: border-box;
+        top: 50%;
+        width: 200px;
+        text-align: center;
+    }
+
+    .input:focus {
+        outline: none;
+    }
+
+    .row_header {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        font-weight: bold;
+        background-color: #e0e0e0;
+        border-top-right-radius: 0.5em;
+        border-top-left-radius: 0.5em;
+        text-align: center;
+    }
+
+    .row_content {
+        border-bottom: solid 1px #e0e0e0;
+    }
+
+    .row_content:hover {
+        background-color: #e0e0e0;
+    }
+
+    .col_content {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        /*height: 42px;*/
+        /*border-right: solid 1px #e0e0e0;*/
+        border-left: solid 1px #e0e0e0;
+        /*border-bottom: solid 1px #e0e0e0;*/
+    }
+
+    .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+        color:black;
+        background-color:darkgray;
+        width: 80px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
+    .nav-pills > li > a, .nav-pills > li > a:hover, .nav-pills > li > a:focus {
+        /*color:black;
+        background-color:darkgray;*/
+        width: 80px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
+</style>
+
+@section scripts {
+
+    <script>
+
+        $(document).ready(function () {
+            var hash = window.location.hash;
+            if (hash == '#celebrity') {
+                $('#liCelebrity a').click();
+            }
+            else if (hash == '#themed') {
+                $('#liThemed a').click();
+            }
+            else if (hash == '#degustation') {
+                $('#liDegustation a').click();
+            }
+            else {
+                $('#liRegular a').click();
+            }
+                
+        });
+
+        var setMenuType = function (menuType) {
+            var menuTitle = '';
+            switch (menuType) {
+                case 0: menuTitle = 'Seasonal Menu'; break;
+                case 1: menuTitle = 'Celebrity Chef Series'; break;
+                case 2: menuTitle = 'Themed Menu'; break;
+                case 3: menuTitle = 'Degustation Menu'; break;
+                default: menuTitle = 'Menu'; break;
+            }
+
+            $('#addMenuTitle').text('Upload ' + menuTitle);
+            $('#menuType').val(menuType);
+        };
+
+        //var getStatus = function (status) {
+        //    switch (status) {
+        //        case 0: return 'Active';
+        //        case 1: return 'Hidden';
+        //        case 2: return 'Archived';
+        //        default: return 'Error';
+        //    }
+        //};
+
+        var edit = function(id) {
+            $('#spanName'+id).hide();
+            $('#btnEdit'+id).hide();
+            $('#inName'+id).val($('#spanName'+id).text());
+            $('#inName'+id).show();
+            $('#btnEditOK'+id).show();
+            $('#btnEditCancel'+id).show();
+            
+        }
+
+        var editOK = function(id) {
+
+            $.ajax({
+                url: 'UpdateMenuTitle',
+                method: 'post',
+                data: {
+                    id: id,
+                    title: $('#inName'+id).val()
+                },
+                success: function() {
+                    $('#inName'+id).hide();
+                    $('#btnEditOK'+id).hide();
+                    $('#btnEditCancel'+id).hide();
+                    $('#spanName'+id).text($('#inName'+id).val());
+                    $('#spanName'+id).show();
+                    $('#btnEdit'+id).show();
+                },
+                error: function(err) {
+                    alert("Error updating menu")
+                }
+            });
+        }
+
+        var editCancel = function(id) {
+            $('#inName'+id).hide();
+            $('#btnEditOK'+id).hide();
+            $('#btnEditCancel'+id).hide();
+            $('#spanName'+id).show();
+            $('#btnEdit'+id).show();
+        }
+
+        var updateStatus = function (id, status) {
+            $.ajax({
+                url: 'UpdateMenuStatus',
+                method: 'post',
+                data: {
+                    id: id,
+                    status: status
+                },
+                success: function () {
+
+                },
+                error: function (err) {
+                    alert("Error updating menu")
+                }
+            });
+        }
+
+        var removeMenu = function (id) {
+            if (confirm("Confirm delete?") == true) {
+                $.ajax({
+                    url: 'UpdateMenuStatus',
+                    method: 'post',
+                    data: {
+                        id: id,
+                        status: 2
+                    },
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function (err) {
+                        alert("Error updating menu")
+                    }
+                });
+            }
+        }
+
+    </script>
+}
+
+<div style="height: 3em"></div>
+
+<ul class="nav nav-tabs">
+    <li id="liRegular"><a data-toggle="tab" href="#regular">Seasonal Menu</a></li>
+    <li id="liCelebrity"><a data-toggle="tab" href="#celebrity">Celebrity Chef</a></li>
+    <li id="liThemed"><a data-toggle="tab" href="#themed">Themed Menu</a></li>
+    <li id="liDegustation"><a data-toggle="tab" href="#degustation">Degustation Menu</a></li>
+</ul>
+
+<div style="height: 3em"></div>
+<div class="tab-content" style="padding-left: 1em; padding-right: 1em" align="center">
+    <div id="regular" class="tab-pane fade">
+        
+        <div style="text-align: right; padding-bottom: 0.5em; max-width: 800px">
+            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" onclick="setMenuType(0)" data-target="#addModal">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Add
+            </button>
+        </div>
+
+        <div class="row row_header" style="max-width: 800px">
+            <div class="col-sm-1">ID</div>
+            <div class="col-sm-6">Title</div>
+            <div class="col-sm-3">Status</div>
+            <div class="col-sm-2">Action</div>
+        </div>
+
+        @foreach (var menu in ViewBag.Regular)
+        {
+            <div class="row row_content" style="max-width: 800px; text-align: left">
+                <div class="col-sm-1 col_content">@menu.ID</div>
+                <div class="col-sm-6 col_content">
+                    <span id="@("spanName" + menu.ID)">@menu.Name</span>
+                    <input type="text" id="@("inName" + menu.ID)" style="display: none" />
+                    <div style="float: right">
+                        <button id="@("btnEdit"+menu.ID)" type="button" class="btn btn-default btn-sm" onclick="edit(@menu.ID)">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button id="@("btnEditOK"+menu.ID)" type="button" class="btn btn-default btn-sm" style="display: none" onclick="editOK(@menu.ID)">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                        <button id="@("btnEditCancel"+menu.ID)" type="button" class="btn btn-default btn-sm" style="display: none" onclick="editCancel(@menu.ID)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>    
+                </div>
+                <div class="col-sm-3 col_content">
+                    <ul class="nav nav-pills">
+                        @if (menu.Status == 0)
+                        {
+                            <li class="active"><a data-toggle="pill" href="#">Active</a></li>
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 1)")">Hidden</a></li>
+                        }
+                        else if (menu.Status == 1)
+                        {
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 0)")">Active</a></li>
+                            <li class="active"><a data-toggle="pill" href="#">Hidden</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-sm-2 col_content">
+                <button type="button" class="btn btn-default btn-sm btn-danger" onclick="@("removeMenu(" + menu.ID + ")")">
+                    <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Remove
+                </button>
+                </div>
+            </div>
+        }
+
+    </div>
+    <div id="celebrity" class="tab-pane fade active">
+        <div style="text-align: right; padding-bottom: 0.5em; max-width: 800px">
+            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" onclick="setMenuType(1)" data-target="#addModal">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Add
+            </button>
+        </div>
+
+        <div class="row row_header" style="max-width: 800px">
+            <div class="col-sm-1">ID</div>
+            <div class="col-sm-6">Title</div>
+            <div class="col-sm-3">Status</div>
+            <div class="col-sm-2">Action</div>
+        </div>
+
+        @foreach (var menu in ViewBag.Celebrity)
+        {
+            <div class="row row_content" style="max-width: 800px; text-align: left">
+                <div class="col-sm-1 col_content">@menu.ID</div>
+                <div class="col-sm-6 col_content">
+                    <span id="@("spanName" + menu.ID)">@menu.Name</span>
+                    <input type="text" id="@("inName" + menu.ID)" style="display: none" />
+                    <div style="float: right">
+                        <button id="@("btnEdit"+menu.ID)" type="button" class="btn btn-default btn-sm" onclick="edit(@menu.ID)">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button id="@("btnEditOK"+menu.ID)" type="button" class="btn btn-default btn-sm" style="display: none" onclick="editOK(@menu.ID)">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                        <button id="@("btnEditCancel"+menu.ID)" type="button" class="btn btn-default btn-sm" style="display: none" onclick="editCancel(@menu.ID)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-3 col_content">
+                    <ul class="nav nav-pills">
+                        @if (menu.Status == 0)
+                        {
+                            <li class="active"><a data-toggle="pill" href="#">Active</a></li>
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 1)")">Hidden</a></li>
+                        }
+                        else if (menu.Status == 1)
+                        {
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 0)")">Active</a></li>
+                            <li class="active"><a data-toggle="pill" href="#">Hidden</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-sm-2 col_content">
+                    <button type="button" class="btn btn-default btn-sm btn-danger" onclick="@("removeMenu(" + menu.ID + ")")">
+                        <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Remove
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="themed" class="tab-pane in active">
+        <div style="text-align: right; padding-bottom: 0.5em; max-width: 800px">
+            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" onclick="setMenuType(2)" data-target="#addModal">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Add
+            </button>
+        </div>
+
+        <div class="row row_header" style="max-width: 800px">
+            <div class="col-sm-1">ID</div>
+            <div class="col-sm-6">Title</div>
+            <div class="col-sm-3">Status</div>
+            <div class="col-sm-2">Action</div>
+        </div>
+
+        @foreach (var menu in ViewBag.Themed)
+        {
+            <div class="row row_content" style="max-width: 800px; text-align: left">
+                <div class="col-sm-1 col_content">@menu.ID</div>
+                <div class="col-sm-6 col_content">
+                    <span id="@("spanName" + menu.ID)">@menu.Name</span>
+                    <input type="text" id="@("inName" + menu.ID)" style="display: none" />
+                    <div style="float: right">
+                        <button id="@("btnEdit"+menu.ID)" type="button" class="btn btn-default btn-sm" onclick="edit(@menu.ID)">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button id="@("btnEditOK"+menu.ID)" type="button" class="btn btn-default btn-sm" style="display: none" onclick="editOK(@menu.ID)">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                        <button id="@("btnEditCancel"+menu.ID)" type="button" class="btn btn-default btn-sm" style="display: none" onclick="editCancel(@menu.ID)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-3 col_content">
+                    <ul class="nav nav-pills">
+                        @if (menu.Status == 0)
+                        {
+                            <li class="active"><a data-toggle="pill" href="#">Active</a></li>
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 1)")">Hidden</a></li>
+                        }
+                        else if (menu.Status == 1)
+                        {
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 0)")">Active</a></li>
+                            <li class="active"><a data-toggle="pill" href="#">Hidden</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-sm-2 col_content">
+                    <button type="button" class="btn btn-default btn-sm btn-danger" onclick="@("removeMenu(" + menu.ID + ")")">
+                        <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Remove
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="degustation" class="tab-pane fade">
+        <div style="text-align: right; padding-bottom: 0.5em; max-width: 800px">
+            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" onclick="setMenuType(3)" data-target="#addModal">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Add
+            </button>
+        </div>
+
+        <div class="row row_header" style="max-width: 800px">
+            <div class="col-sm-1">ID</div>
+            <div class="col-sm-6">Title</div>
+            <div class="col-sm-3">Status</div>
+            <div class="col-sm-2">Action</div>
+        </div>
+
+        @foreach (var menu in ViewBag.Degustation)
+        {
+            <div class="row row_content" style="max-width: 800px; text-align: left">
+                <div class="col-sm-1 col_content">@menu.ID</div>
+                <div class="col-sm-6 col_content">
+                    <span id="@("spanName" + menu.ID)">@menu.Name</span>
+                    <input type="text" id="@("inName" + menu.ID)" style="display: none" />
+                    <div style="float: right">
+                        <button id="@("btnEdit"+menu.ID)" type="button" class="btn btn-default btn-sm" onclick="edit(@menu.ID)">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button id="@("btnEditOK"+menu.ID)" type="button" class="btn btn-default btn-sm" style="display: none" onclick="editOK(@menu.ID)">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                        <button id="@("btnEditCancel"+menu.ID)" type="button" class="btn btn-default btn-sm" style="display: none" onclick="editCancel(@menu.ID)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-3 col_content">
+                    <ul class="nav nav-pills">
+                        @if (menu.Status == 0)
+                        {
+                            <li class="active"><a data-toggle="pill" href="#">Active</a></li>
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 1)")">Hidden</a></li>
+                        }
+                        else if (menu.Status == 1)
+                        {
+                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 0)")">Active</a></li>
+                            <li class="active"><a data-toggle="pill" href="#">Hidden</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-sm-2 col_content">
+                    <button type="button" class="btn btn-default btn-sm btn-danger" onclick="@("removeMenu(" + menu.ID + ")")">
+                        <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Remove
+                    </button>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+<div id="addModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="addMenuTitle">Upload Menu</h4>
+            </div>
+            @using (Html.BeginForm("Manage", "Menu", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+            <div class="modal-body">
+                <label for="file">Title:</label>
+                <input type="text" name="title" id="title" class="input" /><br /><br />
+                <label for="file">Upload Menu:</label>
+                <input type="file" name="file" id="file" /><br />
+                <input type="hidden" name="menuType" id="menuType" value="0" />
+            </div>
+            <div class="modal-footer">
+                <input type="submit" value="Upload Menu" />
+                @*<button type="button" class="btn btn-default" data-dismiss="modal" onclick="submitAddMenu()">OK</button>*@
+            </div>
+            }
+        </div>
+
+    </div>
+</div>

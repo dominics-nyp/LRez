@@ -8,20 +8,27 @@ namespace LRezLib
 {
     public class Constants
     {
-        public static readonly int ReservationStatus_PENDING = 0;
-        public static readonly int ReservationStatus_APPROVED = 1;
-        public static readonly int ReservationStatus_REJECTED = 2;
+        public const int ReservationStatus_PENDING = 0;
+        public const int ReservationStatus_APPROVED = 1;
+        public const int ReservationStatus_REJECTED = 2;
+        public const int ReservationStatus_CANCELLED = 3; 
+        public static readonly Dictionary<int, string> HashReservationStatus = new Dictionary<int, string>() {
+            { ReservationStatus_PENDING, "Pending" },
+            { ReservationStatus_APPROVED, "Confirmed" },
+            { ReservationStatus_REJECTED, "Rejected" },
+            { ReservationStatus_CANCELLED, "Cancelled" }
+        };
 
-        public static readonly int MenuStatus_ACTIVE = 0;
-        public static readonly int MenuStatus_HIDDEN = 1;
-        public static readonly int MenuStatus_ARCHIVED = 2;
+        public const int MenuStatus_ACTIVE = 0;
+        public const int MenuStatus_HIDDEN = 1;
+        public const int MenuStatus_ARCHIVED = 2;
 
-        public static readonly int MenuType_Regular = 0;
-        public static readonly int MenuType_Celebrity = 1;
-        public static readonly int MenuType_Themed = 2;
-        public static readonly int MenuType_Degustation = 3;
+        public const int MenuType_Regular = 0;
+        public const int MenuType_Celebrity = 1;
+        public const int MenuType_Themed = 2;
+        public const int MenuType_Degustation = 3;
 
-        public static readonly string NEW = "NEW";
+        public const string NEW = "NEW";
 
     }
 }

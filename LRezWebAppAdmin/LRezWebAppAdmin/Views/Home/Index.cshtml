@@ -1,31 +1,216 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿
+@{
+    Layout = null;
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - L'Rez Training Restaurant @@ NYP</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link type="text/css" rel="stylesheet" href="~/Content/jquery.datetimepicker.css" />
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    <style>
+        .navbar-fixed-top {
+            height: 75px;
+        }
+
+        .navbar-default .navbar-nav {
+            background-color: #f8f8f8;
+        }
+
+        .navbar-nav li a {
+            padding-top: 35px;
+        }
+
+        .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+            background-color: #ff5733;
+            color: #ffffff;
+        }
+
+        .dropdown-menu > li > a {
+            padding-top: 10px;
+        }
+
+        .dropdown-menu > li > a:hover {
+            background-color: #ff5733;
+            color: #ffffff;
+            padding-top: 10px;
+        }
+
+        body {
+            padding-top: 75px;
+            padding-bottom: 80px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .container-fluid .jumbotron {
+            padding: 0;
+        }
+
+        .logo {
+            background-color: #f8f8f8;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .input-form {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-left: 35px;
+            padding-right: 35px;
+            border: solid 1px #484848;
+            display: inline-block;
+        }
+
+        .input-div {
+            float: left;
+            padding-right: 5px;
+            padding-top: 10px;
+            text-align: left;
+        }
+
+        .input {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #CCC;
+            color: #555;
+            box-sizing: border-box;
+            top: 50%;
+            width: 200px;
+            text-align: center;
+        }
+
+            .input:focus {
+                outline: none;
+            }
+
+            .input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+                text-align: left;
+            }
+
+            .input::-moz-placeholder { /* Firefox 19+ */
+                text-align: left;
+            }
+
+            .input:-ms-input-placeholder { /* IE 10+ */
+                text-align: left;
+            }
+
+            .input:-moz-placeholder { /* Firefox 18- */
+                text-align: left;
+            }
+    </style>
+
+    <script>
+        function confirmModal() {
+            $('#lblName').text($('#inName').val());
+            $('#lblContact').text($('#inContact').val());
+            $('#lblDateTime').text($('#datetimepicker').val());
+            $('#lblPAX').text($('#inPAX').val());
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span class="navbar-brand"><img src="http://localhost:8080/Images/logo.png" alt="L'Rez" height="50" /></span>
+            </div>
+            <div class="navbar-collapse collapse">
+                @*<ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Menu", "Index", "Menu")</li>
+                    <li>@Html.ActionLink("Reservations", "Index", "Reservation")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>*@
+                @*@Html.Partial("_MenuPartial")*@
+                @{ Html.RenderAction("MenuBar", "Menu"); }
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    <div class="container-fluid body-content" style="padding: 0">
+
+        <div class="jumbotron" style="margin-bottom: 10px">
+            <img src="http://localhost:8080/Images/banner3.jpg" alt="L'Rez" class="img-responsive" />
+        </div>
+
+        @*<div style="background-color: white; opacity: 0.85; position: relative; top: -10vh">
+                <input type="text" placeholder="Name" />
+            </div>*@
+
+        <div style="max-width: 1100px; text-align: center; margin: auto">
+            <div class="img-rounded input-form">
+                <div style="text-align: left"><h4>Reserve your table now! </h4></div>
+                <div class="input-div"><input id="inName" class="input" type="text" placeholder="name" /></div>
+                <div class="input-div"><input id="inContact" class="input" type="text" placeholder="contact no." /></div>
+                <div class="input-div"><input class="input" type="text" placeholder="date" id="datetimepicker" /></div>
+                <div class="input-div"><input id="inPAX" class="input" type="number" min="0" step="1" placeholder="pax" /></div>
+                <div style="float: left"><button class="btn" data-toggle="modal" data-target="#confirmModal" onclick="confirmModal()">go</button></div>
+            </div>
+        </div>
+
+        <div id="confirmModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Confirm Reservation?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><u>Please review your details</u></p>
+                        Name : <label id="lblName"></label><br />
+                        Contact No. :<label id="lblContact"></label><br />
+                        Reservation Time : <label id="lblDateTime"></label><br />
+                        Number of Guests : <label id="lblPAX"></label><br />
+                        <br />
+                        <p><u>Additional Information</u></p>
+                        <div>Email : </div><input type="text" class="input" style="width: 100%; text-align: left" placeholder="- to receive a confirmation email from us -" /><br />
+                        <div>Special Requests : </div><textarea rows="4" style="width: 100%"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >OK</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="navbar-fixed-bottom text-center" style="height: 80px; background-color: white">
+            <hr />
+            <p>&copy; 2017 - L'Rez Training Restaurant @@ NYP</p>
+        </footer>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+    <script>
+        $('#datetimepicker').datetimepicker({
+            dayOfWeekStart: 0,
+            lang: 'en',
+            onGenerate: function (ct) {
+                $(this).find('.xdsoft_date.xdsoft_weekend')
+                    .addClass('xdsoft_disabled');
+            },
+            allowTimes: ['11:30', '12:00', '12:30', '13:00', '13:30', '14:00'],
+            minDate: '+1970/01/02',
+            format: 'd/m/Y H:i'
+        });
+    </script>
+</body>
+</html>

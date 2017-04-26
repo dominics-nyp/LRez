@@ -17,30 +17,49 @@
         .navbar-fixed-top {
             height: 75px;
         }
-        .navbar-nav li a {
-            padding-top: 35px;
-        }
+
         .navbar-default .navbar-nav {
             background-color: #f8f8f8;
         }
+
+        .navbar-nav li a {
+            padding-top: 35px;
+        }
+
         .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
             background-color: #ff5733;
             color: #ffffff;
         }
+
+        .dropdown-menu > li > a {
+            padding-top: 10px;
+        }
+
+        .dropdown-menu > li > a:hover {
+            background-color: #ff5733;
+            color: #ffffff;
+            padding-top: 10px;
+        }
+
         body {
             padding-top: 75px;
             padding-bottom: 80px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
+
         .container-fluid .jumbotron {
             padding: 0;
         }
+
         .logo {
-             background-color: #f8f8f8; 
-             padding-left: 10px;
-             padding-right: 10px;
-             padding-top: 10px;
-             padding-bottom: 10px;
+            background-color: #f8f8f8;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
+
         .input-form {
             padding-top: 15px;
             padding-bottom: 15px;
@@ -49,12 +68,14 @@
             border: solid 1px #484848;
             display: inline-block;
         }
+
         .input-div {
-            float: left; 
-            padding-right: 5px; 
-            padding-top:10px;
+            float: left;
+            padding-right: 5px;
+            padding-top: 10px;
             text-align: left;
         }
+
         .input {
             background-color: transparent;
             border: none;
@@ -65,22 +86,26 @@
             width: 200px;
             text-align: center;
         }
-            .input:focus {
-                outline: none;
-            }
-            .input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-                text-align: left;
-            }
-            .input::-moz-placeholder { /* Firefox 19+ */
-                text-align: left;
-            }
-            .input:-ms-input-placeholder { /* IE 10+ */
-                text-align: left;
-            }
-            .input:-moz-placeholder { /* Firefox 18- */
-                text-align: left;
-            }
 
+        .input:focus {
+            outline: none;
+        }
+
+        .input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+            text-align: left;
+        }
+
+        .input::-moz-placeholder { /* Firefox 19+ */
+            text-align: left;
+        }
+
+        .input:-ms-input-placeholder { /* IE 10+ */
+            text-align: left;
+        }
+
+        .input:-moz-placeholder { /* Firefox 18- */
+            text-align: left;
+        }
 
     </style>
 
@@ -105,13 +130,14 @@
                 <span class="navbar-brand"><img src="http://localhost:8080/Images/logo.png" alt="L'Rez" height="50" /></span>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
+                @*<ul class="nav navbar-nav navbar-right">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Menu", "Index", "Menu")</li>
                     <li>@Html.ActionLink("Reservations", "Index", "Reservation")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
+                </ul>*@
+                @{ Html.RenderAction("MenuBar", "Menu"); }
             </div>
         </div>
     </div>
