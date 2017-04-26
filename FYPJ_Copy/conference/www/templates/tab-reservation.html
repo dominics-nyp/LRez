@@ -1,45 +1,41 @@
 <ion-view view-title="Reservation">
   <ion-content>
+  <div>
     <div class="text-center">
       <a ui-sref="account">
         <img menu-close="" src="img/lrez.jpg" width="410" height="200">
         <h4 >Make a Reservation</h4>
       </a>
       <h5>Please complete the form to submit your reservation request</h5>
-      <div class="list">
+      <div class="list list-inset">
         <form novalidate name="reservation">
-          <label class="item item-input item-stacked-label">
+          <label class="item item-input item-floating-label">
             <span class="input-label">Name</span>
-            <input type="text" name="name" ng-model="rf.name" required placeholder="Ms/Mdm/Mr">
+            <input type="text" name="name" ng-model="rf.name" required placeholder="Name">
           </label>
 
-          <label class="item item-input item-stacked-label">
+          <label class="item item-input item-floating-label">
             <span class="input-label">Contact Number</span>
-            <input type="text" name="number" ng-model="rf.number" required placeholder="Number">
+            <input type="number" name="number" ng-model="rf.number" required placeholder="Contact Number">
           </label>
 
-          <label class="item item-input item-stacked-label">
-            <span class="input-label">Email</span>
-            <input type="email" name="email" ng-model="rf.email" required placeholder="abc@google.com">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Email Address</span>
+            <input type="email" name="email" ng-model="rf.email" required placeholder="Email Address">
           </label>
 
-          <label class="item item-input item-stacked-label">
-            <span class="input-label">Date</span>
-            <input type="date" name="date" ng-model="rf.date" required>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Number of Visitors</span>
+            <input type="number" name="visitors" ng-model="rf.visitors" required placeholder="Number of Visitors" max='10' min='1'>
           </label>
 
-          <label class="item item-input item-stacked-label">
-            <span class="input-label">Number of Adults</span>
-            <input type="number" name="adult" ng-model="rf.adult" required placeholder="Number of Adult" min="0" max="10">
-          </label>
-
-          <label class="item item-input item-stacked-label">
-            <span class="input-label">Number of Kids</span>
-            <input type="number" name="kid" ng-model="rf.kid" required placeholder="Number of Kids (Aged 12 years and below)" min="0" max="5">
+          <label class="item item-input">
+            <span class="input-label">Reservation Date</span>
+            <input type="date" name="Date" ng-model="rf.date" required>
           </label>
 
           <div class="list">
-          <label class="item item-input item-select">
+          <label class="item item-input  item-select">
             <div class="input-label">Reservation Timing</div>
             <select name="time" ng-model="rf.time" required>
               <option value="11.5">11:30 a.m.</option>
@@ -51,14 +47,13 @@
             </select>
           </label>
         </div>
-        
-        <button ng-click= "display()" ui-sref="app.home"  ng-disabled="reservation.$invalid" class="button button-block button-balanced">
+
+        <button ng-click= "display()"  ng-disabled="reservation.$invalid" class="button button-block button-balanced" onClick="this.form.reset()">
           Submit
         </button>
-
       </form>
       
-    </div>
-
+      </div>
+  </div>
   </ion-content>
 </ion-view>

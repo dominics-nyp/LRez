@@ -3,10 +3,85 @@
 
 angular.module('app.controllers', [])
 
-  .controller('AppCtrl', function($cordovaOauth, $http) {
+
+.controller('MenuCtrl', function($scope, $http) {
+        $scope.menus = [];
+    
+    $http.get('http://172.20.130.159:8080/api/Menu')
+    .then(function(response){
+      for( i = 0 ; i<response.data.length ; i++){
+        console.log(response.data[i].URL);
+        $scope.menus.push(response.data[i].URL);
+         }
+       })
+    .catch(function(error) {
+        alert("error: " + JSON.stringify(error));
+
+    });
+  })
+
+
+
+.controller('InstaCtrl', function($scope, $http, $window) {
+        $scope.instas = [];
+        $scope.captions = [];
+
+        $scope.access_token = $window.sessionStorage.getItem("access_token");
+        console.log("access_token", $scope.access_token);
+    $http.get('https://www.instagram.com/lrezproject/media/?size=t')
+    .then(function(response){
+      for( i = 0 ; i<response.data.items.length; i++){
+        console.log(response.data.items[i]);
+        $scope.instas.push(response.data.items[i]);
+
+          if (response.data.items[i].caption == null)
+          {
+            $scope.captions.push(response.data.items[i]);
+          }
+          else{
+            $scope.captions.push(response.data.items[i].caption.text);
+          }
+
+         }
+       })
+    .catch(function(error) {
+        // alert("error: " + JSON.stringify(error));
+
+    });
+
+       $scope.igLike = function(val) {
+
+
+          $scope.access_token = $window.sessionStorage.getItem("access_token");
+        //console.log($scope.instas);
+             //$http.post('https://api.instagram.com/v1/media/'  + $scope.instas[key].id +'/likes?access_token=4318921338.d8a48ba.ea5390d0a6ee41458ad1fe9caa946fa6')
+
+             var button = event.target.id;
+             // alert(val.id);
+
+             for (key in $scope.instas)
+             {
+
+                if (val.id == $scope.instas[key].id) {
+
+                  $http.post('https://api.instagram.com/v1/media/' + $scope.instas[key].id + '/likes?access_token=' + $scope.access_token)
+
+                  alert("Liked");
+                  break;
+                }
+             }
+
+        }
+    
+
+  })
+
+  .controller('AppCtrl', function($cordovaOauth, $http, $scope, $window) {
     var appCtrl = this;
 
     appCtrl.user = '';
+     $scope.showsecondCard = true;
+      $scope.isDisabled = false;
     
     appCtrl.fbLogin = function () { 
       
@@ -25,6 +100,10 @@ angular.module('app.controllers', [])
               display: 'http://graph.facebook.com/'+ response.data.id + '/picture?type=large',
               name: response.data.name
             };
+              $scope.hidedefaultimg = true;
+             $scope.showsecondCard = false;
+                $scope.isDisabled = true;
+                return false;
           })
           .catch(function(error) {
             alert('error: ' + JSON.stringify(error));
@@ -88,19 +167,29 @@ angular.module('app.controllers', [])
 
       try {
     
-        $cordovaOauth.instagram("dadd1fa8cccb4f388b078935844b032a", ["basic"])
+        $cordovaOauth.instagram("d8a48ba89ff14edeb7b621c758de4637", ["basic+likes"])
         .then(function(response) {
-          alert(JSON.stringify(response));
+          // alert(JSON.stringify(response));
+
+          $window.sessionStorage.setItem("access_token", response.access_token);
+
+          $scope.access_token = $window.sessionStorage.getItem("access_token");
+
           $http({
-            url: 'https://api.instagram.com/v1/users/self/?access_token=' + response.access_token
+            url: 'https://api.instagram.com/v1/users/self/?access_token=' + $scope.access_token
           })
           .then(function(response) {
+            // alert(response.access_token);
             alert('instagram login success');
             appCtrl.user = {
               id: response.data.id,
               display: "http://graph.facebook.com/"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     + response.data.id + '/picture?type=large',
               name: response.data.name
             };
+            $scope.hidedefaultimg = true;
+             $scope.showsecondCard = false;
+             $scope.isDisabled = true;
+                return false;
           })
           .catch(function(error) {
             alert('error: ' + JSON.stringify(error));
@@ -154,6 +243,20 @@ angular.module('app.controllers', [])
       }
     };
 
+
+      $scope.logout = function() {
+       $scope.hidedefaultimg = false;
+        $scope.isDisabled = false;
+      alert("Sign out successfully");
+      $scope.showsecondCard = true;
+    $cordovaFacebook.logout();
+
+    }, function(error) {
+        alert("There was a problem signing in!  See the console for logs");
+        console.log(error);
+      
+    }
+
   })
 
   .controller('InfoCtrl', function() {
@@ -185,102 +288,141 @@ angular.module('app.controllers', [])
     
   })
 
-    .controller('CalendarCtrl', function ($scope, $cordovaCalendar, $http) {
+    .controller('CalendarCtrl', function ($scope, $cordovaCalendar, $http, $ionicPopup, $cordovaClipboard) {
+
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementsByName("Date")[0].setAttribute('min', today);
 
     $scope.rf = {
       name:'',
-      number:0,
+      number:'',
       email:'',
       date:'',
-      adult:0,
-      kid:0,
+      vistors:'',
       time:''
 
 
     }
 
-    $scope.display = function(){
-      console.log($scope.rf);
-    
-var data = {'Name': $scope.rf.name,
-            'Contact':$scope.rf.number,
-            'Email': $scope.rf.email,
-            'ReservationDateTime':new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60),
-            'NumAdults':$scope.rf.adult,
-            'NumChildren':$scope.rf.kid
-          };
+    function popup() {
+     var confirmPopup = $ionicPopup.confirm({
+       title: 'Calendar',
+       template: 'Would you like to add your reservation into your calendar?'
+     });
 
-    $http({
-      method: 'POST',
-      url: 'http://localhost:53501/api/Reservations', 
-      data: data,
-      headers: {'Content-Type':'application/json'}
-    })
-   .then(
-       function(response){
-         // success callback
-         alert('success')
-       })
-  .catch(
-    function(error){
-   // failure callback
-   alert(JSON.stringify(error));
- }
-);
-
-      try {
-       $cordovaCalendar.createEvent({
-        title: 'LRez Reservation',
-        location: 'Nanyang Polytechnic Block F, Level 3',
-        notes: 'Wishing you a pleasant dining experience!',
-        startDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) ,
-        endDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) 
-      }).then(function (result) {
+     confirmPopup.then(function(res) {
+       if(res) {
+         try {
+           $cordovaCalendar.createEvent({
+            title: 'LRez Reservation',
+            location: 'Nanyang Polytechnic Block F, Level 3',
+            notes: 'Wishing you a pleasant dining experience!',
+            startDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) ,
+            endDate: new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60) 
+          }).then(function (result) {
       // success
       alert("Event successfully added into calendar!");
-      }, function (err) {
+      showAlert();
+    }, function (err) {
       // error
       alert("Event is not added into calendar");
-      });
-    }
-    catch (error) {
-        alert('Event Creation Failure');
-        console.log("Error -> " + JSON.stringify(error));
-      }
-    }
+    });
+        }
+        catch (error) {
+          alert('Event Creation Failure');
+          console.log("Error -> " + JSON.stringify(error));
+        }
+      } else {
+       alert("Event is not added into calendar");
+       showAlert();
+     }
+   });
+   };
+
+   $scope.display = function(){
+    console.log($scope.rf);
+    
+    var data = {'Name': $scope.rf.name,
+    'Contact':$scope.rf.number,
+    'Email': $scope.rf.email,
+    'ReservationDateTime':new Date($scope.rf.date.getTime() + $scope.rf.time*60000*60),
+    'Numvisitors':$scope.rf.visitors,
+  };
+
+  /* $scope.copyText = function(value) {
+        $cordovaClipboard.copy(value).then(function() {
+            console.log("Copied text");
+        }, function() {
+            console.error("There was an error copying");
+        });
+    } */
+
+  $http({
+    method: 'POST',
+    url: 'http://172.20.129.97:8033/api/Reservations', 
+    data: data,
+    headers: {'Content-Type':'application/json'}
+  })
+  .then(
+   function(response){
+           // success callback
+           popup();
+           console.log(response.data.Tracking);
+           $scope.tracking = response.data.Tracking; 
+           alert("Your Tracking ID is "+ response.data.Tracking);
+
+         })
+  .catch(
+    function(error){
+     // failure callback
+     console.log(error);
+     alert(JSON.stringify(error));
+   }
+   );
+}
 
 })
 
-.controller('ResCtrl', function($scope, $ionicLoading, $state, $stateParams){
+  .controller('ResCtrl', function($scope, $ionicLoading, $state, $stateParams){
     console.log('reservation');
 
     $scope.formData = {};
 
     //Go to the guessing page
     $scope.onTouch = function(item,event){
-        console.log($scope.formData.email);
+      console.log($scope.formData.email);
     };
 
-})
+  })
 
+  .controller('TrackCtrl', function($scope, $http) {
+    //var LoginId = SocialLogin.get();
+    $scope.reservations = [];
+    $scope.statuscheck= function(id){
+      $http.get('http://172.20.129.97:8033/api/Reservations?tracking='+id)
+      .then(function(response){
+        var intStatus = response.data.Status;
+        if( intStatus == 0){
+          alert("Rejected Reservation");
+          //$scope.reservationStatus = 'Rejected';
+        }
+        else if(intStatus == 1){
+          alert("Approved Reservation");
+        // $scope.reservationStatus = 'Approved';
+       }
+       else if(intStatus == 2){
+        alert("Pending Reservation");
+        // $scope.reservationStatus = 'Pending';
+       }
+     })
+      .catch(function(error) {
+        alert("Your ID is invalid");
 
-  .controller('MenuCtrl', function($scope, $http) {
-        $scope.menus = [];
+      });
+    };
     
-    $http.get('http://localhost:53501/api/Menu')
-    .then(function(response){
-      for( i = 0 ; i<response.data.length ; i++){
-        console.log(response.data[i].URL);
-        $scope.menus.push(response.data[i].URL);
-         }
-       })
-    .catch(function(error) {
-        alert("error: " + JSON.stringify(error));
 
-    });
   });
-
-
 
 
 })();

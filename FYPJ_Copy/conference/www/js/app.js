@@ -47,7 +47,19 @@
       url: '/home',
       views: {
         'homeContent': {
-          templateUrl: 'templates/tab-home.html'
+          templateUrl: 'templates/tab-home.html',
+           controller:"InstaCtrl"
+        }
+      }
+    })
+
+
+    .state('app.lrezfb', {
+      url: '/lrezfb',
+      templateUrl: 'templates/tab-lrezfb.html',
+      views: {
+        'homeContent': {
+          templateUrl: 'templates/tab-lrezfb.html',
         }
       }
     })
@@ -59,6 +71,16 @@
           templateUrl: 'templates/tab-information.html',
           controller: "InfoCtrl as infoCtrl"
 
+        }
+      }
+    })
+
+    .state('app.tracking', {
+      url: '/tracking',
+      views:{
+        'trackingContent':{
+           templateUrl: 'templates/tab-tracking.html',
+            controller: "TrackCtrl as trackCtrl"
         }
       }
     })
