@@ -70,125 +70,86 @@
         padding-bottom: 5px;
         text-align: center;
     }
+
+    .tooltip-inner {
+        font-size: medium;
+        min-width: 300px;
+        /*width: 400px;*/ 
+    }
+
+
 </style>
 
 @section scripts {
 
     <script type="text/javascript">
 
-        //$(document).ready(function () {
-        //    var hash = window.location.hash;
-        //    if (hash == '#celebrity') {
-        //        $('#liCelebrity a').click();
-        //    }
-        //    else if (hash == '#themed') {
-        //        $('#liThemed a').click();
-        //    }
-        //    else if (hash == '#degustation') {
-        //        $('#liDegustation a').click();
-        //    }
-        //    else {
-        //        $('#liRegular a').click();
-        //    }
-        //});
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
 
-        //var setMenuType = function (menuType) {
-        //    var menuTitle = '';
-        //    switch (menuType) {
-        //        case 0: menuTitle = 'Seasonal Menu'; break;
-        //        case 1: menuTitle = 'Celebrity Chef Series'; break;
-        //        case 2: menuTitle = 'Themed Menu'; break;
-        //        case 3: menuTitle = 'Degustation Menu'; break;
-        //        default: menuTitle = 'Menu'; break;
-        //    }
+            var hash = window.location.hash;
+            if (hash == '#week') {
+                $('#liWeekly a').click();
+            }
 
-        //    $('#addMenuTitle').text('Upload ' + menuTitle);
-        //    $('#menuType').val(menuType);
-        //};
+        });
 
-        //var getStatus = function (status) {
-        //    switch (status) {
-        //        case 0: return 'Active';
-        //        case 1: return 'Hidden';
-        //        case 2: return 'Archived';
-        //        default: return 'Error';
-        //    }
-        //};
+        var confirmModal = function (id, status) {
 
-        //var edit = function(id) {
-        //    $('#spanName'+id).hide();
-        //    $('#btnEdit'+id).hide();
-        //    $('#inName'+id).val($('#spanName'+id).text());
-        //    $('#inName'+id).show();
-        //    $('#btnEditOK'+id).show();
-        //    $('#btnEditCancel'+id).show();
-        //}
+            selectedReservationId = id;
+            selectedReservationStatus = status;
 
-        //var editOK = function(id) {
-        //    $.ajax({
-        //        url: 'UpdateMenuTitle',
-        //        method: 'post',
-        //        data: {
-        //            id: id,
-        //            title: $('#inName'+id).val()
-        //        },
-        //        success: function() {
-        //            $('#inName'+id).hide();
-        //            $('#btnEditOK'+id).hide();
-        //            $('#btnEditCancel'+id).hide();
-        //            $('#spanName'+id).text($('#inName'+id).val());
-        //            $('#spanName'+id).show();
-        //            $('#btnEdit'+id).show();
-        //        },
-        //        error: function(err) {
-        //            alert("Error updating menu")
-        //        }
-        //    });
-        //}
+            switch (status) {
+                case 1:
+                    $('#confirmModalBody').text("Confirm Reservation " + id + "?");
+                    break;
+                case 2:
+                    $('#confirmModalBody').text("Reject Reservation " + id + "?");
+                    break;
+                case 3:
+                    $('#confirmModalBody').text("Cancel Reservation " + id + "?");
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        //var editCancel = function(id) {
-        //    $('#inName'+id).hide();
-        //    $('#btnEditOK'+id).hide();
-        //    $('#btnEditCancel'+id).hide();
-        //    $('#spanName'+id).show();
-        //    $('#btnEdit'+id).show();
-        //}
+        var selectedReservationId;
+        var selectedReservationStatus;
 
-        //var updateStatus = function (id, status) {
-        //    $.ajax({
-        //        url: 'UpdateMenuStatus',
-        //        method: 'post',
-        //        data: {
-        //            id: id,
-        //            status: status
-        //        },
-        //        success: function () {
-
-        //        },
-        //        error: function (err) {
-        //            alert("Error updating menu")
-        //        }
-        //    });
-        //}
-
-        //var removeMenu = function (id) {
-        //    if (confirm("Confirm delete?") == true) {
-        //        $.ajax({
-        //            url: 'UpdateMenuStatus',
-        //            method: 'post',
-        //            data: {
-        //                id: id,
-        //                status: 2
-        //            },
-        //            success: function () {
-        //                location.reload();
-        //            },
-        //            error: function (err) {
-        //                alert("Error updating menu")
-        //            }
-        //        });
-        //    }
-        //}
+        var updateReservation = function () {
+            $.ajax({
+                url: 'UpdateReservationStatus',
+                method: 'post',
+                data: {
+                    id: selectedReservationId,
+                    status: selectedReservationStatus
+                },
+                success: function () {
+                    if (selectedReservationStatus == 1) {
+                        $('#divDailyStatus' + selectedReservationId).text("confirmed");
+                        $('#divWeeklyStatus' + selectedReservationId).text("confirmed");
+                        $('#divPendingStatus' + selectedReservationId).text("confirmed");
+                    }
+                    else if (selectedReservationStatus == 2) {
+                        $('#divDailyStatus' + selectedReservationId).text("rejected");
+                        $('#divWeeklyStatus' + selectedReservationId).text("rejected");
+                        $('#divPendingStatus' + selectedReservationId).text("rejected");
+                    }
+                    else if (selectedReservationStatus == 3) {
+                        $('#divDailyStatus' + selectedReservationId).text("cancelled");
+                        $('#divWeeklyStatus' + selectedReservationId).text("cancelled");
+                        $('#divPendingStatus' + selectedReservationId).text("cancelled");
+                    }
+                    $('#divDailyAction' + selectedReservationId).text("");
+                    $('#divWeeklyAction' + selectedReservationId).text("");
+                    $('#divPendingAction' + selectedReservationId).text("");
+                },
+                error: function (err) {
+                    alert("Error updating Reservation")
+                }
+            });
+        };
 
     </script>
 }
@@ -200,15 +161,17 @@
             document.write("pending");
         else if (status == 1)
             document.write("confirmed");
-        else if (status == 1)
+        else if (status == 2)
             document.write("rejected");
-        else if (status == 1)
+        else if (status == 3)
             document.write("cancelled");
-        else if (status == 1)
+        else if (status == 4)
             document.write("expired");
         else
             document.write("error");
     };
+
+
 
 </script>
 
@@ -225,6 +188,16 @@
 <div style="height: 3em"></div>
 <div class="tab-content" style="padding-left: 1em; padding-right: 1em" align="center">
     <div id="daily" class="tab-pane fade in active">
+
+        <div style="padding-bottom: 1em;">
+            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).AddDays(-1).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).ToString("dd/MMM/yyyy"), t = 0 })" style="padding-right: 3em">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <label>@ViewBag.Day</label>
+            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).AddDays(1).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).ToString("dd/MMM/yyyy"), t = 0 })" style="padding-left: 3em">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
 
         <div class="row row_header">
             <div class="col-sm-1">ID</div>
@@ -248,87 +221,175 @@
                     @reservation.Contact<br />
                     @reservation.Email
                 </div>
-                <div class="col-sm-1 col_content">
+                <div class="col-sm-1 col_content" id="@("divDailyStatus" + reservation.ID)">
                     <script type="text/javascript">
                         displayStatus(@reservation.Status);
                     </script>
                 </div>
-                <div class="col-sm-2 col_content">
+                <div class="col-sm-2 col_content" id="@("divDailyAction" + reservation.ID)">
                     @if (reservation.Status == 0) //pending
                     {
-                        <button type="button" class="btn btn-success">Confirm</button>
-                        <button type="button" class="btn btn-danger">Reject</button>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 1)")">Confirm</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 2)")">Reject</button>
                     }
                     else if (reservation.Status == 1) //confirmed
                     {
-                        <button type="button" class="btn btn-danger">Cancel</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 3)")">Cancel</button>
                     }
                 </div>
-                <div class="col-sm-1 col_content">something</div>
-
-
-
-                @*<div class="col-sm-3 col_content">
-                    <ul class="nav nav-pills">
-                        @if (menu.Status == 0)
-                        {
-                            <li class="active"><a data-toggle="pill" href="#">Active</a></li>
-                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 1)")">Hidden</a></li>
-                        }
-                        else if (menu.Status == 1)
-                        {
-                            <li><a data-toggle="pill" href="#" onclick="@("updateStatus(" + menu.ID + ", 0)")">Active</a></li>
-                            <li class="active"><a data-toggle="pill" href="#">Hidden</a></li>
-                        }
-                    </ul>
+                <div class="col-sm-1 col_content">
+                    @if (reservation.Requests != null)
+                    {
+                    <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="left" title="@reservation.Requests" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                    }
+                    <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="left" title="@reservation.Remarks" style="padding-left: 0.5em; padding-right: 0.5em"></span>
                 </div>
-                <div class="col-sm-2 col_content">
-                    <button type="button" class="btn btn-default btn-sm btn-danger" onclick="@("removeMenu(" + menu.ID + ")")">
-                        <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Remove
-                    </button>
-                </div>*@
             </div>
         }
 
     </div>
+    
     <div id="weekly" class="tab-pane fade">
-        
+        <div style="padding-bottom: 1em;">
+            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).AddDays(-7).ToString("dd/MMM/yyyy"), t = 1 })#week" style="padding-right: 3em">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <label>@ViewBag.WeekStart</label>&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>&nbsp;&nbsp;&nbsp;<label>@ViewBag.WeekEnd</label>
+            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).AddDays(7).ToString("dd/MMM/yyyy"), t = 1 })#week" style="padding-left: 3em">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+
+        <div class="row row_header">
+            <div class="col-sm-1">ID</div>
+            <div class="col-sm-3">Customer</div>
+            <div class="col-sm-1">Time</div>
+            <div class="col-sm-1">Pax</div>
+            <div class="col-sm-2">Contact</div>
+            <div class="col-sm-1">Status</div>
+            <div class="col-sm-2">Action</div>
+            <div class="col-sm-1">Comments</div>
+        </div>
+
+        @foreach (var reservation in ViewBag.Weekly)
+        {
+            <div class="row row_content">
+                <div class="col-sm-1 col_content">@reservation.ID</div>
+                <div class="col-sm-3 col_content" style="text-align: left">@reservation.Name</div>
+                <div class="col-sm-1 col_content">
+                    @reservation.ReservationDateTime.ToString("dd/MM/yy")
+                    @reservation.ReservationDateTime.ToString("hh:mm tt")
+                </div>
+                <div class="col-sm-1 col_content">@reservation.NumVisitors</div>
+                <div class="col-sm-2 col_content" style="text-align: left">
+                    @reservation.Contact<br />
+                    @reservation.Email
+                </div>
+                <div class="col-sm-1 col_content" id="@("divWeeklyStatus" + reservation.ID)">
+                    <script type="text/javascript">
+                        displayStatus(@reservation.Status);
+                    </script>
+                </div>
+                <div class="col-sm-2 col_content" id="@("divWeeklyAction" + reservation.ID)">
+                    @if (reservation.Status == 0) //pending
+                    {
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 1)")">Confirm</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 2)")">Reject</button>
+                    }
+                    else if (reservation.Status == 1) //confirmed
+                    {
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 3)")">Cancel</button>
+                    }
+                </div>
+                <div class="col-sm-1 col_content">
+                    @if (reservation.Requests != null)
+                    {
+                        <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="left" title="@reservation.Requests" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                    }
+                    <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="left" title="@reservation.Remarks" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                </div>
+            </div>
+        }
     </div>
 
     <div id="pending" class="tab-pane fade">
 
+        <div class="row row_header">
+            <div class="col-sm-1">ID</div>
+            <div class="col-sm-3">Customer</div>
+            <div class="col-sm-1">Time</div>
+            <div class="col-sm-1">Pax</div>
+            <div class="col-sm-2">Contact</div>
+            <div class="col-sm-1">Status</div>
+            <div class="col-sm-2">Action</div>
+            <div class="col-sm-1">Comments</div>
+        </div>
+
+        @foreach (var reservation in ViewBag.Pending)
+        {
+            <div class="row row_content">
+                <div class="col-sm-1 col_content">@reservation.ID</div>
+                <div class="col-sm-3 col_content" style="text-align: left">@reservation.Name</div>
+                <div class="col-sm-1 col_content">
+                    @reservation.ReservationDateTime.ToString("dd/MM/yy")
+                    @reservation.ReservationDateTime.ToString("hh:mm tt")
+                </div>
+                <div class="col-sm-1 col_content">@reservation.NumVisitors</div>
+                <div class="col-sm-2 col_content" style="text-align: left">
+                    @reservation.Contact<br />
+                    @reservation.Email
+                </div>
+                <div class="col-sm-1 col_content" id="@("divPendingStatus" + reservation.ID)">
+                    <script type="text/javascript">
+                        displayStatus(@reservation.Status);
+                    </script>
+                </div>
+                <div class="col-sm-2 col_content" id="@("divPendingAction" + reservation.ID)">
+                    @if (reservation.Status == 0) //pending
+                    {
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 1)")">Confirm</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 2)")">Reject</button>
+                    }
+                    else if (reservation.Status == 1) //confirmed
+                    {
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 3)")">Cancel</button>
+                    }
+                </div>
+                <div class="col-sm-1 col_content">
+                    @if (reservation.Requests != null)
+                    {
+                        <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="left" title="@reservation.Requests" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                    }
+                    <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="left" title="@reservation.Remarks" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                </div>
+            </div>
+        }
     </div>
     
     <div id="search" class="tab-pane fade">
 
     </div>
 
-</div>
+    <div id="confirmModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
-<div id="addModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" id="addMenuTitle">Upload Menu</h4>
-            </div>
-            @using (Html.BeginForm("Manage", "Menu", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm Decision</h4>
+                </div>
                 <div class="modal-body">
-                    <label for="file">Title:</label>
-                    <input type="text" name="title" id="title" class="input" /><br /><br />
-                    <label for="file">Upload Menu:</label>
-                    <input type="file" name="file" id="file" /><br />
-                    <input type="hidden" name="menuType" id="menuType" value="0" />
+                    <div id="confirmModalBody">Confirm?</div>
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" value="Upload Menu" />
-                    @*<button type="button" class="btn btn-default" data-dismiss="modal" onclick="submitAddMenu()">OK</button>*@
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateReservation()">OK</button>
                 </div>
-            }
-        </div>
+            </div>
 
+        </div>
     </div>
+
 </div>
+
+

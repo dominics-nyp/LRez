@@ -75,18 +75,64 @@ namespace LRezWebAppAdmin.Controllers
             public string Status;
         }
 
-        public ActionResult Manage()
+        public ActionResult Manage(string d, string w, string t)
         {
-            List<Reservation> lstReservationsDaily = ReservationsManager.getReservations(DateTime.Now);
+            DateTime daily = DateTime.Now;
+            DateTime weekly = DateTime.Now;
+            int tab = 0;
 
-            DateTime[] week = getWeek(DateTime.Now);
+            if (d != null)
+            {
+                try
+                {
+                    daily = DateTime.Parse(d);
+                }
+                catch (Exception)
+                {
+                    daily = DateTime.Now;
+                }
+            }
+            if (w != null)
+            {
+                try
+                {
+                    weekly = DateTime.Parse(w);
+                }
+                catch (Exception)
+                {
+                    weekly = DateTime.Now;
+                }
+            }
+            if (t != null)
+            {
+                try
+                {
+                    tab = int.Parse(t);
+                    if (tab < 0 || tab > 3)
+                        tab = 0;
+                }
+                catch (Exception)
+                {
+                    tab = 0;
+                }
+            }
+
+            List<Reservation> lstReservationsDaily = ReservationsManager.getReservations(daily);
+
+            DateTime[] week = getWeek(weekly);
             List<Reservation> lstReservationWeekly = ReservationsManager.getReservations(week[0], week[1]);
 
-            List<Reservation> lstPending = ReservationsManager.getReservations(Constants.ReservationStatus_PENDING);
+            List<Reservation> lstPending = ReservationsManager.getReservations(Constants.ReservationStatus_PENDING, false);
 
             ViewBag.Daily = lstReservationsDaily;
             ViewBag.Weekly = lstReservationWeekly;
             ViewBag.Pending = lstPending;
+
+            ViewBag.Day = daily.ToString("dd - MM - yyyy");
+            ViewBag.Week = weekly.ToString("dd - MM - yyyy");
+            ViewBag.WeekStart = week[0].ToString("dd - MM - yyyy");
+            ViewBag.WeekEnd = week[1].AddDays(-1).ToString("dd - MM - yyyy");
+            ViewBag.Tab = tab;
 
             return View();
         }
@@ -101,6 +147,16 @@ namespace LRezWebAppAdmin.Controllers
             DateTime endOfWeek = startOfWeek.AddDays(7);
 
             return new DateTime[2] { startOfWeek, endOfWeek };
+        }
+
+        public ActionResult UpdateReservationStatus(int id, int status)
+        {
+            if (ReservationsManager.updateReservationStatus(id, status))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+            else
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Update Failed");
         }
     }
 }
