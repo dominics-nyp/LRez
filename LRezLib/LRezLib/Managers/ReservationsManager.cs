@@ -18,9 +18,9 @@ namespace LRezLib.Managers
             return ReservationsDAO.getReservations(includeExpired);
         }
 
-        public static List<Reservation> getReservations(int reservationStatus)
+        public static List<Reservation> getReservations(int reservationStatus, bool includeExpired = true)
         {
-            return ReservationsDAO.getReservations(reservationStatus);
+            return ReservationsDAO.getReservations(reservationStatus, includeExpired);
         }
 
         public static List<Reservation> getReservations(string social_account, string social_provider, bool includeExpired = false)
@@ -77,6 +77,10 @@ namespace LRezLib.Managers
             return ReservationsDAO.getReservations(fromDate, toDate);
         }
 
+        public static bool updateReservationStatus(int id, int status)
+        {
+            return ReservationsDAO.updateReservation(id, status);
+        }
 
     }
 }

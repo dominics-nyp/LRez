@@ -27,7 +27,7 @@ namespace LRezLib.DAO
             else
             {
                 sql += " where reservation_datetime>=@reservation_datetime";
-                Parameter p = new Parameter("reservation_datetime", DateTime.Today);
+                Parameter p = new Parameter("@reservation_datetime", DateTime.Today);
                 DataTable dt = DB.query(sql, p);
                 foreach (DataRow dr in dt.Rows)
                     reservations.Add(new Reservation(dr));
@@ -36,12 +36,20 @@ namespace LRezLib.DAO
             return reservations;
         }
 
-        public static List<Reservation> getReservations(int reservationStatus)
+        public static List<Reservation> getReservations(int reservationStatus, bool includeExpired = true)
         {
             List<Reservation> reservations = new List<Reservation>();
 
             string sql = "select * from Reservations where status=@status";
-            Parameter p = new Parameter("status", reservationStatus);
+            List<Parameter> p = new List<Parameter>();
+            p.Add(new Parameter("@status", reservationStatus));
+
+            if (!includeExpired)
+            {
+                sql += " and reservation_datetime>=@reservation_datetime";
+                p.Add(new Parameter("@reservation_datetime", DateTime.Today));
+            }
+
             DataTable dt = DB.query(sql, p);
             foreach (DataRow dr in dt.Rows)
                 reservations.Add(new Reservation(dr));
@@ -88,8 +96,8 @@ namespace LRezLib.DAO
             string sql = "select * from Reservations where reservation_datetime>=@reservation_datetime_start and reservation_datetime<@reservation_datetime_end " +
                 "order by reservation_datetime";
             List<Parameter> parameters = new List<Parameter>() {
-                new Parameter("reservation_datetime_start", new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, 0)),
-                new Parameter("reservation_datetime_end", new DateTime(nextDate.Year, nextDate.Month, nextDate.Day, 0, 0, 0, 0))
+                new Parameter("@reservation_datetime_start", new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, 0)),
+                new Parameter("@reservation_datetime_end", new DateTime(nextDate.Year, nextDate.Month, nextDate.Day, 0, 0, 0, 0))
             };
             DataTable dt = DB.query(sql, parameters);
             foreach (DataRow dr in dt.Rows)
@@ -105,8 +113,8 @@ namespace LRezLib.DAO
             string sql = "select * from Reservations where reservation_datetime>=@reservation_datetime_start and reservation_datetime<@reservation_datetime_end " +
                 "order by reservation_datetime";
             List<Parameter> parameters = new List<Parameter>() {
-                new Parameter("reservation_datetime_start", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0, 0)),
-                new Parameter("reservation_datetime_end", new DateTime(toDate.Year, toDate.Month, toDate.Day, 0, 0, 0, 0))
+                new Parameter("@reservation_datetime_start", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0, 0)),
+                new Parameter("@reservation_datetime_end", new DateTime(toDate.Year, toDate.Month, toDate.Day, 0, 0, 0, 0))
             };
             DataTable dt = DB.query(sql, parameters);
             foreach (DataRow dr in dt.Rows)
@@ -199,5 +207,17 @@ namespace LRezLib.DAO
                 return true;
         }
 
+        public static bool updateReservation(int id, int status)
+        {
+            string sql = "update Reservations set status=@status where ID=@id";
+            List<Parameter> parameters = new List<Parameter>();
+            parameters.Add(new Parameter("@status", status));
+            parameters.Add(new Parameter("@id", id));
+
+            if (DB.execute(sql, parameters) < 0)
+                return false;
+            else
+                return true;
+        }
     }
 }
