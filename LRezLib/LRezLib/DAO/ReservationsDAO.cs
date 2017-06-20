@@ -219,5 +219,31 @@ namespace LRezLib.DAO
             else
                 return true;
         }
+
+        public static List<Reservation> searchReservations(string searchTerm, bool includeExpired = false)
+        {
+            List<Reservation> reservations = new List<Reservation>();
+
+            string sql = "select * from Reservations where name like @name or contact like @contact or tracking like @tracking";
+            List<Parameter> parameters = new List<Parameter>();
+            parameters.Add(new Parameter("@name", "%" + searchTerm + "%"));
+            parameters.Add(new Parameter("@contact", "%" + searchTerm + "%"));
+            parameters.Add(new Parameter("@tracking", "%" + searchTerm + "%"));
+
+            if (!includeExpired)
+            {
+                sql += " and reservation_datetime>=@reservation_datetime";
+                parameters.Add(new Parameter("@reservation_datetime", DateTime.Today));
+            }
+
+            sql += " order by contact, reservation_datetime desc";
+
+            DataTable dt = DB.query(sql, parameters);
+            foreach (DataRow dr in dt.Rows)
+                reservations.Add(new Reservation(dr));
+
+            return reservations;
+        }
+
     }
 }

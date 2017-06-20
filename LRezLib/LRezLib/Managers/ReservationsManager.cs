@@ -82,5 +82,9 @@ namespace LRezLib.Managers
             return ReservationsDAO.updateReservation(id, status);
         }
 
+        public static List<Reservation> searchReservations(string searchTerm, bool includeExpired = false)
+        {
+            return ReservationsDAO.searchReservations(searchTerm, includeExpired);
+        }
     }
 }

@@ -75,11 +75,13 @@ namespace LRezWebAppAdmin.Controllers
             public string Status;
         }
 
-        public ActionResult Manage(string d, string w, string t)
+        public ActionResult Manage(string d, string w, string s, string se, string t)
         {
             DateTime daily = DateTime.Now;
             DateTime weekly = DateTime.Now;
             int tab = 0;
+            string search = "";
+            bool searchIncludeExpired = false;
 
             if (d != null)
             {
@@ -103,6 +105,17 @@ namespace LRezWebAppAdmin.Controllers
                     weekly = DateTime.Now;
                 }
             }
+            if (s != null && se != null) {
+                search = s;
+                try
+                {
+                    searchIncludeExpired = bool.Parse(se);
+                }
+                catch (Exception)
+                {
+                    searchIncludeExpired = false;
+                }
+            }
             if (t != null)
             {
                 try
@@ -124,14 +137,19 @@ namespace LRezWebAppAdmin.Controllers
 
             List<Reservation> lstPending = ReservationsManager.getReservations(Constants.ReservationStatus_PENDING, false);
 
+            List<Reservation> lstSearch = ReservationsManager.searchReservations(search, searchIncludeExpired);
+
             ViewBag.Daily = lstReservationsDaily;
             ViewBag.Weekly = lstReservationWeekly;
             ViewBag.Pending = lstPending;
+            ViewBag.Search = lstSearch;
 
             ViewBag.Day = daily.ToString("dd - MM - yyyy");
             ViewBag.Week = weekly.ToString("dd - MM - yyyy");
             ViewBag.WeekStart = week[0].ToString("dd - MM - yyyy");
             ViewBag.WeekEnd = week[1].AddDays(-1).ToString("dd - MM - yyyy");
+            ViewBag.SearchTerm = search;
+            ViewBag.SearchIncludeExpired = searchIncludeExpired;
             ViewBag.Tab = tab;
 
             return View();

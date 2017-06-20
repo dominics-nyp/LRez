@@ -367,6 +367,17 @@
     </div>
     
     <div id="search" class="tab-pane fade">
+        <div style="padding-bottom: 2em">
+            Search for a Reservation by Customer Name, Contact Number or Tracking ID
+        </div>
+        <div style="padding-bottom: 2em">
+            <input class="form-control" id="inSearch" type="text" value="@ViewBag.SearchTerm">
+            <label><input type="checkbox" value="@ViewBag.SearchIncludeExpired"> Include Expired</label>
+        </div>
+        <div>
+            <button type="button" class="btn">Search</button>
+        </div>
+
 
     </div>
 
