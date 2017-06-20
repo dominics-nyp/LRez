@@ -28,7 +28,7 @@ angular.module('app.controllers', [])
 
         $scope.access_token = $window.sessionStorage.getItem("access_token");
         console.log("access_token", $scope.access_token);
-    $http.get('https://www.instagram.com/lrezproject/media/?size=t')
+    $http.get('https://www.instagram.com/lreztrainingrestaurant/media/?size=t')
     .then(function(response){
       for( i = 0 ; i<response.data.items.length; i++){
         console.log(response.data.items[i]);
