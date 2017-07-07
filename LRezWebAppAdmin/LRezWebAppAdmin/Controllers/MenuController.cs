@@ -112,8 +112,8 @@ namespace LRezWebAppAdmin.Controllers
                 {
                     try
                     {
-                        string path = Path.Combine(ConfigurationManager.AppSettings["menu_dir"], Path.GetFileName(file.FileName));
-                        //string path = Path.Combine(Server.MapPath("~/Images"), Path.GetFileName(file.FileName));
+                        //string path = Path.Combine(ConfigurationManager.AppSettings["menu_dir"], Path.GetFileName(file.FileName));
+                        string path = Path.Combine(Server.MapPath(ConfigurationManager.AppSettings["menu_dir"]), Path.GetFileName(file.FileName));
                         file.SaveAs(path);
 
                         Menu m = new Menu();

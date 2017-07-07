@@ -144,10 +144,10 @@ namespace LRezWebAppAdmin.Controllers
             ViewBag.Pending = lstPending;
             ViewBag.Search = lstSearch;
 
-            ViewBag.Day = daily.ToString("dd - MM - yyyy");
-            ViewBag.Week = weekly.ToString("dd - MM - yyyy");
-            ViewBag.WeekStart = week[0].ToString("dd - MM - yyyy");
-            ViewBag.WeekEnd = week[1].AddDays(-1).ToString("dd - MM - yyyy");
+            ViewBag.Day = daily.ToString("dd - MMM - yyyy");
+            ViewBag.Week = weekly.ToString("dd - MMM - yyyy");
+            ViewBag.WeekStart = week[0].ToString("dd - MMM - yyyy");
+            ViewBag.WeekEnd = week[1].AddDays(-1).ToString("dd - MMM - yyyy");
             ViewBag.SearchTerm = search;
             ViewBag.SearchIncludeExpired = searchIncludeExpired;
             ViewBag.Tab = tab;
