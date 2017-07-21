@@ -197,6 +197,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\banner.jpg" />
+    <Content Include="Images\banner2.jpg" />
+    <Content Include="Images\banner3.jpg" />
+    <Content Include="Images\divider.png" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\restaurant001.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ckeditor\CHANGES.md" />
