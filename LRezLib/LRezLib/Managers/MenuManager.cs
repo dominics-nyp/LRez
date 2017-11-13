@@ -53,6 +53,7 @@ namespace LRezLib.Managers
             m.Type = menu.Type;
             m.LastModifiedBy = menu.LastModifiedBy;
             m.LastModifiedDate = DateTime.Now;
+            m.AllowBallot = menu.AllowBallot;
             m.Remarks = menu.Remarks;
 
             if (MenuDAO.addMenu(m))

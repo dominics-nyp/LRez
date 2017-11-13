@@ -35,7 +35,7 @@ namespace LRezService.Controllers
             {
                 List<Menu> menus;
                 if (active)
-                    menus = MenuManager.getMenus();
+                    menus = MenuManager.getActiveMenus();
                 else
                     menus = MenuManager.getMenus();
                 return Ok(menus);
@@ -59,6 +59,27 @@ namespace LRezService.Controllers
             {
                 Log.Error(e.Message);
                 return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                return InternalServerError(e);
+            }
+        }
+
+        [HttpGet]
+        public IHttpActionResult Get(bool active, int menuType)
+        {
+            try
+            {
+                List<Menu> menus;
+
+                if (active)
+                    menus = MenuManager.getActiveMenus(menuType);
+                else
+                    menus = MenuManager.getMenus(menuType);
+
+                return Ok(menus);
             }
             catch (Exception e)
             {

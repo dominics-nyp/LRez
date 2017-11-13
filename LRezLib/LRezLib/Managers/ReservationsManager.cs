@@ -42,11 +42,13 @@ namespace LRezLib.Managers
         {
             Reservation r = new Reservation();
 
+            r.Salutation = reservation.Salutation;
             r.Name = reservation.Name;
             r.Contact = reservation.Contact;
             r.Email = reservation.Email;
             r.ReservationDateTime = reservation.ReservationDateTime;
             r.NumVisitors = reservation.NumVisitors;
+            r.CustomerType = reservation.CustomerType;
             r.Requests = reservation.Requests;
             r.Tracking = generateTracking(reservation.Name);
             r.SocialAccount = reservation.SocialAccount;
@@ -77,9 +79,19 @@ namespace LRezLib.Managers
             return ReservationsDAO.getReservations(fromDate, toDate);
         }
 
+        public static List<Reservation> getReservations(string contact)
+        {
+            return ReservationsDAO.getReservations(contact);
+        }
+
         public static bool updateReservationStatus(int id, int status)
         {
-            return ReservationsDAO.updateReservation(id, status);
+            return ReservationsDAO.updateReservationStatus(id, status);
+        }
+
+        public static bool updateReservationRemarks(int id, string remarks)
+        {
+            return ReservationsDAO.updateReservationRemarks(id, remarks);
         }
 
         public static List<Reservation> searchReservations(string searchTerm, bool includeExpired = false)

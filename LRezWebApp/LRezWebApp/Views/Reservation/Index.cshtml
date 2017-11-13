@@ -14,9 +14,9 @@
         top: 50%;
         width: 250px;
     }
-        .input:focus {
-            outline: none;
-        }
+    .input:focus {
+        outline: none;
+    }
 
     li a {
         color: grey;
@@ -47,8 +47,9 @@
     }
 
     function confirmModal() {
-        $('#lblName').text($('#inName').val());
-        $('#lblContact').text($('#inContact').val());
+        $('#lblName').text($('#sltDesignation').val() + ' ' + $('#inName').val());
+        $('#lblCustomerType').text($('input[name=customerType]:checked').val());
+        $('#lblContact').text($('#inCountryCode').val().trim() + ' ' + $('#inContact').val());
         $('#lblEmail').text($('#inEmail').val());
         $('#lblDateTime').text($('#datetimepicker').val());
         $('#lblPAX').text($('#inPAX').val());
@@ -58,10 +59,12 @@
     function createReservation() {
         var reservation = {
             Name: $('#inName').val(),
+            Salutation: $('#sltDesignation').val(),
             Contact: $('#inContact').val(),
             Email: $('#inEmail').val(),
             ReservationDateTime: formatDate($('#datetimepicker').val()),
             NumVisitors: $('#inPAX').val(),
+            CustomerType: $('input[name=customerType]:checked').val(),
             Requests: $('#inRequests').val()
         };
 
@@ -151,16 +154,42 @@
         <h2>Make a Reservation with us today!</h2>
         <br />
         <div>
-            <div class="col-lg-2">Name</div><input id="inName" class="input" type="text" />*<br /><br />
-            <div class="col-lg-2">Contact No.</div><input id="inContact" class="input" type="text" />*<br /><br />
-            <div class="col-lg-2">Email</div><input id="inEmail" class="input" type="text" /><br /><br />
+            
+            <div class="col-lg-2">Name</div>
+            <select id="sltDesignation" class="input" style="width: 40px; height: 23px; padding-top: 1px; padding-bottom: 1px;">
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Ms">Ms</option>
+                <option value="Mdm">Mdm</option>
+                <option value="Dr">Dr</option>
+            </select>&nbsp;&nbsp;
+            <input id="inName" class="input" type="text" style="width: 200px;" />*<br /><br />
+            
+            <div class="col-lg-2">Contact No.</div>
+            <input id="inCountryCode" class="input" type="text" style="width: 40px" value="+65" />&nbsp;&nbsp;
+            <input id="inContact" class="input" type="text" style="width: 200px" />*<br /><br />
+
+            <div class="col-lg-2">Email</div><input id="inEmail" class="input" type="text" />*<br /><br />
             <div class="col-lg-2">Reservation Date</div><input id="datetimepicker" class="input" type="text" style="width: 150px" />*<br /><br />
-            <div class="col-lg-2">Number of Visitors</div><input id="inPAX" class="input" type="number" min="0" step="1" style="width: 50px" />*<br /><br />
+            
+            <div class="col-lg-2">Number of pax</div><input id="inPAX" class="input" type="number" min="0" max="8" step="1" style="width: 50px" />*<br /><br />
+            <div class="col-lg-2"></div>
+            <input type='radio' name='customerType' value='public' checked />public &nbsp;&nbsp;&nbsp;&nbsp;
+            <input type='radio' name='customerType' value='staff' /> staff &nbsp;&nbsp;&nbsp;&nbsp;
+            <input type='radio' name='customerType' value='student' /> student &nbsp;&nbsp;&nbsp;&nbsp;
+            <br /><br />
             <div class="col-lg-2">Special Requests</div><textarea id="inRequests" type="text" style="width: 255px" rows="6"></textarea><br /><br />
             <div class="col-lg-2"></div><div style="width: 250px; text-align: right; float: left">
                 <button class="btn btn-default" data-toggle="modal" data-target="#confirmModal" onclick="confirmModal()">go</button>
             </div>
             <div style="font-size: xx-small; clear: both">* denotes compulsary field</div>
+            <div style="font-size: xx-small; clear: both">for reservations of more than 8 pax, please contact us @@ (+65) 6541 4384</div>
+        </div>
+
+        <div style="margin-top: 15px">
+            <u>Operation Schedule</u><br />
+            4 April 2016 - 17 August 2016 (Closed from 18 February to 3 March 2016 for student training)<br />
+            Mon to Fri: 11:30am to 2:30pm (Last Order at 2:00pm) Closed on Sat, Sun and Public Holidays<br />
         </div>
 
         <div id="confirmModal" class="modal fade" role="dialog">
@@ -174,11 +203,11 @@
                     </div>
                     <div class="modal-body">
                         <p><u>Please review your details</u></p><br />
-                        Name : <label id="lblName"></label><br /><br />
-                        Contact No. :<label id="lblContact"></label><br /><br />
+                        Name : <label id="lblName"></label> (<label id="lblCustomerType"></label>)<br /><br />
+                        Contact No. : <label id="lblContact"></label><br /><br />
                         Email : <label id="lblEmail"></label><br /><br />
                         Reservation Time : <label id="lblDateTime"></label><br /><br />
-                        Number of Guests : <label id="lblPAX"></label><br /><br />
+                        Number of pax : <label id="lblPAX"></label><br /><br />
                         Special Requests : <label id="lblRequests"></label><br /><br />
                     </div>
                     <div class="modal-footer">

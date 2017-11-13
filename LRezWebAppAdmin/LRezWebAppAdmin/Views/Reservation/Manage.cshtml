@@ -91,6 +91,9 @@
             if (hash == '#week') {
                 $('#liWeekly a').click();
             }
+            else if (hash == "#search") {
+                $('#liSearch a').click();
+            }
 
         });
 
@@ -109,10 +112,13 @@
                 case 3:
                     $('#confirmModalBody').text("Cancel Reservation " + id + "?");
                     break;
+                case 5:
+                    $('#confirmModalBody').text("Confirm " + id + " no-show?");
+                    break;
                 default:
                     break;
             }
-        }
+        };
 
         var selectedReservationId;
         var selectedReservationStatus;
@@ -141,12 +147,68 @@
                         $('#divWeeklyStatus' + selectedReservationId).text("cancelled");
                         $('#divPendingStatus' + selectedReservationId).text("cancelled");
                     }
+                    else if (selectedReservationStatus == 5) {
+                        $('#divDailyStatus' + selectedReservationId).text("no-show");
+                        $('#divWeeklyStatus' + selectedReservationId).text("no-show");
+                        $('#divPendingStatus' + selectedReservationId).text("no-show");
+                    }
                     $('#divDailyAction' + selectedReservationId).text("");
                     $('#divWeeklyAction' + selectedReservationId).text("");
                     $('#divPendingAction' + selectedReservationId).text("");
                 },
                 error: function (err) {
                     alert("Error updating Reservation")
+                }
+            });
+        };
+
+        var search = function () {
+            var searchTerm = $("#inSearch").val();
+            var searchIncludeExpired = $("#inSearchIncludeExpired").val();
+
+            var url = "Manage";
+            url += "?d=" + "@(DateTime.Parse(ViewBag.Day).ToString("dd/MMM/yyyy"))";
+            url += "&w=" + "@(DateTime.Parse(ViewBag.Week).ToString("dd/MMM/yyyy"))";
+            url += "&t=3";
+            url += "&s=" + $("#inSearch").val();
+            url += "&se=" + document.getElementById('inSearchIncludeExpired').checked;
+            url += "#search";
+
+            window.location.href = url;
+        };
+
+        var remarksModal = function (id) {
+            selectedReservationId = id;
+            $.ajax({
+                url: 'GetReservationRemarks',
+                method: 'post',
+                data: {
+                    id: id
+                },
+                success: function (data) {
+                    $('#tbxRemarks').val(data.remarks);
+                },
+                error: function (err) {
+                    alert("Error retrieving Reservation");
+                }
+            });
+            
+        };
+
+        var updateRemarks = function () {
+            var remarks = $('#tbxRemarks').val();
+            $.ajax({
+                url: 'UpdateReservationRemarks',
+                method: 'post',
+                data: {
+                    id: selectedReservationId,
+                    remarks: remarks
+                },
+                success: function () {
+                    $('#tbxRemarks').text("");
+                },
+                error: function (err) {
+                    alert("Error updating Reservation");
                 }
             });
         };
@@ -167,6 +229,8 @@
             document.write("cancelled");
         else if (status == 4)
             document.write("expired");
+        else if (status == 5)
+            document.write("no-show");
         else
             document.write("error");
     };
@@ -187,14 +251,15 @@
 
 <div style="height: 3em"></div>
 <div class="tab-content" style="padding-left: 1em; padding-right: 1em" align="center">
+
     <div id="daily" class="tab-pane fade in active">
 
         <div style="padding-bottom: 1em;">
-            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).AddDays(-1).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).ToString("dd/MMM/yyyy"), t = 0 })" style="padding-right: 3em">
+            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).AddDays(-1).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).ToString("dd/MMM/yyyy"), s = ViewBag.SearchTerm, se = ViewBag.SearchIncludeExpired})" style="padding-right: 3em">
                 <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
             <label>@ViewBag.Day</label>
-            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).AddDays(1).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).ToString("dd/MMM/yyyy"), t = 0 })" style="padding-left: 3em">
+            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).AddDays(1).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).ToString("dd/MMM/yyyy"), s = ViewBag.SearchTerm, se = ViewBag.SearchIncludeExpired})" style="padding-left: 3em">
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
         </div>
@@ -234,6 +299,7 @@
                     }
                     else if (reservation.Status == 1) //confirmed
                     {
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 5)")">No-Show</button>
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 3)")">Cancel</button>
                     }
                 </div>
@@ -242,7 +308,7 @@
                     {
                     <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="left" title="@reservation.Requests" style="padding-left: 0.5em; padding-right: 0.5em"></span>
                     }
-                    <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="left" title="@reservation.Remarks" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                    <span class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#remarksModal" style="padding-left: 0.5em; padding-right: 0.5em" onclick="@("remarksModal(" + reservation.ID + ")")"></span>
                 </div>
             </div>
         }
@@ -251,11 +317,11 @@
     
     <div id="weekly" class="tab-pane fade">
         <div style="padding-bottom: 1em;">
-            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).AddDays(-7).ToString("dd/MMM/yyyy"), t = 1 })#week" style="padding-right: 3em">
+            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).AddDays(-7).ToString("dd/MMM/yyyy"), s = ViewBag.SearchTerm, se = ViewBag.SearchIncludeExpired})#week" style="padding-right: 3em">
                 <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
             <label>@ViewBag.WeekStart</label>&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>&nbsp;&nbsp;&nbsp;<label>@ViewBag.WeekEnd</label>
-            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).AddDays(7).ToString("dd/MMM/yyyy"), t = 1 })#week" style="padding-left: 3em">
+            <a href="@Url.Action("Manage", "Reservation", new { d = DateTime.Parse(ViewBag.Day).ToString("dd/MMM/yyyy"), w = DateTime.Parse(ViewBag.Week).AddDays(7).ToString("dd/MMM/yyyy"), s = ViewBag.SearchTerm, se = ViewBag.SearchIncludeExpired})#week" style="padding-left: 3em">
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
         </div>
@@ -298,6 +364,7 @@
                     }
                     else if (reservation.Status == 1) //confirmed
                     {
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 5)")">No-Show</button>
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 3)")">Cancel</button>
                     }
                 </div>
@@ -306,7 +373,7 @@
                     {
                         <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="left" title="@reservation.Requests" style="padding-left: 0.5em; padding-right: 0.5em"></span>
                     }
-                    <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="left" title="@reservation.Remarks" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                    <span class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#remarksModal" style="padding-left: 0.5em; padding-right: 0.5em" onclick="@("remarksModal(" + reservation.ID + ")")"></span>
                 </div>
             </div>
         }
@@ -352,6 +419,7 @@
                     }
                     else if (reservation.Status == 1) //confirmed
                     {
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 5)")">No-Show</button>
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 3)")">Cancel</button>
                     }
                 </div>
@@ -360,7 +428,7 @@
                     {
                         <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="left" title="@reservation.Requests" style="padding-left: 0.5em; padding-right: 0.5em"></span>
                     }
-                    <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="left" title="@reservation.Remarks" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                    <span class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#remarksModal" style="padding-left: 0.5em; padding-right: 0.5em" onclick="@("remarksModal(" + reservation.ID + ")")"></span>
                 </div>
             </div>
         }
@@ -372,11 +440,73 @@
         </div>
         <div style="padding-bottom: 2em">
             <input class="form-control" id="inSearch" type="text" value="@ViewBag.SearchTerm">
-            <label><input type="checkbox" value="@ViewBag.SearchIncludeExpired"> Include Expired</label>
+            <label><input type="checkbox" id="inSearchIncludeExpired" checked="@ViewBag.SearchIncludeExpired"> Include Expired</label>
         </div>
         <div>
-            <button type="button" class="btn">Search</button>
+            <button type="button" class="btn" onclick="search()">Search</button>
         </div>
+        <div>
+            &nbsp;
+        </div>
+
+        @if (ViewBag.Search.Count > 0)
+        {
+        <div class="row row_header">
+            <div class="col-sm-1">ID</div>
+            <div class="col-sm-3">Customer</div>
+            <div class="col-sm-1">Time</div>
+            <div class="col-sm-1">Pax</div>
+            <div class="col-sm-2">Contact</div>
+            <div class="col-sm-1">Status</div>
+            <div class="col-sm-2">Action</div>
+            <div class="col-sm-1">Comments</div>
+        </div>
+        }
+        @if (ViewBag.Search.Count == 0 && ViewBag.SearchTerm != null && ViewBag.SearchTerm.Length > 0)
+        {
+            <div>No Records Found.</div>
+        }
+
+        @foreach (var reservation in ViewBag.Search)
+        {
+            <div class="row row_content">
+                <div class="col-sm-1 col_content">@reservation.ID</div>
+                <div class="col-sm-3 col_content" style="text-align: left">@reservation.Name</div>
+                <div class="col-sm-1 col_content">
+                    @reservation.ReservationDateTime.ToString("dd/MM/yy")
+                    @reservation.ReservationDateTime.ToString("hh:mm tt")
+                </div>
+                <div class="col-sm-1 col_content">@reservation.NumVisitors</div>
+                <div class="col-sm-2 col_content" style="text-align: left">
+                    @reservation.Contact<br />
+                    @reservation.Email
+                </div>
+                <div class="col-sm-1 col_content" id="@("divPendingStatus" + reservation.ID)">
+                    <script type="text/javascript">
+                        displayStatus(@reservation.Status);
+                    </script>
+                </div>
+                <div class="col-sm-2 col_content" id="@("divPendingAction" + reservation.ID)">
+                    @if (reservation.Status == 0) //pending
+                    {
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 1)")">Confirm</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 2)")">Reject</button>
+                    }
+                    else if (reservation.Status == 1) //confirmed
+                    {
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 5)")">No-Show</button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModal" onclick="@("confirmModal(" + reservation.ID + ", 3)")">Cancel</button>
+                    }
+                </div>
+                <div class="col-sm-1 col_content">
+                    @if (reservation.Requests != null)
+                    {
+                        <span class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-placement="left" title="@reservation.Requests" style="padding-left: 0.5em; padding-right: 0.5em"></span>
+                    }
+                    <span class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#remarksModal" style="padding-left: 0.5em; padding-right: 0.5em" onclick="@("remarksModal(" + reservation.ID + ")")"></span>
+                </div>
+            </div>
+        }
 
 
     </div>
@@ -396,6 +526,29 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateReservation()">OK</button>
                 </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="remarksModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="remarksMenuTitle">Remarks</h4>
+                </div>
+
+                <div class="modal-body">
+                    <textarea class="form-control" rows="5" id="tbxRemarks" name="tbxRemarks"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="updateRemarks()">save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
+                </div>
+                
             </div>
 
         </div>

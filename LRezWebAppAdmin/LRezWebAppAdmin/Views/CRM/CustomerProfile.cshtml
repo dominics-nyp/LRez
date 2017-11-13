@@ -1,0 +1,507 @@
+﻿@{
+    ViewBag.Title = "Customer Profile";
+}
+
+<style>
+    .main-info {
+        font-weight: bold;
+        padding: 0.7em;
+    }
+
+    .main-info-input {
+        font-size: large;
+        border: none;
+        padding: 0.6em;
+        width: 19em;
+        max-width: 19em;
+    }
+
+    .main-info-inputEdit {
+        font-size: large;
+        border: none;
+        border-bottom: solid 1px grey;
+        padding: 0.6em;
+    }
+
+    .main-info-inputEdit:focus {
+        outline: none;
+    }
+
+    .glyphicon {
+        cursor: pointer;
+    }
+
+    .interactions {
+        border: solid 1px grey;
+        box-shadow: 4px 4px grey;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 5px;
+    }
+
+    .interactions-item {
+        border-bottom: solid 1px grey;
+        /*box-shadow: 1px 1px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        /*border-radius: 3px;*/
+    }
+
+    .notes {
+        border: solid 1px grey;
+        box-shadow: 4px 4px grey;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 5px;
+    }
+
+    .notes-item {
+        border-bottom: solid 1px grey;
+        /*box-shadow: 1px 1px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        /*border-radius: 3px;*/
+    }
+
+    .reservations {
+        border: solid 1px grey;
+        box-shadow: 4px 4px grey;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 5px;
+    }
+
+    .reservations-item {
+        border-bottom: solid 1px grey;
+        /*box-shadow: 1px 1px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        /*border-radius: 3px;*/
+    }
+
+</style>
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#inDOB').val(getDateString(@ViewBag.profile.DOB_Day, @ViewBag.profile.DOB_Month, @ViewBag.profile.DOB_Year));
+        });
+
+        var getDateString = function(day, month, year) {
+            var dateString = "";
+            if (day <= 0)
+                dateString += "-";
+            else
+                dateString += day;
+            dateString += " / ";
+            switch (month) {
+                case '1':
+                case 1:
+                    dateString += '@ViewBag.months[1]'; break;
+                case '2': 
+                case 2:
+                    dateString += '@ViewBag.months[2]'; break;
+                case '3': 
+                case 3:
+                    dateString += '@ViewBag.months[3]'; break;
+                case '4':
+                case 4:
+                    dateString += '@ViewBag.months[4]'; break;
+                case '5':
+                case 5:
+                    dateString += '@ViewBag.months[5]'; break;
+                case '6': 
+                case 6:
+                    dateString += '@ViewBag.months[6]'; break;
+                case '7':
+                case 7:
+                    dateString += '@ViewBag.months[7]'; break;
+                case '8':
+                case 8:
+                    dateString += '@ViewBag.months[8]'; break;
+                case '9':
+                case 9:
+                    dateString += '@ViewBag.months[9]'; break;
+                case '10': 
+                case 10:
+                    dateString += '@ViewBag.months[10]'; break;
+                case '11': 
+                case 11:
+                    dateString += '@ViewBag.months[11]'; break;
+                case '12': 
+                case 12:
+                    dateString += '@ViewBag.months[12]'; break;
+                default: dateString += '@ViewBag.months[0]'; break;
+            }
+            dateString += " / ";
+            if (year <= 0)
+                dateString += "-";
+            else
+                dateString += year;
+
+            return dateString;
+        }
+
+        var startEditName = function() {
+            $('#inName').attr("readonly", false);
+            $('#inName').addClass("main-info-inputEdit");
+            $('#editNameIcon').hide();
+            $('#doneEditNameIcon').show();
+        }
+
+        var endEditName = function () {
+
+            $.ajax({
+                url: 'UpdateProfileName',
+                method: 'post',
+                data: {
+                    name: $('#inName').val(),
+                    contact: $('#inContact').val()
+                },
+                success: function() {
+                    $('#inName').attr("readonly", true);
+                    $('#inName').removeClass("main-info-inputEdit");
+                    $('#editNameIcon').show();
+                    $('#doneEditNameIcon').hide();
+                },
+                error: function() {
+                    $('#toastSaveError').show();
+                }
+            });
+        }
+
+        //var startEditContact = function () {
+        //    $('#inContact').attr("readonly", false);
+        //    $('#inContact').addClass("main-info-inputEdit");
+        //    $('#editContactIcon').hide();
+        //    $('#doneEditContactIcon').show();
+        //}
+
+        //var endEditContact = function () {
+        //    $('#inContact').attr("readonly", true);
+        //    $('#inContact').removeClass("main-info-inputEdit");
+        //    $('#editContactIcon').show();
+        //    $('#doneEditContactIcon').hide();
+        //}
+
+        var startEditEmail = function () {
+            $('#inEmail').attr("readonly", false);
+            $('#inEmail').addClass("main-info-inputEdit");
+            $('#editEmailIcon').hide();
+            $('#doneEditEmailIcon').show();
+        }
+
+        var endEditEmail = function () {
+
+            $.ajax({
+                url: 'UpdateProfileEmail',
+                method: 'post',
+                data: {
+                    email: $('#inEmail').val(),
+                    contact: $('#inContact').val()
+                },
+                success: function() {
+                    $('#inEmail').attr("readonly", true);
+                    $('#inEmail').removeClass("main-info-inputEdit");
+                    $('#editEmailIcon').show();
+                    $('#doneEditEmailIcon').hide();
+                },
+                error: function() {
+                    $('#toastSaveError').show();
+                }
+            });
+        }
+
+        var startEditDOB = function () {
+            $('#inDOB').hide()
+            $('#inEditDOB').show();
+            $('#editDOBIcon').hide();
+            $('#doneEditDOBIcon').show();
+        }
+
+        var endEditDOB = function () {
+
+            $.ajax({
+                url: 'UpdateProfileDOB',
+                method: 'post',
+                data: {
+                    contact: $('#inContact').val(),
+                    day: $('#inDOBDay').val(),
+                    month: $('#inDOBMonth').val(),
+                    year: $('#inDOBYear').val()
+                },
+                success: function() {
+                    $('#inEmail').attr("readonly", true);
+                    $('#inEmail').removeClass("main-info-inputEdit");
+                    $('#editEmailIcon').show();
+                    $('#doneEditEmailIcon').hide();
+                },
+                error: function() {
+                    $('#toastSaveError').show();
+                }
+            });
+
+            var day = $('#inDOBDay').val();
+            var month = $('#inDOBMonth').val();
+            var year = $('#inDOBYear').val();
+            $('#inDOB').val(getDateString(day, month, year));
+            $('#inDOB').show();
+            $('#inEditDOB').hide();
+            $('#editDOBIcon').show();
+            $('#doneEditDOBIcon').hide();
+        }
+
+    </script>
+
+}
+
+<script>
+    var displayStatus = function (status) {
+        if (status == 0)
+            document.write("pending");
+        else if (status == 1)
+            document.write("confirmed");
+        else if (status == 2)
+            document.write("rejected");
+        else if (status == 3)
+            document.write("cancelled");
+        else if (status == 4)
+            document.write("expired");
+        else
+            document.write("error");
+    }
+</script>
+
+<br />
+<br />
+
+@if (ViewBag.error != null && ViewBag.error.Length > 0)
+{
+    <div><h2>@ViewBag.error</h2></div>
+}
+else
+{
+    <div class="alert alert-danger fade in" id="toastSaveError" style="display: none">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Warning!</strong> Error Saving Information
+    </div>
+    <div>
+        <div class="col-lg-2 main-info">Name: </div>
+        <input type="text" class="main-info-input" readonly value="@ViewBag.profile.Name" id="inName" />
+        <span class="glyphicon glyphicon-pencil" onclick="startEditName()" id="editNameIcon"></span>
+        <span class="glyphicon glyphicon-ok" onclick="endEditName()" id="doneEditNameIcon" style="display: none"></span>
+    </div>
+
+    <div>
+        <div class="col-lg-2 main-info">Contact: </div>
+        <input type="text" class="main-info-input" readonly value="@ViewBag.profile.Contact" id="inContact" />
+        @*<span class="glyphicon glyphicon-pencil" onclick="startEditContact()" id="editContactIcon"></span>
+        <span class="glyphicon glyphicon-ok" onclick="endEditContact()" id="doneEditContactIcon" style="display: none"></span>*@
+    </div>
+
+    <div>
+        <div class="col-lg-2 main-info">Email: </div>
+        <input type="text" class="main-info-input" readonly value="@ViewBag.profile.Email" id="inEmail" />
+        <span class="glyphicon glyphicon-pencil" onclick="startEditEmail()" id="editEmailIcon"></span>
+        <span class="glyphicon glyphicon-ok" onclick="endEditEmail()" id="doneEditEmailIcon" style="display: none"></span>
+
+    </div>
+
+    <div>
+        <div class="col-lg-2 main-info">Date of Birth: </div>
+        <input type="text" class="main-info-input" readonly id="inDOB" />
+        <div id="inEditDOB" style="display: none; float: left; padding-right: 20px">
+            <select id="inDOBDay" class="main-info-inputEdit">
+                <option value="-1">-</option>
+                @for (int i = 1; i < 32; i++)
+                {
+                    if (i == ViewBag.profile.DOB_Day)
+                    {
+                        <option value="@i" selected>@i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+            &nbsp;/&nbsp;
+            <select id="inDOBMonth" class="main-info-inputEdit">
+                <option value="-1">-</option>
+                @for (int i = 1; i < ViewBag.months.Length; i++)
+                {
+                    if (i == ViewBag.profile.DOB_Month)
+                    {
+                        <option value="@i" selected>@ViewBag.months[i]</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@ViewBag.months[i]</option>
+                    }
+                }
+            </select>
+            &nbsp;/&nbsp;
+            <select id="inDOBYear" class="main-info-inputEdit">
+                <option value="-1">-</option>
+                @for (int i = DateTime.Now.Year; i > 1900; i--)
+                {
+                    if (i == ViewBag.profile.DOB_Year)
+                    {
+                        <option value="@i" selected>@i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+        </div>
+        <span class="glyphicon glyphicon-pencil" onclick="startEditDOB()" id="editDOBIcon"></span>
+        <span class="glyphicon glyphicon-ok" onclick="endEditDOB()" id="doneEditDOBIcon" style="display: none"></span>
+    </div>
+
+    <div style="padding-top: 10px; clear: both">
+        <div class="col-lg-6">
+            <div class="interactions" style="margin-bottom: 20px;">
+                <div>
+                    <h3 style="float: left"><b>Customer Interactions</b></h3>
+                    <h3 style="float: right">
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#addInteractionModal">
+                            <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Add
+                        </button>
+                    </h3>
+                </div>
+                <div style="clear: both">
+                    @foreach (var interaction in ViewBag.customerInteractions)
+                    {
+                        <div class="interactions-item"><b>[ @interaction.CreatedDate.ToString("dd MMM yyyy") ]</b> @interaction.Entry</div>
+                    }
+                </div>
+            </div>
+            <div class="reservations">
+                <h3><b>Reservations Log</b></h3>
+                <table>
+                    <tr>
+                        <td></td>
+                        <td>Status</td>
+                    </tr>
+                    @foreach (var reservation in ViewBag.customerReservations)
+                    {
+                        <tr>
+                            <td>@reservation.NumVisitors PAX @@ @reservation.ReservationDateTime</td>
+                            <td>
+                                <script type="text/javascript">
+                                    displayStatus(@reservation.Status);
+                                </script>
+                            </td>
+                        </tr>
+                        <tr class="reservations-item"></tr>
+                    }
+                    <tr></tr>
+                </table>
+
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="notes">
+                <div>
+                    <h3 style="float: left"><b>Customer Notes</b></h3>
+                    <h3 style="float: right">
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#addNoteModal">
+                            <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Add
+                        </button>
+                    </h3>
+                </div>
+                <div style="clear: both">
+                    @foreach (var note in ViewBag.customerNotes)
+                    {
+                        <div class="notes-item">
+                            <table width="100%">
+                                <tr>
+                                    <td>@note.Entry</td>
+                                    <td align="right">
+                                        <a href="@Url.Action("DeleteEntry", "CRM", new { profile = ViewBag.profile.Contact, entryType = 1, entryId = @note.ID })" style="padding-right: 1em">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+
+
+    <div id="addInteractionModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Interaction</h4>
+                </div>
+                @using (Html.BeginForm("CustomerProfile", "CRM", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-body">
+                        <label for="file">Interaction:</label>
+                        <textarea rows="4" cols="50" style="max-width: 385px !important" name="entry" id="entry"></textarea>
+                        <br />
+                        <input type="hidden" name="profile" id="profile" value="@ViewBag.profile.Contact" />
+                        <input type="hidden" name="entryType" id="entryType" value="0" />
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Add" />
+                        @*<button type="button" class="btn btn-default" data-dismiss="modal" onclick="submitAddMenu()">OK</button>*@
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+
+    <div id="addNoteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Note</h4>
+                </div>
+                @using (Html.BeginForm("CustomerProfile", "CRM", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-body">
+                        <label for="file">Note:</label>
+                        <textarea rows="4" cols="50" style="max-width: 385px !important" name="entry" id="entry"></textarea>
+                        <br />
+                        <input type="hidden" name="profile" id="profile" value="@ViewBag.profile.Contact" />
+                        <input type="hidden" name="entryType" id="entryType" value="1" />
+                    </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Add" />
+                            @*<button type="button" class="btn btn-default" data-dismiss="modal" onclick="submitAddMenu()">OK</button>*@
+                        </div>
+                }
+            </div>
+
+        </div>
+    </div>

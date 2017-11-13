@@ -176,6 +176,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CRMController.cs" />
+    <Compile Include="Controllers\GalleryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
@@ -201,8 +203,12 @@
     <Content Include="Images\banner2.jpg" />
     <Content Include="Images\banner3.jpg" />
     <Content Include="Images\divider.png" />
+    <Content Include="Images\facebook.png" />
+    <Content Include="Images\instagram.png" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\restaurant001.jpg" />
+    <Content Include="Images\twitter.png" />
+    <Content Include="Images\youtube.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ckeditor\CHANGES.md" />
@@ -387,7 +393,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -426,6 +434,9 @@
     <Content Include="Views\Menu\Manage.cshtml" />
     <Content Include="Views\Reservation\Index.cshtml" />
     <Content Include="Views\Reservation\Manage.cshtml" />
+    <Content Include="Views\Gallery\Manage.cshtml" />
+    <Content Include="Views\CRM\Index.cshtml" />
+    <Content Include="Views\CRM\CustomerProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

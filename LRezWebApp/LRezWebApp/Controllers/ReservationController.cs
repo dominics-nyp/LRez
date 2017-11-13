@@ -1,10 +1,12 @@
-﻿using LRezLib;
-using LRezLib.Managers;
-using LRezLib.Models;
+﻿using LRezWebApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -20,24 +22,29 @@ namespace LRezWebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateReservation(Reservation reservation)
+        public async Task<ActionResult> CreateReservation(Reservation reservation)
         {
             if (validateReservation(reservation))
             {
-                Reservation r = ReservationsManager.createReservation(reservation);
+                var client = new HttpClient();
+                string baseUrl = ConfigurationManager.AppSettings.Get("LRezService");
+                client.BaseAddress = new Uri(baseUrl);
+                var stringContent = new StringContent(reservation.toJSON(), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = client.PostAsync("api/reservations", stringContent).Result;  // Blocking call!
+
+                string responseString = await response.Content.ReadAsStringAsync();
+                Reservation r = Reservation.parseReservation(responseString);
                 return Json(r);
             }
             else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Invalid Parameters");
-            }
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Invalid");
         }
 
         private bool validateReservation(Reservation reservation)
         {
-            if (reservation.Name == null || reservation.Contact == null || reservation.ReservationDateTime == null)  //check for required fields
+            if (reservation.Name == null || reservation.Contact == null || reservation.Email == null || reservation.ReservationDateTime == null)  //check for required fields
                 return false;
-            if (reservation.Name.Length == 0 || reservation.Contact.Length == 0)  //check for required fields
+            if (reservation.Name.Length == 0 || reservation.Contact.Length == 0 || reservation.Email.Length == 0)  //check for required fields
                 return false;
             else if (reservation.ReservationDateTime < DateTime.Now.Date.AddDays(1))  //check for valid date
                 return false;
@@ -50,9 +57,12 @@ namespace LRezWebApp.Controllers
         [HttpPost]
         public ActionResult TrackReservation(string tracking)
         {
-            try 
+            try
             {
-                Reservation r = ReservationsManager.getReservation(tracking);
+                var client = new WebClient();
+                client.QueryString.Add("tracking", tracking);
+                var response = client.DownloadString(ConfigurationManager.AppSettings.Get("LRezService") + "api/reservations");
+                Reservation r = Reservation.parseReservation(response);
                 TrackedReservation t = new TrackedReservation();
                 t.ReservationDateTime = r.ReservationDateTime.ToString("f");
                 if (Constants.HashReservationStatus.ContainsKey(r.Status))
@@ -62,7 +72,6 @@ namespace LRezWebApp.Controllers
                 }
                 else
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Invalid");
-
             }
             catch (Exception)
             {
@@ -70,11 +79,19 @@ namespace LRezWebApp.Controllers
             }
         }
 
-        struct TrackedReservation
+        public struct TrackedReservation
         {
             public string ReservationDateTime;
             public string Status;
         }
 
+        public ActionResult Ballot()
+        {
+            string paramMenu = this.Request.QueryString["menu"];
+            int menuId = 0;
+            if (int.TryParse(paramMenu, out menuId))
+                ViewBag.menu = menuId;
+            return View();
+        }
     }
 }

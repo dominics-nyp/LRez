@@ -52,6 +52,8 @@
     <Compile Include="Connections\DB.cs" />
     <Compile Include="Connections\Parameter.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DAO\CustomerEntryDAO.cs" />
+    <Compile Include="DAO\CustomerProfileDAO.cs" />
     <Compile Include="DAO\InformationDAO.cs" />
     <Compile Include="DAO\MenuDAO.cs" />
     <Compile Include="DAO\ReservationsDAO.cs" />
@@ -59,9 +61,12 @@
     <Compile Include="Exceptions\Exception_InvalidParameters.cs" />
     <Compile Include="Exceptions\Exception_NotFound.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Managers\CustomerProfilesManager.cs" />
     <Compile Include="Managers\InformationManager.cs" />
     <Compile Include="Managers\MenuManager.cs" />
     <Compile Include="Managers\ReservationsManager.cs" />
+    <Compile Include="Models\CustomerEntry.cs" />
+    <Compile Include="Models\CustomerProfile.cs" />
     <Compile Include="Models\Information.cs" />
     <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\Reservation.cs" />

@@ -10,11 +10,13 @@ namespace LRezLib.Models
     public class Reservation
     {
         public int ID { get; set; }
+        public string Salutation { get; set; }
         public string Name { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }
         public DateTime ReservationDateTime { get; set; }
         public int NumVisitors { get; set; }
+        public string CustomerType { get; set; }
         public string Requests { get; set; }
         public string Tracking { get; set; }
         public string SocialAccount { get; set; }
@@ -23,15 +25,18 @@ namespace LRezLib.Models
         public string LastModifiedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public string Remarks { get; set; }
+        public string Status_Remarks { get; set; }
 
         public Reservation()
         {
             this.ID = -1;
+            this.Salutation = "";
             this.Name = "";
             this.Contact = "";
             this.Email = "";
             this.ReservationDateTime = DateTime.Now;
             this.NumVisitors = -1;
+            this.CustomerType = "";
             this.Requests = "";
             this.Tracking = "";
             this.SocialAccount = "";
@@ -40,11 +45,14 @@ namespace LRezLib.Models
             this.LastModifiedBy = "";
             this.LastModifiedDate = DateTime.Now;
             this.Remarks = "";
+            this.Status_Remarks = "";
         }
 
         public Reservation(DataRow dr)
         {
             this.ID = (int)dr["ID"];
+            if (dr["salutation"] != DBNull.Value)
+                this.Salutation = (string)dr["salutation"];
             if (dr["name"] != DBNull.Value)
                 this.Name = (string)dr["name"];
             if (dr["contact"] != DBNull.Value)
@@ -55,6 +63,8 @@ namespace LRezLib.Models
                 this.ReservationDateTime = (DateTime)dr["reservation_datetime"];
             if (dr["num_visitors"] != DBNull.Value)
                 this.NumVisitors = (int)dr["num_visitors"];
+            if (dr["customer_type"] != DBNull.Value)
+                this.CustomerType = (string)dr["customer_type"];
             if (dr["requests"] != DBNull.Value)
                 this.Requests = (string)dr["requests"];
             if (dr["tracking"] != DBNull.Value)
@@ -71,6 +81,8 @@ namespace LRezLib.Models
                 this.LastModifiedDate = (DateTime)dr["last_modified_date"];
             if (dr["remarks"] != DBNull.Value)
                 this.Remarks = (string)dr["remarks"];
+            if (dr["status_remarks"] != DBNull.Value)
+                this.Status_Remarks = (string)dr["status_remarks"];
         }
     }
 }

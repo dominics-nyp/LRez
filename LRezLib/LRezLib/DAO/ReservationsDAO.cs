@@ -123,6 +123,21 @@ namespace LRezLib.DAO
             return reservations;
         }
 
+        public static List<Reservation> getReservations(string contact)
+        {
+            List<Reservation> reservations = new List<Reservation>();
+
+            string sql = "select * from Reservations where contact like @contact order by reservation_datetime desc";
+            List<Parameter> parameters = new List<Parameter>() {
+                new Parameter("@contact", "%" + contact)
+            };
+            DataTable dt = DB.query(sql, parameters);
+            foreach (DataRow dr in dt.Rows)
+                reservations.Add(new Reservation(dr));
+
+            return reservations;
+        }
+
         public static Reservation getReservation(string tracking)
         {
             string sql = "select * from Reservations where tracking=@tracking order by reservation_datetime desc";
@@ -157,13 +172,19 @@ namespace LRezLib.DAO
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into Reservations (");
-            sb.Append("name, contact, email, reservation_datetime, num_visitors, ");
+            sb.Append("salutation, name, contact, email, reservation_datetime, num_visitors, customer_type, ");
             sb.Append("requests, tracking, social_account, social_provider, status, last_modified, last_modified_date, remarks) ");
             sb.Append("values (");
-            sb.Append("@name, @contact, @email, @reservation_datetime, @num_visitors, ");
+            sb.Append("@salutation, @name, @contact, @email, @reservation_datetime, @num_visitors, @customerType, ");
             sb.Append("@requests, @tracking, @social_account, @social_provider, @status, @last_modified, @last_modified_date, @remarks)");
 
             List<Parameter> parameters = new List<Parameter>();
+
+            if (r.Salutation == null || r.Salutation.Length == 0)
+                parameters.Add(new Parameter("@salutation", DBNull.Value));
+            else
+                parameters.Add(new Parameter("@salutation", r.Salutation));
+
             parameters.Add(new Parameter("@name", r.Name));
             parameters.Add(new Parameter("@contact", r.Contact));
 
@@ -174,6 +195,11 @@ namespace LRezLib.DAO
 
             parameters.Add(new Parameter("@reservation_datetime", r.ReservationDateTime));
             parameters.Add(new Parameter("@num_visitors", r.NumVisitors));
+
+            if (r.CustomerType == null || r.CustomerType.Length == 0)
+                parameters.Add(new Parameter("@customerType", DBNull.Value));
+            else
+                parameters.Add(new Parameter("@customerType", r.CustomerType));
 
             if (r.Requests == null || r.Requests.Length == 0)
                 parameters.Add(new Parameter("@requests", DBNull.Value));
@@ -207,7 +233,7 @@ namespace LRezLib.DAO
                 return true;
         }
 
-        public static bool updateReservation(int id, int status)
+        public static bool updateReservationStatus(int id, int status)
         {
             string sql = "update Reservations set status=@status where ID=@id";
             List<Parameter> parameters = new List<Parameter>();
@@ -220,11 +246,24 @@ namespace LRezLib.DAO
                 return true;
         }
 
+        public static bool updateReservationRemarks(int id, string remarks)
+        {
+            string sql = "update Reservations set remarks=@remarks where ID=@id";
+            List<Parameter> parameters = new List<Parameter>();
+            parameters.Add(new Parameter("@remarks", remarks));
+            parameters.Add(new Parameter("@id", id));
+
+            if (DB.execute(sql, parameters) < 0)
+                return false;
+            else
+                return true;
+        }
+
         public static List<Reservation> searchReservations(string searchTerm, bool includeExpired = false)
         {
             List<Reservation> reservations = new List<Reservation>();
 
-            string sql = "select * from Reservations where name like @name or contact like @contact or tracking like @tracking";
+            string sql = "select * from Reservations where (name like @name or contact like @contact or tracking like @tracking)";
             List<Parameter> parameters = new List<Parameter>();
             parameters.Add(new Parameter("@name", "%" + searchTerm + "%"));
             parameters.Add(new Parameter("@contact", "%" + searchTerm + "%"));

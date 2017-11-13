@@ -15,6 +15,7 @@
         <ul class="nav navbar-nav navbar-right">
             @*<li style="padding-top: 35px; color: grey">Hello @User.Identity.GetUserName()</li>*@
             <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("About", "About", "Home")</li>
             @*<li>@Html.ActionLink("Menu", "Index", "Menu")</li>*@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -41,8 +42,18 @@
                     <li>@Html.ActionLink("Manage Menu", "Manage", "Menu")</li>
                 </ul>
             </li>
-            <li>@Html.ActionLink("Reservations", "Manage", "Reservation")</li>
-            <li>@Html.ActionLink("About", "About", "Home")</li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    Reservations
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("New", "Index", "Reservation", new { menutype = 3 }, null)</li>
+                    <li>@Html.ActionLink("Manage", "Manage", "Reservation")</li>
+                </ul>
+            </li>
+            @*<li>@Html.ActionLink("Gallery", "Manage", "Gallery")</li>*@
+            <li>@Html.ActionLink("CRM", "Index", "CRM")</li>
             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off @User.Identity.GetUserName()</a></li>
         </ul>
@@ -52,6 +63,7 @@ else
 {
     <ul class="nav navbar-nav navbar-right">
         <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("About", "About", "Home")</li>
         @*<li>@Html.ActionLink("Menu", "Index", "Menu")</li>*@
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -77,8 +89,8 @@ else
                 }
             </ul>
         </li>
-        <li>@Html.ActionLink("Reservations", "Manage", "Reservation")</li>
-        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Reservations", "Index", "Reservation")</li>
+        @*<li>@Html.ActionLink("Gallery", "Manage", "Gallery")</li>*@
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>

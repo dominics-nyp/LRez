@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "Customer Profiling";
+}
+
+<style>
+
+a:link {
+    color: #606060;
+    text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+    color: #606060;
+    text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+/* selected link */
+a:active {
+    color: #606060;
+    text-decoration: none;
+}
+    
+.input {
+    width: 20em;
+    max-width: 20em;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #CCC;
+    /*color: #555;
+    box-sizing: border-box;
+    top: 50%;*/
+}
+
+</style>
+
+@section scripts {
+    <script type="text/javascript">
+
+        var searchByName = function () {
+            var name = $('#inName').val();
+            if (name != null && name.length > 0) {
+                var url = "?name=" + name;
+                window.location.href = url;
+            }
+        };
+
+        var searchByContact = function () {
+            var contact = $('#inContact').val();
+            if (contact != null && contact.length > 0) {
+                var url = "?contact=" + contact;
+                window.location.href = url;
+            }
+        };
+
+    </script>
+}
+
+<br />
+<br />
+
+<table style="width: 90%">
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td style="padding-bottom: 10px">Search by Name</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input style="width: 60em" id="inName" type="text" value="@ViewBag.name">
+                        <button type="button" class="btn" onclick="searchByName()">go</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td align="center">
+            <div style="text-align: center; vertical-align: middle">
+                -- or  --
+            </div>
+        </td>
+        <td align="right">
+            <table>
+                <tr>
+                    <td style="padding-bottom: 10px">Search by Contact Number</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input style="width: 60em" id="inContact" type="text" value="@ViewBag.contact">
+                        <button type="button" class="btn" onclick="searchByContact()">go</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<br />
+<br />
+
+@if (ViewBag.contact != null && ViewBag.contact.Length > 0)
+{
+    <div style="font-weight: bold">
+        Profiles found for Contact Number: @ViewBag.contact
+    </div>
+}
+else if (ViewBag.name != null && ViewBag.name.Length > 0)
+{
+    <div style="font-weight: bold">
+        Profiles found for Name: @ViewBag.name
+    </div>
+}
+
+<br />
+
+@if (ViewBag.profiles != null && ViewBag.profiles.Count > 0)
+{
+    foreach (var profile in ViewBag.profiles)
+    {
+        <a href="@Url.Action("CustomerProfile", "CRM", new { profile = profile.Contact })">
+            <div class="well well-sm">
+                <h3 style="padding-left: 5px">@profile.Name</h3>
+                &emsp;&emsp;contact: <b>@profile.Contact</b>&emsp;&emsp;email: <b>@profile.Email</b>
+            </div>
+        </a>
+    }
+}
+else if (ViewBag.contact != null || ViewBag.name != null)
+{
+    <div>
+        No Records Found.
+    </div>
+}
+
+@if (ViewBag.suggestions != null && ViewBag.suggestions.Count > 0)
+{
+    <div style="font-weight: bold; margin-top: 25px; margin-bottom: 15px">
+        Other Suggestions
+    </div>
+}
+
+@if (ViewBag.suggestions != null && ViewBag.suggestions.Count > 0)
+{
+    foreach (var suggestion in ViewBag.suggestions)
+    {
+        <div class="well well-sm"; style="clear: both">
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <div style="padding-left: 5px; font-weight: bold;">@suggestion.Name</div>
+                        &emsp;&emsp;contact: <b>@suggestion.Contact</b>&emsp;&emsp;email: <b>@suggestion.Email</b>
+                    </td>
+                    <td align="right">
+                        <a href="@Url.Action("CreateProfile", "CRM", new { contact = suggestion.Contact, name = suggestion.Name, email = suggestion.Email })" class="btn btn-warning btn-sm" style="color: white">
+                            Create Profile
+                        </a>        
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+}
+
+@if (ViewBag.contact != null || ViewBag.name != null)
+{
+    <div style="text-align: center; margin-top: 25px;">-- or --</div>
+    <div style="text-align: center; margin-top: 25px;">
+        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" onclick="setMenuType(0)" data-target="#addModal">
+            Create New Profile
+        </button>
+</div>
+}
+
+
+<div id="addModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="createProfileTitle">Create Profile</h4>
+            </div>
+            @using (Html.BeginForm("CreateProfile", "CRM", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+                    <label for="file">Name:</label>
+                    <input type="text" name="name" id="name" class="input" /><br /><br />
+                    <label for="file">Contact:</label>
+                    <input type="text" name="contact" id="contact" class="input" />
+                    <div style="font-size: x-small">* please omit country code</div><br />
+                    <label for="file">Email:</label>
+                    <input type="text" name="email" id="email" class="input" /><br />
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Submit" />
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

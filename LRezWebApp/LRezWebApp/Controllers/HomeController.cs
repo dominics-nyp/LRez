@@ -1,10 +1,7 @@
-﻿using LRezLib.Managers;
-using LRezLib.Models;
+﻿using LRezWebApp.Models;
 using Microsoft.Security.Application;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Configuration;
+using System.Net;
 using System.Web.Mvc;
 
 namespace LRezWebApp.Controllers
@@ -18,7 +15,10 @@ namespace LRezWebApp.Controllers
 
         public ActionResult About()
         {
-            Information information = InformationManager.getInformation();
+            var client = new WebClient();
+            var response = client.DownloadString(ConfigurationManager.AppSettings.Get("LRezService") + "api/information");
+
+            Information information = new Information(response);
             ViewBag.Text = Sanitizer.GetSafeHtmlFragment(information.AboutUsText);
             ViewBag.Image = information.AboutUsImage;
 
@@ -27,7 +27,10 @@ namespace LRezWebApp.Controllers
 
         public ActionResult Contact()
         {
-            Information information = InformationManager.getInformation();
+            var client = new WebClient();
+            var response = client.DownloadString(ConfigurationManager.AppSettings.Get("LRezService") + "api/information");
+
+            Information information = new Information(response);
             ViewBag.Text = Sanitizer.GetSafeHtmlFragment(information.ContactUsText);
             ViewBag.Map = information.ContactUsMap;
 

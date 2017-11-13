@@ -72,9 +72,9 @@ namespace LRezLib.DAO
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("insert into Menu (");
-            sb.Append("name, description, url, status, type, last_modified, last_modified_date, remarks) ");
+            sb.Append("name, description, url, status, type, last_modified, last_modified_date, allow_ballot, remarks) ");
             sb.Append("values (");
-            sb.Append("@name, @description, @url, @status, @type, @last_modified, @last_modified_date, @remarks)");
+            sb.Append("@name, @description, @url, @status, @type, @last_modified, @last_modified_date, @allowBallot, @remarks)");
 
             List<Parameter> parameters = new List<Parameter>();
             parameters.Add(new Parameter("@name", menu.Name));
@@ -89,6 +89,7 @@ namespace LRezLib.DAO
             parameters.Add(new Parameter("@type", menu.Type));
             parameters.Add(new Parameter("@last_modified", menu.LastModifiedBy));
             parameters.Add(new Parameter("@last_modified_date", menu.LastModifiedDate));
+            parameters.Add(new Parameter("@allowBallot", menu.AllowBallot));
 
             if (menu.Remarks == null || menu.Remarks.Length==0)
                 parameters.Add(new Parameter("@remarks", DBNull.Value));
@@ -106,7 +107,7 @@ namespace LRezLib.DAO
             StringBuilder sb = new StringBuilder();
             sb.Append("update Menu set ");
             sb.Append("name=@name, description=@description, url=@url, status=@status, type=@type, ");
-            sb.Append("last_modified=@last_modified, last_modified_date =@last_modified_date, remarks=@remarks ");
+            sb.Append("last_modified=@last_modified, last_modified_date=@last_modified_date, allow_ballot=@allowBallot, remarks=@remarks ");
             sb.Append("where ID=@id");
 
             List<Parameter> parameters = new List<Parameter>();
@@ -122,6 +123,7 @@ namespace LRezLib.DAO
             parameters.Add(new Parameter("@type", menu.Type));
             parameters.Add(new Parameter("@last_modified", menu.LastModifiedBy));
             parameters.Add(new Parameter("@last_modified_date", menu.LastModifiedDate));
+            parameters.Add(new Parameter("@allowBallot", menu.AllowBallot));
 
             if (menu.Remarks == null || menu.Remarks.Length == 0)
                 parameters.Add(new Parameter("@remarks", DBNull.Value));

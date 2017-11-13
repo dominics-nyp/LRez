@@ -24,7 +24,7 @@ namespace LRezLib.Models
         public string LastModifiedBy { get; set; }
 
         public DateTime LastModifiedDate { get; set; }
-
+        public bool AllowBallot { get; set; }
         public string Remarks { get; set; }
 
         public Menu()
@@ -37,6 +37,7 @@ namespace LRezLib.Models
             this.Type = -1;
             this.LastModifiedBy = "";
             this.LastModifiedDate = DateTime.Now;
+            this.AllowBallot = false;
             this.Remarks = "";
         }
 
@@ -57,6 +58,8 @@ namespace LRezLib.Models
                 this.LastModifiedBy = (string)dr["last_modified"];
             if (dr["last_modified_date"] != DBNull.Value)
                 this.LastModifiedDate = (DateTime)dr["last_modified_date"];
+            if (dr["allow_ballot"] != DBNull.Value)
+                this.AllowBallot = (bool)dr["allow_ballot"];
             if (dr["remarks"] != DBNull.Value)
                 this.Remarks = (string)dr["remarks"];
         }

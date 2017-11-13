@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LRezLib.Models.Menu>
+﻿@model IEnumerable<LRezWebApp.Models.Menu>
 
 @{
     ViewBag.Title = "Whats Cooking? " + ViewBag.MenuType;
@@ -49,12 +49,20 @@
                 if (j == 0)
                 {
                     <div class="item active">
+                        @if (menu.AllowBallot)
+                        {
+                        <div style="text-align: center; font-size: large">Interested in this menu? Please submit a ballot request by clicking <a href="Reservation/Ballot?menu=@menu.ID">here!</a></div>
+                        }
                         <img src="@menu.URL" alt="@menu.Name">
                     </div>
                 }
                 else
                 {
                     <div class="item">
+                        @if (menu.AllowBallot)
+                        {
+                            <div style="text-align: center; font-size: large">Interested in this menu? Please submit a ballot request by clicking <a href="Reservation/Ballot?menu=@menu.ID">here!</a></div>
+                        }
                         <img src="@menu.URL" alt="@menu.Name">
                     </div>
                 }

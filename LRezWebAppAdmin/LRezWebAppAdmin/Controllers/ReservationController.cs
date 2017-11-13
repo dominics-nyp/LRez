@@ -34,9 +34,9 @@ namespace LRezWebAppAdmin.Controllers
 
         private bool validateReservation(Reservation reservation)
         {
-            if (reservation.Name == null || reservation.Contact == null || reservation.ReservationDateTime == null)  //check for required fields
+            if (reservation.Name == null || reservation.Contact == null || reservation.Email == null || reservation.ReservationDateTime == null)  //check for required fields
                 return false;
-            if (reservation.Name.Length == 0 || reservation.Contact.Length == 0)  //check for required fields
+            if (reservation.Name.Length == 0 || reservation.Contact.Length == 0 || reservation.Email.Length == 0)  //check for required fields
                 return false;
             else if (reservation.ReservationDateTime < DateTime.Now.Date.AddDays(1))  //check for valid date
                 return false;
@@ -79,7 +79,6 @@ namespace LRezWebAppAdmin.Controllers
         {
             DateTime daily = DateTime.Now;
             DateTime weekly = DateTime.Now;
-            int tab = 0;
             string search = "";
             bool searchIncludeExpired = false;
 
@@ -116,19 +115,6 @@ namespace LRezWebAppAdmin.Controllers
                     searchIncludeExpired = false;
                 }
             }
-            if (t != null)
-            {
-                try
-                {
-                    tab = int.Parse(t);
-                    if (tab < 0 || tab > 3)
-                        tab = 0;
-                }
-                catch (Exception)
-                {
-                    tab = 0;
-                }
-            }
 
             List<Reservation> lstReservationsDaily = ReservationsManager.getReservations(daily);
 
@@ -137,7 +123,9 @@ namespace LRezWebAppAdmin.Controllers
 
             List<Reservation> lstPending = ReservationsManager.getReservations(Constants.ReservationStatus_PENDING, false);
 
-            List<Reservation> lstSearch = ReservationsManager.searchReservations(search, searchIncludeExpired);
+            List<Reservation> lstSearch = new List<Reservation>();
+            if (search != null && search.Length > 0)
+                lstSearch = ReservationsManager.searchReservations(search, searchIncludeExpired);
 
             ViewBag.Daily = lstReservationsDaily;
             ViewBag.Weekly = lstReservationWeekly;
@@ -150,7 +138,6 @@ namespace LRezWebAppAdmin.Controllers
             ViewBag.WeekEnd = week[1].AddDays(-1).ToString("dd - MMM - yyyy");
             ViewBag.SearchTerm = search;
             ViewBag.SearchIncludeExpired = searchIncludeExpired;
-            ViewBag.Tab = tab;
 
             return View();
         }
@@ -176,5 +163,28 @@ namespace LRezWebAppAdmin.Controllers
             else
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Update Failed");
         }
+
+        public ActionResult UpdateReservationRemarks(int id, string remarks)
+        {
+            if (ReservationsManager.updateReservationRemarks(id, remarks))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+            else
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Update Failed");
+
+        }
+
+        public ActionResult GetReservationRemarks(int id)
+        {
+            Reservation r = ReservationsManager.getReservation(id);
+            if (r != null)
+            {
+                return Json(new { remarks = r.Remarks });
+            }
+            else
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Reservation not found");
+        }
+
     }
 }

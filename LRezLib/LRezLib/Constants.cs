@@ -11,12 +11,14 @@ namespace LRezLib
         public const int ReservationStatus_PENDING = 0;
         public const int ReservationStatus_APPROVED = 1;
         public const int ReservationStatus_REJECTED = 2;
-        public const int ReservationStatus_CANCELLED = 3; 
+        public const int ReservationStatus_CANCELLED = 3;
+        public const int ReservationStatus_NOSHOW = 5;
         public static readonly Dictionary<int, string> HashReservationStatus = new Dictionary<int, string>() {
             { ReservationStatus_PENDING, "Pending" },
             { ReservationStatus_APPROVED, "Confirmed" },
             { ReservationStatus_REJECTED, "Rejected" },
-            { ReservationStatus_CANCELLED, "Cancelled" }
+            { ReservationStatus_CANCELLED, "Cancelled" },
+            { ReservationStatus_NOSHOW, "No-Show" }
         };
 
         public const int MenuStatus_ACTIVE = 0;
@@ -27,6 +29,9 @@ namespace LRezLib
         public const int MenuType_Celebrity = 1;
         public const int MenuType_Themed = 2;
         public const int MenuType_Degustation = 3;
+
+        public const int CustomerEntryType_Interaction = 0;
+        public const int CustomerEntryType_Note = 1;
 
         public const string NEW = "NEW";
 
