@@ -102,7 +102,7 @@ namespace LRezWebAppAdmin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Manage(string title, HttpPostedFileBase file, bool allowBallot, int menuType)
+        public ActionResult Manage(string title, HttpPostedFileBase file, int menuType)
         {
             string redirectHash = "";
             if (file != null && file.ContentLength > 0)
@@ -121,7 +121,7 @@ namespace LRezWebAppAdmin.Controllers
                         m.Description = "No Description Available";
                         m.URL = ConfigurationManager.AppSettings["menu_url"] + "/" + Path.GetFileName(file.FileName);
                         m.Status = Constants.MenuStatus_HIDDEN;
-                        m.AllowBallot = allowBallot;
+                        m.AllowBallot = false;
                         switch (menuType)
                         {
                             case 0:

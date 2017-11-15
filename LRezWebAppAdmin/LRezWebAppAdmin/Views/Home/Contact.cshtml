@@ -97,7 +97,11 @@
 
     <div class="row" style="text-align: center">
         <div class="col-sm-6 vcenter" style="padding-bottom: 2em">
+@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
             <button id="btnEdit" class="btn btn-danger" onclick="showEdit()">Edit Text</button>
+}
             <button id="btnSave" class="btn btn-danger" onclick="save()" style="display: none">Save</button>
             <button id="btnCancel" class="btn btn-danger" onclick="hideEdit()" style="display: none">Cancel</button>
         </div><!--

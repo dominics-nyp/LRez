@@ -190,8 +190,8 @@ namespace LRezLib.DAO
                 new Parameter("@customer_contact", contact),
                 new Parameter("@entry", entry),
                 new Parameter("@type", entryType),
-                new Parameter("@created_date", createdBy),
-                new Parameter("@created_by", createdDate)
+                new Parameter("@created_date", createdDate),
+                new Parameter("@created_by", createdBy)
             };
 
             if (DB.execute(sql, parameters) < 0)

@@ -4,8 +4,10 @@ using LRezLib.Exceptions;
 using LRezLib.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,7 +61,51 @@ namespace LRezLib.Managers
             r.Remarks = reservation.Remarks;
 
             if (ReservationsDAO.addReservation(r))
+            {
+                bool toSendEmail = bool.Parse(ConfigurationManager.AppSettings["email_flag"]);
+                if (toSendEmail)
+                {
+                    SmtpClient client = new SmtpClient();
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.EnableSsl = true;
+                    client.Host = ConfigurationManager.AppSettings["email_host"];
+                    client.Port = int.Parse(ConfigurationManager.AppSettings["email_port"]);
+
+                    // setup Smtp authentication
+                    System.Net.NetworkCredential credentials =
+                        new System.Net.NetworkCredential(ConfigurationManager.AppSettings["email_add"], ConfigurationManager.AppSettings["email_pass"]);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = credentials;
+
+                    MailMessage msg = new MailMessage();
+                    msg.From = new MailAddress(ConfigurationManager.AppSettings["email_add"]);
+                    msg.To.Add(new MailAddress(r.Email));
+
+                    msg.Subject = "Reservation Submitted";
+                    msg.IsBodyHtml = true;
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("<html><head></head><body><b>Hi ");
+                    sb.Append(r.Salutation + " " + r.Name + ",</b><br /><br />");
+                    sb.Append("Thanks for your reservation with L'Rez. We will get in touch with you shortly. In the meanwhile, you may track your reservation with the tracking id: " + r.Tracking + ".<br /><br />");
+                    sb.Append("Cheers, <br />");
+                    sb.Append("L'Rez Training Restaurant");
+                    sb.Append("</body>");
+
+                    msg.Body = string.Format(sb.ToString());
+
+                    try
+                    {
+                        client.Send(msg);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Send Email Fail: ID=" + r.ID + ", Email=" + r.Email);
+                    }
+                }
+
                 return r;
+            }
             else
                 throw new Exception_Database("Unable to create new Reservation");
         }
@@ -86,7 +132,73 @@ namespace LRezLib.Managers
 
         public static bool updateReservationStatus(int id, int status)
         {
-            return ReservationsDAO.updateReservationStatus(id, status);
+            bool result = ReservationsDAO.updateReservationStatus(id, status);
+            if (result)
+            {
+                bool toSendEmail = bool.Parse(ConfigurationManager.AppSettings["email_flag"]);
+                if (toSendEmail && (status == Constants.ReservationStatus_APPROVED || status == Constants.ReservationStatus_REJECTED || status == Constants.ReservationStatus_CANCELLED))
+                {
+                    Reservation r = ReservationsDAO.getReservation(id);
+
+                    SmtpClient client = new SmtpClient();
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.EnableSsl = true;
+                    client.Host = ConfigurationManager.AppSettings["email_host"];
+                    client.Port = int.Parse(ConfigurationManager.AppSettings["email_port"]);
+
+                    // setup Smtp authentication
+                    System.Net.NetworkCredential credentials =
+                        new System.Net.NetworkCredential(ConfigurationManager.AppSettings["email_add"], ConfigurationManager.AppSettings["email_pass"]);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = credentials;
+
+                    MailMessage msg = new MailMessage();
+                    msg.From = new MailAddress(ConfigurationManager.AppSettings["email_add"]);
+                    msg.To.Add(new MailAddress(r.Email));
+
+                    msg.IsBodyHtml = true;
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("<html><head></head><body><b>Hi ");
+                    sb.Append(r.Salutation + " " + r.Name + ",</b><br /><br />");
+                    sb.Append("Thanks for your reservation with L'Rez. ");
+                    sb.Append("Your reservation on " + r.ReservationDateTime.ToString("dd-MMM-yyyy HH:mm") + " is ");
+
+                    switch (status)
+                    {
+                        case Constants.ReservationStatus_APPROVED:
+                            msg.Subject = "Reservation Approved";
+                            sb.Append("APPROVED.");
+                            break;
+                        case Constants.ReservationStatus_REJECTED:
+                            msg.Subject = "Reservation Declined";
+                            sb.Append("DECLINED.");
+                            break;
+                        case Constants.ReservationStatus_CANCELLED:
+                            msg.Subject = "Reservation Cancelled";
+                            sb.Append("CANCELLED.");
+                            break;
+                        default: break;
+                    }
+
+                    sb.Append("You may track your reservation with the tracking id: " + r.Tracking + ".< br />< br /> ");
+                    sb.Append("Cheers, <br />");
+                    sb.Append("L'Rez Training Restaurant");
+                    sb.Append("</body>");
+
+                    msg.Body = string.Format(sb.ToString());
+
+                    try
+                    {
+                        client.Send(msg);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Send Email Fail: ID=" + r.ID + ", Email=" + r.Email);
+                    }
+                }
+            }
+
+            return result;
         }
 
         public static bool updateReservationRemarks(int id, string remarks)

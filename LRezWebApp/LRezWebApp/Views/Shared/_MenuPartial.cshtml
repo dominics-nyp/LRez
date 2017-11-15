@@ -4,6 +4,13 @@
 
 @model List<int>
 
+<style>
+    .social-icon {
+        width: 20px;
+        height: 20px;
+    }
+</style>
+
 <ul class="nav navbar-nav navbar-right">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
     <li>@Html.ActionLink("About", "About", "Home")</li>
@@ -35,4 +42,8 @@
     @*<li>@Html.ActionLink("Gallery", "Index", "Gallery")</li>*@
     <li>@Html.ActionLink("Feedback", "Index", "Feedback")</li>
     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    <li class="no-hightlight"><a href="https://www.facebook.com/NYPRestaurantandCafe/"><img src="~/Images/facebook.png" alt="Facebook" class="social-icon" /></a></li>
+    <li class="no-hightlight"><a href="https://www.instagram.com/explore/locations/324485290/"><img src="~/Images/instagram.png" alt="Instagram" class="social-icon" /></a></li>
+    
 </ul>
+

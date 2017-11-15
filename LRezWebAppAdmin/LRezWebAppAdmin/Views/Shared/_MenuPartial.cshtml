@@ -4,6 +4,13 @@
 
 @model List<int>
 
+<style>
+    .social-icon {
+        width: 20px;
+        height: 20px;
+    }
+</style>
+
 @using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
@@ -48,7 +55,7 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("New", "Index", "Reservation", new { menutype = 3 }, null)</li>
+                    <li>@Html.ActionLink("New", "Index", "Reservation")</li>
                     <li>@Html.ActionLink("Manage", "Manage", "Reservation")</li>
                 </ul>
             </li>
@@ -56,6 +63,8 @@
             <li>@Html.ActionLink("CRM", "Index", "CRM")</li>
             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off @User.Identity.GetUserName()</a></li>
+            <li class="no-hightlight"><a href="https://www.facebook.com/NYPRestaurantandCafe/"><img src="~/Images/facebook.png" alt="Facebook" class="social-icon" /></a></li>
+            <li class="no-hightlight"><a href="https://www.instagram.com/explore/locations/324485290/"><img src="~/Images/instagram.png" alt="Instagram" class="social-icon" /></a></li>
         </ul>
     }
 }
@@ -93,5 +102,7 @@ else
         @*<li>@Html.ActionLink("Gallery", "Manage", "Gallery")</li>*@
         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li class="no-hightlight"><a href="https://www.facebook.com/NYPRestaurantandCafe/"><img src="~/Images/facebook.png" alt="Facebook" class="social-icon" /></a></li>
+        <li class="no-hightlight"><a href="https://www.instagram.com/explore/locations/324485290/"><img src="~/Images/instagram.png" alt="Instagram" class="social-icon" /></a></li>
     </ul>
 }

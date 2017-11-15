@@ -69,7 +69,7 @@
         };
 
         $.ajax({
-            url: location.protocol + "//" + location.host + '/Reservation/CreateReservation',
+            url: location.protocol + "//" + location.host + location.pathname + '/CreateReservation',
             method: 'post',
             data: reservation,
             success: function (response) {
@@ -89,7 +89,7 @@
         $("#divNotFound").hide();
         $('#divReservationDetails').hide();
         $.ajax({
-            url: location.protocol + "//" + location.host + '/Reservation/TrackReservation',
+            url: location.protocol + "//" + location.host + location.pathname + '/TrackReservation',
             method: 'post',
             data: {
                 tracking: $('#inTracking').val()
